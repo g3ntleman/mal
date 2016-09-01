@@ -27,12 +27,13 @@
 - (NSString*) lispDescription {
     
     BOOL first = YES;
-    NSMutableString* buffer = [[NSMutableString alloc] initWithCapacity: self.count*12];
+    NSMutableString* buffer = [[NSMutableString alloc] initWithCapacity: self.count*4];
     [buffer appendString: @"("];
     for (id object in self) {
-        if (!first) {
-            [buffer appendString: @" "];
+        if (first) {
             first = NO;
+        } else {
+            [buffer appendString: @" "];
         }
         [buffer appendString: [object lispDescription]];
     }
@@ -51,9 +52,10 @@
     NSMutableString* buffer = [[NSMutableString alloc] initWithCapacity: self.count*12];
     [buffer appendString: @"{"];
     [self enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull value, BOOL * _Nonnull stop) {
-        if (!first) {
-            [buffer appendString: @" "];
+        if (first) {
             first = NO;
+        } else {
+            [buffer appendString: @" "];
         }
         [buffer appendString: [key lispDescription]];
         [buffer appendString: @" "];
