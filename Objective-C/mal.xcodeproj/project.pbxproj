@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8D511F4D1D779F43003ED9FC /* NSObject+Types.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D511F4C1D779F43003ED9FC /* NSObject+Types.m */; };
 		8D8917C01D6FD4F200351894 /* step0_repl.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8917BF1D6FD4F200351894 /* step0_repl.m */; };
 		8D8917C71D70D78B00351894 /* libreadline.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D8917C61D70D78B00351894 /* libreadline.tbd */; };
 		8D8917D71D74F95C00351894 /* SESyntaxParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8917CA1D74F8A700351894 /* SESyntaxParser.m */; };
@@ -38,6 +39,8 @@
 /* Begin PBXFileReference section */
 		8D454BD51D6FD291007C7554 /* mal */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mal; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D454BE71D6FD3D4007C7554 /* step0_repl */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = step0_repl; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D511F4B1D779F43003ED9FC /* NSObject+Types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Types.h"; sourceTree = "<group>"; };
+		8D511F4C1D779F43003ED9FC /* NSObject+Types.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Types.m"; sourceTree = "<group>"; };
 		8D8917BF1D6FD4F200351894 /* step0_repl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = step0_repl.m; sourceTree = "<group>"; };
 		8D8917C11D6FD84100351894 /* step0_repl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = step0_repl.h; sourceTree = "<group>"; };
 		8D8917C31D70D17400351894 /* tests */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tests; sourceTree = "<group>"; };
@@ -82,6 +85,8 @@
 		8D454BCC1D6FD291007C7554 = {
 			isa = PBXGroup;
 			children = (
+				8D511F4B1D779F43003ED9FC /* NSObject+Types.h */,
+				8D511F4C1D779F43003ED9FC /* NSObject+Types.m */,
 				8D8917C61D70D78B00351894 /* libreadline.tbd */,
 				8D8917C41D70D19F00351894 /* run_argv_test.sh */,
 				8D8917C51D70D19F00351894 /* runtest.py */,
@@ -258,6 +263,7 @@
 			files = (
 				8D8917D71D74F95C00351894 /* SESyntaxParser.m in Sources */,
 				8D8917DB1D74FA3A00351894 /* step1_read_print.m in Sources */,
+				8D511F4D1D779F43003ED9FC /* NSObject+Types.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,6 +430,7 @@
 				8D8917D51D74F91900351894 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

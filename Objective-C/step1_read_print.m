@@ -8,11 +8,15 @@
 
 #import <Foundation/Foundation.h>
 #include <readline/readline.h>
+#import "SESyntaxParser.h"
 #import "step0_repl.h"
 
 
 id READ(NSString* code) {
-    return code;
+    SESyntaxParser* reader = [[SESyntaxParser alloc] initWithString: code range: NSMakeRange(0, code.length)];
+    id result = [reader readForm];
+    //NSLog(@"Read '%@' into '%@'", code, result);
+    return result;
 }
 
 id EVAL(id ast, id env) {
@@ -21,7 +25,7 @@ id EVAL(id ast, id env) {
 
 
 NSString* PRINT(id exp) {
-    return exp;
+    return [exp lispDescription];
 }
 
 

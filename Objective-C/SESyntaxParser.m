@@ -7,6 +7,8 @@
 //
 
 #import "SESyntaxParser.h"
+#import "NSObject+Types.h"
+#import <Foundation/NSNumberFormatter.h>
 #include <ctype.h>
 
 @implementation SESyntaxParser {
@@ -14,20 +16,18 @@
     NSUInteger length;
     NSUInteger position;
     NSRange stringRange;
+    SETokenOccurrence lastToken;
 }
 
-@synthesize delegateBlock;
-
 - (id) initWithString: (NSString*) sSource
-                range: (NSRange) range
-                block: (SESyntaxParserBlock) aDelegateBlock {
+                range: (NSRange) range {
     
     if (! sSource.length) return nil;
     
     NSParameterAssert(NSMaxRange(range) <= sSource.length);
     
     if (self = [self init]) {
-        delegateBlock = aDelegateBlock;
+        //delegateBlock = aDelegateBlock;
         _string = sSource;
         length = range.length;
         stringRange = range;
@@ -58,56 +58,56 @@
 /* This is the lisp tokenizer; it returns a symbol, or one of `(', `)', `.', or EOF */
 - (SETokenOccurrence) nextToken {
     unichar c;
-
-    SETokenOccurrence result;
     
     do {
         c = [self getc];
         if (c == ';') {
             // parse line comment:
-            result.token = COMMENT;
-            result.range.location = position-1;
+            lastToken.type = COMMENT;
+            lastToken.range.location = position-1;
+            lastToken.firstChar = c;
             do c = [self getc]; while (c != '\n' && c);
-            result.range.length = position - result.range.location;
-            return result;
+            lastToken.range.length = position - lastToken.range.location;
+            return lastToken;
         }
     } while (c && isspace(c));
     
-    result.range.location = position-1;
+    lastToken.range.location = position-1;
+    lastToken.firstChar = c;
 
     switch (c) {
         case 0: {
-            result.token = END_OF_INPUT;
-            result.range.length = 0;
-            return result;
+            lastToken.type = END_OF_INPUT;
+            lastToken.range.length = 0;
+            return lastToken;
         }
         case '(':
         case '[': {
-            result.token = LEFT_PAR;
-            result.range.length = 1;
-            return result;
+            lastToken.type = LEFT_PAR;
+            lastToken.range.length = 1;
+            return lastToken;
         }
         case ')':
         case ']': {
-            result.token = RIGHT_PAR;
-            result.range.length = 1;
-            return result;
+            lastToken.type = RIGHT_PAR;
+            lastToken.range.length = 1;
+            return lastToken;
         }
         case '.': {
-            result.token = DOT;
-            result.range.length = 1;
-            return result;
+            lastToken.type = DOT;
+            lastToken.range.length = 1;
+            return lastToken;
         }
         case '"': {
             register unichar prev = 0;
-            result.token = STRING;
+            lastToken.type = STRING;
             do {
                 prev = c;
                 c = [self getc];
             } while (c != 0 && (c != '"' || prev=='\\'));
-            result.range.length = position-result.range.location;
+            lastToken.range.length = position-lastToken.range.location;
             
-            return result;
+            return lastToken;
         }
         default:
         
@@ -116,22 +116,28 @@
         } while (c && !isspace(c) && c != ';' && ! isPar(c));
         
         if (c) position -= 1;
-        result.range.length = position-result.range.location;
-        unichar firstChar = characters[result.range.location];
+        lastToken.range.length = position-lastToken.range.location;
+        unichar firstChar = lastToken.firstChar;
         if (firstChar == '#') {
-            result.token = CONSTANT;
+            lastToken.type = CONSTANT;
         } else if (isdigit(firstChar)) {
-            result.token = NUMBER;
+            lastToken.type = NUMBER;
         } else if (firstChar == ':') {
-            result.token = KEYWORD;
+            lastToken.type = KEYWORD;
         } else {
-            result.token = ATOM;
+            lastToken.type = ATOM;
         }
-        return result;
+        return lastToken;
     }
 }
 
-- (void) parseAll {
+- (SETokenOccurrence) peekToken {
+    SETokenOccurrence token = [self nextToken];
+    position = token.range.location; // push back position
+    return token;
+}
+
+- (void) tokenizeAllWithBlock: (SESyntaxParserBlock) delegateBlock {
     
     position = 0;
     SEParserResult pResult;
@@ -139,13 +145,13 @@
     pResult.elementCount = 0;
     BOOL stop = NO;
     
-    while (! stop && (pResult.occurrence = [self nextToken]).token != END_OF_INPUT) {
+    while (! stop && (pResult.occurrence = [self nextToken]).type != END_OF_INPUT) {
         //NSLog(@"Found Token '%@'(%d) at %@", [schemeString substringWithRange:tokenInstance.occurrence], tokenInstance.token, NSStringFromRange(tokenInstance.occurrence));
         
         // Adjust offset from -init:
         pResult.occurrence.range.location += stringRange.location;
         
-        switch (pResult.occurrence.token) {
+        switch (pResult.occurrence.type) {
             case LEFT_PAR:
                 pResult.depth += 1;
                 pResult.elementCount = 0;
@@ -169,8 +175,98 @@
     }
 }
 
+- (id) readList {
+    SETokenOccurrence leftPar = [self nextToken];
+    NSMutableArray* list = [[NSMutableArray alloc] initWithCapacity: 4];
+    id element;
+    while ((element = [self readForm])) {
+        [list addObject: element];
+    }
+    
+    if (lastToken.type != RIGHT_PAR) {
+        NSLog(@"Unterminated List starting at %ld", leftPar.range.location);
+    } else {
+        if (matchingPar(leftPar.firstChar) != lastToken.firstChar) {
+            NSLog(@"Unmatched Pars '%C':%ld and '%C':%ld.", leftPar.firstChar, leftPar.range.location, lastToken.firstChar, lastToken.range.location);
+        }
+    }
+    
+    return list;
+}
+
+
+- (id) readMap {
+    SETokenOccurrence leftPar = [self nextToken];
+    NSMutableDictionary* map = [[NSMutableDictionary alloc] initWithCapacity: 4];
+    id key, value;
+    while ((key = [self readForm])) {
+        if ((value = [self readForm])) {
+            [map setObject: value forKey: key];
+        }
+    }
+    
+    if (lastToken.type != RIGHT_PAR) {
+        NSLog(@"Unterminated List starting at %ld", leftPar.range.location);
+    } else {
+        if (matchingPar(leftPar.firstChar) != lastToken.firstChar) {
+            NSLog(@"Unterminated List starting at %ld", leftPar.range.location);
+        }
+    }
+    
+    return map;
+}
+
+- (id) readForm {
+    
+    do {
+        SETokenOccurrence nextToken = [self nextToken];
+        switch (nextToken.type) {
+            case END_OF_INPUT:
+                return nil;
+                break;
+            case RIGHT_PAR:
+                // Signal Error!
+                return nil;
+                break;
+            case COMMENT:
+                // NOP
+                break;
+            case LEFT_PAR:
+                position = nextToken.range.location; // push back the reader
+                if (nextToken.firstChar == '{') {
+                    return [self readMap];
+                } else {
+                    return [self readList];
+                }
+                break;
+            case NUMBER: {
+                NSNumberFormatter* f= [[NSNumberFormatter alloc] init]; // TODO: reuse
+                f.numberStyle = NSNumberFormatterDecimalStyle;
+                NSString* string = [NSString stringWithCharacters: &characters[nextToken.range.location] length: nextToken.range.length];
+                NSNumber* number = [f numberFromString: string];
+                return number;
+                break;
+            }
+            case KEYWORD:
+                return [[NSString stringWithCharacters: &characters[nextToken.range.location] length:nextToken.range.length] asSymbol];
+                break;
+
+            case STRING:
+            default:
+                return [NSString stringWithCharacters: &characters[nextToken.range.location] length:nextToken.range.length];
+                break;
+                
+                //@throw @"Unexpected Token";
+                //break;
+        }
+    } while (YES);
+    
+    return nil;
+}
+
 
 @end
+
 
 inline BOOL isOpeningPar(unichar aChar) {
     return aChar == '(' || aChar == '[' || aChar == '{';

@@ -21,12 +21,13 @@ typedef enum {
     NUMBER,
     CONSTANT,
     KEYWORD
-} s_token;
+} SETokenType;
 
 
 typedef struct  {
-    s_token token;
+    SETokenType type;
     NSRange range;
+    unichar firstChar;
 } SETokenOccurrence;
 
 typedef struct  {
@@ -41,16 +42,31 @@ typedef struct  {
 
 typedef void (^SESyntaxParserBlock)(SESyntaxParser *parser, SEParserResult result, BOOL* stopRef);
 
+@interface SEExpression : NSObject {
+    SETokenOccurrence occurrence;
+}
+
+@property (readonly) id value; // can be constants, strings, lists, etc.
+
+- (id) initWithValue: (id) value occurrence: (SETokenOccurrence) occurrence;
+
+- (NSString*) lispDescription;
+
+@end
+
+
 @interface SESyntaxParser : NSObject
 
-@property (strong, nonatomic) SESyntaxParserBlock delegateBlock;
 @property (strong, readonly) NSString* string;
 
 - (id) initWithString: (NSString*) sSource
-                range: (NSRange) range
-                block: (SESyntaxParserBlock) aDelegateBlock;
+                range: (NSRange) range;
 
-- (void) parseAll;
+- (SETokenOccurrence) nextToken;
+
+- (void) tokenizeAllWithBlock: (SESyntaxParserBlock) delegateBlock;
+
+- (id) readForm;
 
 @end
 
