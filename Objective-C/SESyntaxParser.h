@@ -24,6 +24,7 @@ typedef enum {
     QUASIQUOTE,
     UNQUOTE,
     SPLICE_UNQUOTE,
+    WITH_META,
     DEREF,
     KEYWORD
 } SETokenType;

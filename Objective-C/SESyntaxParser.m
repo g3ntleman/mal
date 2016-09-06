@@ -110,6 +110,12 @@
             lastToken.range.length = 1;
             return lastToken;
         }
+        case '^': {
+            lastToken.type = WITH_META;
+            lastToken.range.length = 1;
+            return lastToken;
+        }
+            
         case '~': {
             if (position<length && characters[position] == '@') {
                 [self getc];
@@ -208,6 +214,7 @@
  **/
 - (id) readList {
     SETokenOccurrence leftPar = [self nextToken];
+    
     NSMutableArray* array = [[NSMutableArray alloc] initWithCapacity: 4];
     id element;
     while ((element = [self readForm])) {
@@ -231,6 +238,11 @@
 
 - (id) readMap {
     SETokenOccurrence leftPar = [self nextToken];
+    
+    if (leftPar.type != LEFT_PAR) {
+        NSLog(@"Expected '{' but got '%@'", [NSString stringWithCharacters: &characters[leftPar.range.location] length: leftPar.range.length]);
+    }
+    
     NSMutableDictionary* map = [[NSMutableDictionary alloc] initWithCapacity: 4];
     id key, value;
     while ((key = [self readForm])) {
@@ -305,7 +317,13 @@
             case QUASIQUOTE:
                 return [MALList listFromArray: @[@"quasiquote", [self readForm]]];
                 break;
-
+               
+            case WITH_META: {
+                id form1 = [self readMap];
+                id form2 = [self readForm];
+                return [MALList listFromArray: @[@"with-meta", form2, form1]];
+                break;
+            }
             case STRING:
             default:
                 return [NSString stringWithCharacters: &characters[nextToken.range.location] length:nextToken.range.length];
