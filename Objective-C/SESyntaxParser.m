@@ -70,7 +70,7 @@
             lastToken.range.length = position - lastToken.range.location;
             return lastToken;
         }
-    } while (c && isspace(c));
+    } while (c && (isspace(c) || c==','));
     
     lastToken.range.location = position-1;
     lastToken.firstChar = c;
@@ -113,7 +113,7 @@
         
         do {
             c = [self getc];
-        } while (c && !isspace(c) && c != ';' && ! isPar(c));
+        } while (c && !isspace(c) && c != ';' && ! isPar(c) && c!=',');
         
         if (c) position -= 1;
         lastToken.range.length = position-lastToken.range.location;
