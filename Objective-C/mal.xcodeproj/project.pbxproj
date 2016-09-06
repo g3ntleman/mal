@@ -15,9 +15,10 @@
 		8D8917C01D6FD4F200351894 /* step0_repl.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8917BF1D6FD4F200351894 /* step0_repl.m */; };
 		8D8917C71D70D78B00351894 /* libreadline.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D8917C61D70D78B00351894 /* libreadline.tbd */; };
 		8D8917D71D74F95C00351894 /* SESyntaxParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8917CA1D74F8A700351894 /* SESyntaxParser.m */; };
-		8D8917DB1D74FA3A00351894 /* step1_read_print.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8917D91D74FA2E00351894 /* step1_read_print.m */; };
+		8D8917DB1D74FA3A00351894 /* step1_read_print.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8917D91D74FA2E00351894 /* step1_read_print.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8D8917DC1D74FA8700351894 /* libreadline.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D8917C61D70D78B00351894 /* libreadline.tbd */; };
 		8D8CDD491D7E941300B28817 /* MALList.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8CDD481D7E941300B28817 /* MALList.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8D8CDD4B1D7EB7E000B28817 /* MALList.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8CDD481D7E941300B28817 /* MALList.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -258,6 +259,7 @@
 			files = (
 				8D511F4E1D77C8EB003ED9FC /* step1_read_print.m in Sources */,
 				8D511F4F1D77C8F6003ED9FC /* NSObject+Types.m in Sources */,
+				8D8CDD4B1D7EB7E000B28817 /* MALList.m in Sources */,
 				8D511F501D77C8F9003ED9FC /* SESyntaxParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

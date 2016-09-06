@@ -20,6 +20,11 @@ typedef enum {
     STRING,
     NUMBER,
     CONSTANT,
+    QUOTE,
+    QUASIQUOTE,
+    UNQUOTE,
+    SPLICE_UNQUOTE,
+    DEREF,
     KEYWORD
 } SETokenType;
 

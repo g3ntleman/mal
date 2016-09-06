@@ -12,6 +12,8 @@
 
 + (id) listFromArray: (NSArray*) anArray;
 
+// TODO: Implement +listWithObjects: ...
+
 - (NSUInteger)count;
 
 - (id)objectAtIndex:(NSUInteger)index;

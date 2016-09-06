@@ -81,12 +81,14 @@
             lastToken.range.length = 0;
             return lastToken;
         }
+        case '{':
         case '(':
         case '[': {
             lastToken.type = LEFT_PAR;
             lastToken.range.length = 1;
             return lastToken;
         }
+        case '}':
         case ')':
         case ']': {
             lastToken.type = RIGHT_PAR;
@@ -95,6 +97,32 @@
         }
         case '.': {
             lastToken.type = DOT;
+            lastToken.range.length = 1;
+            return lastToken;
+        }
+        case '\'': {
+            lastToken.type = QUOTE;
+            lastToken.range.length = 1;
+            return lastToken;
+        }
+        case '`': {
+            lastToken.type = QUASIQUOTE;
+            lastToken.range.length = 1;
+            return lastToken;
+        }
+        case '~': {
+            if (position<length && characters[position] == '@') {
+                [self getc];
+                lastToken.type = SPLICE_UNQUOTE;
+                lastToken.range.length = 2;
+                return lastToken;
+            }
+            lastToken.type = UNQUOTE;
+            lastToken.range.length = 1;
+            return lastToken;
+        }
+        case '@': {
+            lastToken.type = DEREF;
             lastToken.range.length = 1;
             return lastToken;
         }
@@ -175,6 +203,9 @@
     }
 }
 
+/**
+ * Also Reads Vectors / Arrays.
+ **/
 - (id) readList {
     SETokenOccurrence leftPar = [self nextToken];
     NSMutableArray* array = [[NSMutableArray alloc] initWithCapacity: 4];
@@ -191,7 +222,8 @@
         }
     }
     if (leftPar.firstChar == '(') {
-        return [MALList listFromArray: array];
+        return [MALList listFromArray: array]; // Turn it into a List
+
     }
     return array;
 }
@@ -249,8 +281,29 @@
                 return number;
                 break;
             }
-            case KEYWORD:
-                return [[NSString stringWithCharacters: &characters[nextToken.range.location] length:nextToken.range.length] asSymbol];
+            case KEYWORD: {
+                NSString* keyword = [[NSString stringWithCharacters: &characters[nextToken.range.location] length:nextToken.range.length] asSymbol];
+                return keyword;
+                break;
+            }
+            case QUOTE:
+                return [MALList listFromArray: @[@"quote", [self readForm]]];
+                break;
+                
+            case UNQUOTE:
+                return [MALList listFromArray: @[@"unquote", [self readForm]]];
+                break;
+                
+            case SPLICE_UNQUOTE:
+                return [MALList listFromArray: @[@"splice-unquote", [self readForm]]];
+                break;
+                
+            case DEREF:
+                return [MALList listFromArray: @[@"deref", [self readForm]]];
+                break;
+                
+            case QUASIQUOTE:
+                return [MALList listFromArray: @[@"quasiquote", [self readForm]]];
                 break;
 
             case STRING:
