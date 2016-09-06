@@ -28,7 +28,7 @@
     
     BOOL first = YES;
     NSMutableString* buffer = [[NSMutableString alloc] initWithCapacity: self.count*4];
-    [buffer appendString: @"("];
+    [buffer appendString: @"["];
     for (id object in self) {
         if (first) {
             first = NO;
@@ -37,7 +37,7 @@
         }
         [buffer appendString: [object lispDescription]];
     }
-    [buffer appendString: @")"];
+    [buffer appendString: @"]"];
     
     return buffer;
 }
@@ -90,3 +90,5 @@ static NSMutableSet* symbols = nil;
 }
 
 @end
+
+

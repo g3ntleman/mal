@@ -17,6 +17,7 @@
 		8D8917D71D74F95C00351894 /* SESyntaxParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8917CA1D74F8A700351894 /* SESyntaxParser.m */; };
 		8D8917DB1D74FA3A00351894 /* step1_read_print.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8917D91D74FA2E00351894 /* step1_read_print.m */; };
 		8D8917DC1D74FA8700351894 /* libreadline.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D8917C61D70D78B00351894 /* libreadline.tbd */; };
+		8D8CDD491D7E941300B28817 /* MALList.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8CDD481D7E941300B28817 /* MALList.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -57,6 +58,8 @@
 		8D8917D11D74F91900351894 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8D8917D81D74FA2E00351894 /* step1_read_print.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = step1_read_print.h; sourceTree = "<group>"; };
 		8D8917D91D74FA2E00351894 /* step1_read_print.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = step1_read_print.m; sourceTree = "<group>"; };
+		8D8CDD481D7E941300B28817 /* MALList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MALList.m; sourceTree = "<group>"; };
+		8D8CDD4A1D7E943700B28817 /* MALList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MALList.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +93,8 @@
 		8D454BCC1D6FD291007C7554 = {
 			isa = PBXGroup;
 			children = (
+				8D8CDD4A1D7E943700B28817 /* MALList.h */,
+				8D8CDD481D7E941300B28817 /* MALList.m */,
 				8D511F4B1D779F43003ED9FC /* NSObject+Types.h */,
 				8D511F4C1D779F43003ED9FC /* NSObject+Types.m */,
 				8D8917C61D70D78B00351894 /* libreadline.tbd */,
@@ -271,6 +276,7 @@
 			files = (
 				8D8917D71D74F95C00351894 /* SESyntaxParser.m in Sources */,
 				8D8917DB1D74FA3A00351894 /* step1_read_print.m in Sources */,
+				8D8CDD491D7E941300B28817 /* MALList.m in Sources */,
 				8D511F4D1D779F43003ED9FC /* NSObject+Types.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

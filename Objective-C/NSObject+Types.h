@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MALList.h"
 
 @interface NSObject (LispTypes)
 
@@ -20,5 +21,4 @@
 - (NSString*) asSymbol;
 
 @end
-
 

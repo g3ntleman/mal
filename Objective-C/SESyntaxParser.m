@@ -177,10 +177,10 @@
 
 - (id) readList {
     SETokenOccurrence leftPar = [self nextToken];
-    NSMutableArray* list = [[NSMutableArray alloc] initWithCapacity: 4];
+    NSMutableArray* array = [[NSMutableArray alloc] initWithCapacity: 4];
     id element;
     while ((element = [self readForm])) {
-        [list addObject: element];
+        [array addObject: element];
     }
     
     if (lastToken.type != RIGHT_PAR) {
@@ -190,8 +190,10 @@
             NSLog(@"Unmatched Pars '%C':%ld and '%C':%ld.", leftPar.firstChar, leftPar.range.location, lastToken.firstChar, lastToken.range.location);
         }
     }
-    
-    return list;
+    if (leftPar.firstChar == '(') {
+        return [MALList listFromArray: array];
+    }
+    return array;
 }
 
 
