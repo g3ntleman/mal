@@ -6,8 +6,22 @@
 //  Copyright © 2016 Dirk Theisen. All rights reserved.
 //
 
+#import "MALList.h"
 #import "NSObject+Types.h"
 
+
+BOOL MALObjectIsBlock(id _Nullable block) {
+    static Class blockClass;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        blockClass = [^{} class];
+        while ([blockClass superclass] != NSObject.class) {
+            blockClass = [blockClass superclass];
+        }
+    });
+    
+    return [block isKindOfClass:blockClass];
+}
 
 @implementation NSObject (LispTypes)
 
@@ -17,6 +31,14 @@
 
 - (BOOL) isSymbol {
     return NO;
+}
+
+- (id) EVAL: (NSDictionary*) env {
+    return [self eval_ast: env];
+}
+
+- (id) eval_ast: (NSDictionary*) env {
+    return self;
 }
 
 @end
@@ -42,6 +64,26 @@
     return buffer;
 }
 
+
+- (id) eval_ast: (NSDictionary*) env {
+    NSUInteger count = self.count;
+    if (!count) return self;
+    //LispFunction f = nil;
+    
+    NSMutableArray* args = [NSMutableArray arrayWithCapacity: count-1];
+    for (id object in self) {
+        id eObject = [object EVAL: env];
+        //if (!f) {
+        //    f = eObject;
+        //} else {
+        [args addObject: eObject];
+        //}
+    }
+    return args;// f(args);
+}
+
+
+
 @end
 
 @implementation NSDictionary (LispTypes)
@@ -66,6 +108,18 @@
     return buffer;
 }
 
+- (id) eval_ast: (NSDictionary*) env {
+    NSUInteger count = self.count;
+    if (!count) return self;
+
+    NSMutableDictionary* tmp = [NSMutableDictionary dictionaryWithCapacity: count];
+    for (id key in self) {
+        id eObject = [[self objectForKey: key] EVAL: env];
+        [tmp setObject: eObject forKey: key];
+    }
+    return tmp;
+}
+
 @end
 
 @implementation NSString (LispTypes)
@@ -87,6 +141,21 @@ static NSMutableSet* symbols = nil;
 
 - (BOOL) isSymbol {
     return self == [symbols member: self];
+}
+
+- (id) eval_ast : (NSDictionary*) env {
+    if ([self isSymbol]) {
+        id result = env[self];
+        if (! result) {
+            NSString* msg = [NSString stringWithFormat: @"Symbol '%@' not defined.", self];
+            @throw([NSException exceptionWithName: @"MALUndefinedSymbolException"
+                                           reason: msg
+                                         userInfo: nil]);
+        }
+        return result;
+        
+    }
+    return self; // simple string
 }
 
 @end

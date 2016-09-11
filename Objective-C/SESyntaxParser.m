@@ -9,6 +9,7 @@
 #import "SESyntaxParser.h"
 #import "NSObject+Types.h"
 #import <Foundation/NSNumberFormatter.h>
+#import "MALList.h"
 #include <ctype.h>
 
 @implementation SESyntaxParser {
@@ -115,6 +116,7 @@
             lastToken.range.length = 1;
             return lastToken;
         }
+
             
         case '~': {
             if (position<length && characters[position] == '@') {
@@ -143,6 +145,7 @@
             
             return lastToken;
         }
+        case '-':
         default:
         
         do {
@@ -154,7 +157,7 @@
         unichar firstChar = lastToken.firstChar;
         if (firstChar == '#') {
             lastToken.type = CONSTANT;
-        } else if (isdigit(firstChar)) {
+        } else if (isdigit(firstChar) || (firstChar == '-' && lastToken.range.length>1)) {
             lastToken.type = NUMBER;
         } else if (firstChar == ':') {
             lastToken.type = KEYWORD;
@@ -299,23 +302,23 @@
                 break;
             }
             case QUOTE:
-                return [MALList listFromArray: @[@"quote", [self readForm]]];
+                return [MALList listFromFirstObject: @"quote" rest: [self readForm]];
                 break;
                 
             case UNQUOTE:
-                return [MALList listFromArray: @[@"unquote", [self readForm]]];
+                return [MALList listFromFirstObject: @"unquote" rest: [self readForm]];
                 break;
                 
             case SPLICE_UNQUOTE:
-                return [MALList listFromArray: @[@"splice-unquote", [self readForm]]];
+                return [MALList listFromFirstObject: @"splice-unquote" rest: [self readForm]];
                 break;
                 
             case DEREF:
-                return [MALList listFromArray: @[@"deref", [self readForm]]];
+                return [MALList listFromFirstObject: @"deref" rest: [self readForm]];
                 break;
                 
             case QUASIQUOTE:
-                return [MALList listFromArray: @[@"quasiquote", [self readForm]]];
+                return [MALList listFromFirstObject: @"quasiquote" rest: [self readForm]];
                 break;
                
             case WITH_META: {
@@ -324,6 +327,9 @@
                 return [MALList listFromArray: @[@"with-meta", form2, form1]];
                 break;
             }
+            case ATOM:
+                return [[NSString stringWithCharacters: &characters[nextToken.range.location] length:nextToken.range.length] asSymbol];
+                break;
             case STRING:
             default:
                 return [NSString stringWithCharacters: &characters[nextToken.range.location] length:nextToken.range.length];

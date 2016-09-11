@@ -11,6 +11,7 @@
 @interface MALList : NSArray
 
 + (id) listFromArray: (NSArray*) anArray;
++ (id) listFromFirstObject: (id) first rest: (NSArray*) anArray;
 
 // TODO: Implement +listWithObjects: ...
 

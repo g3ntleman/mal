@@ -17,7 +17,7 @@ id EVAL(id ast, id env);
 NSString* PRINT(id exp);
 
 
-NSString* REP(NSString* code);
+NSString* REP(NSString* code, NSDictionary* env);
 
 
 #endif
