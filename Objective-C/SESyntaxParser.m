@@ -118,7 +118,6 @@
             lastToken.range.length = 1;
             return lastToken;
         }
-
             
         case '~': {
             if (position<length && characters[position] == '@') {
@@ -147,8 +146,7 @@
             
             return lastToken;
         }
-        case '-':
-        case '+':
+
         default:
             
             do {
@@ -175,6 +173,11 @@
                         lastToken.type = ATOM;
                         break;
                     } // else fall through to number
+                    if (firstChar=='+') {
+                        // Skip leading '+' - scanner can't handle it.
+                        lastToken.range.length -=1;
+                        lastToken.range.location +=1;
+                    }
                 }
                 case '1':
                 case '2':
