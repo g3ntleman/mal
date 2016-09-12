@@ -20,6 +20,8 @@ typedef enum {
     STRING,
     NUMBER,
     CONSTANT,
+    BOOL_TRUE,
+    BOOL_FALSE,
     QUOTE,
     QUASIQUOTE,
     UNQUOTE,

@@ -60,6 +60,7 @@
 - (SETokenOccurrence) nextToken {
     unichar c;
     
+    // Skip leading "space" / ignore chars:
     do {
         c = [self getc];
         if (c == ';') {
@@ -75,7 +76,8 @@
     
     lastToken.range.location = position-1;
     lastToken.firstChar = c;
-
+    
+    // Beginning of Token found.
     switch (c) {
         case 0: {
             lastToken.type = END_OF_INPUT;
@@ -146,26 +148,69 @@
             return lastToken;
         }
         case '-':
+        case '+':
         default:
-        
-        do {
-            c = [self getc];
-        } while (c && !isspace(c) && c != ';' && ! isPar(c) && c!=',');
-        
-        if (c) position -= 1;
-        lastToken.range.length = position-lastToken.range.location;
-        unichar firstChar = lastToken.firstChar;
-        if (firstChar == '#') {
-            lastToken.type = CONSTANT;
-        } else if (isdigit(firstChar) || (firstChar == '-' && lastToken.range.length>1)) {
-            lastToken.type = NUMBER;
-        } else if (firstChar == ':') {
-            lastToken.type = KEYWORD;
-        } else {
-            lastToken.type = ATOM;
-        }
-        return lastToken;
+            
+            do {
+                c = [self getc];
+            } while (c && !isspace(c) && c != ';' && ! isPar(c) && c!=',');
+            
+            if (c) position -= 1;
+            lastToken.range.length = position-lastToken.range.location;
+            unichar firstChar = lastToken.firstChar;
+            
+            switch (firstChar) {
+                case '#':
+                    lastToken.type = CONSTANT;
+                    break;
+                    
+                case ':':
+                    lastToken.type = KEYWORD;
+                    break;
+                    
+                    
+                case '-':
+                case '+': {
+                    if (lastToken.range.length<=1) {
+                        lastToken.type = ATOM;
+                        break;
+                    } // else fall through to number
+                }
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                case '0': {
+                    lastToken.type = NUMBER;
+                    break;
+                }
+                case 't': {
+                    unichar* token = characters+lastToken.range.location;
+                    if (lastToken.range.length==4 && token[1]=='r' && token[2]=='u' && token[3]=='e') {
+                        lastToken.type = BOOL_TRUE;
+                        break;
+                    }
+                }
+                case 'f': {
+                    unichar* token = characters+lastToken.range.location;
+                    if (lastToken.range.length==5 && token[1]=='a' && token[2]=='l' && token[3]=='s' && token[3]=='e') {
+                        lastToken.type = BOOL_FALSE;
+                        break;
+                    }
+                }
+                    
+                default:
+                    lastToken.type = ATOM;
+                    break;
+            }
+            
     }
+    return lastToken;
 }
 
 - (SETokenOccurrence) peekToken {
@@ -299,6 +344,14 @@
             case KEYWORD: {
                 NSString* keyword = [[NSString stringWithCharacters: &characters[nextToken.range.location] length:nextToken.range.length] asSymbol];
                 return keyword;
+                break;
+            }
+            case BOOL_TRUE: {
+                return @YES;
+                break;
+            }
+            case BOOL_FALSE: {
+                return @NO;
                 break;
             }
             case QUOTE:
