@@ -81,7 +81,7 @@ int main(int argc, const char * argv[]) {
         LispFunction minus = ^id(NSArray* args) {
             NSUInteger count = args.count;
             NSInteger result = 0;
-
+            
             if (count>1) {
                 result = [args[1] integerValue];
                 if (count == 2) {
@@ -98,7 +98,7 @@ int main(int argc, const char * argv[]) {
             NSCParameterAssert(args.count>1);
             NSInteger result = 1;
             NSUInteger count = args.count;
-
+            
             for (int i = 1; i<count; i++) {
                 result *= [args[i] integerValue];
             }
@@ -120,14 +120,14 @@ int main(int argc, const char * argv[]) {
             }
             return @(result);
         };
-
+        
         NSDictionary* repl_env =  @{
-                      [@"+" asSymbol]: plus,
-                      [@"-" asSymbol]: minus,
-                      [@"*" asSymbol]: multiply,
-                      [@"/" asSymbol]: divide
-                      };
-                
+                                    [@"+" asSymbol]: plus,
+                                    [@"-" asSymbol]: minus,
+                                    [@"*" asSymbol]: multiply,
+                                    [@"/" asSymbol]: divide
+                                    };
+        
         while (true) {
             char *rawline = readline("user> ");
             if (!rawline) { break; }
