@@ -115,13 +115,9 @@
     NSMutableArray* args = [MALList listWithCapacity: count];
     for (id object in self) {
         id eObject = [object EVAL: env];
-        //if (!f) {
-        //    f = eObject;
-        //} else {
         [args addObject: eObject];
-        //}
     }
-    return args;// f(args);
+    return args;
 }
 
 @end

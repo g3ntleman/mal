@@ -24,6 +24,11 @@
 			<key>orderHint</key>
 			<integer>3</integer>
 		</dict>
+		<key>step3_env.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>4</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
@@ -38,6 +43,11 @@
 			<true/>
 		</dict>
 		<key>8D8917CE1D74F91900351894</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8D8C74931D88DC95007AE095</key>
 		<dict>
 			<key>primary</key>
 			<true/>
