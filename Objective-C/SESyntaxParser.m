@@ -206,6 +206,13 @@
                         break;
                     }
                 }
+                case 'n': {
+                    unichar* token = characters+lastToken.range.location;
+                    if (lastToken.range.length==3 && token[1]=='i' && token[2]=='l') {
+                        lastToken.type = NIL;
+                        break;
+                    }
+                }
                     
                 default:
                     lastToken.type = ATOM;
@@ -322,12 +329,14 @@
                 return nil;
                 break;
             case RIGHT_PAR:
-                // Signal Error!
+                // TODO: Signal Error!
                 return nil;
                 break;
             case COMMENT:
                 // NOP
                 break;
+            case NIL:
+                return nil;
             case LEFT_PAR:
                 position = nextToken.range.location; // push back the reader
                 if (nextToken.firstChar == '{') {

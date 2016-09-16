@@ -22,6 +22,7 @@ typedef enum {
     CONSTANT,
     BOOL_TRUE,
     BOOL_FALSE,
+    NIL,
     QUOTE,
     QUASIQUOTE,
     UNQUOTE,

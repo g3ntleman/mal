@@ -9,11 +9,16 @@
 #import <Foundation/Foundation.h>
 
 @interface MALEnv : NSObject {
+    @public
     NSMutableDictionary* data;
-    MALEnv* outer;
 }
 
-- (id) initWithOuterEnvironment: (MALEnv*) anOuter;
+- (id) initWithOuterEnvironment: (MALEnv*) anOuter
+                       capacity: (NSUInteger) capacity;
+
+- (id) initWithOuterEnvironment: (MALEnv*) anOuter
+                       bindings: (NSArray*) keys
+                    expressions: (NSArray*) expressions;
 
 - (MALEnv*) find: (NSString*) symbol;
 - (id) get: (NSString*) symbol;

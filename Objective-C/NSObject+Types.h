@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MALEnv.h"
 
 typedef id _Nullable (^LispFunction)(NSArray* _Nullable args );
 
@@ -15,8 +16,8 @@ extern BOOL MALObjectIsBlock(id _Nullable block);
 @interface NSObject (LispTypes)
 
 - (NSString* _Nonnull) lispDescription;
-- (id) EVAL: (NSDictionary*) env;
-- (id) eval_ast: (NSDictionary*) env;
+- (id) EVAL: (MALEnv*) env;
+- (id) eval_ast: (MALEnv*) env;
 - (BOOL) isSymbol;
 
 @end

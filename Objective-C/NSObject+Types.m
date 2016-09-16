@@ -33,11 +33,11 @@ BOOL MALObjectIsBlock(id _Nullable block) {
     return NO;
 }
 
-- (id) EVAL: (NSDictionary*) env {
+- (id) EVAL: (MALEnv*) env {
     return [self eval_ast: env];
 }
 
-- (id) eval_ast: (NSDictionary*) env {
+- (id) eval_ast: (MALEnv*) env {
     return self;
 }
 
@@ -65,7 +65,7 @@ BOOL MALObjectIsBlock(id _Nullable block) {
 }
 
 
-- (id) eval_ast: (NSDictionary*) env {
+- (id) eval_ast: (MALEnv*) env {
     NSUInteger count = self.count;
     if (!count) return self;
     //LispFunction f = nil;
@@ -108,7 +108,7 @@ BOOL MALObjectIsBlock(id _Nullable block) {
     return buffer;
 }
 
-- (id) eval_ast: (NSDictionary*) env {
+- (id) eval_ast: (MALEnv*) env {
     NSUInteger count = self.count;
     if (!count) return self;
 
@@ -143,9 +143,9 @@ static NSMutableSet* symbols = nil;
     return self == [symbols member: self];
 }
 
-- (id) eval_ast : (NSDictionary*) env {
+- (id) eval_ast : (MALEnv*) env {
     if ([self isSymbol]) {
-        id result = env[self];
+        id result = [env get: self];
         if (! result) {
             NSString* msg = [NSString stringWithFormat: @"Symbol '%@' not defined.", self];
             @throw([NSException exceptionWithName: @"MALUndefinedSymbolException"

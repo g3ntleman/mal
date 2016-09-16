@@ -9,7 +9,7 @@
 #include <readline/readline.h>
 #import "SESyntaxParser.h"
 #import "NSObject+Types.h"
-#import "step3_env.h"
+#import "step4_if_fn_do.h"
 
 
 //#define EVAL(ast, env) [ast lispEvalWithEnvironment: env]
@@ -121,7 +121,7 @@ int main(int argc, const char * argv[]) {
             return @(result);
         };
         
-        MALEnv* replEnvironment = [[MALEnv alloc] initWithOuterEnvironment: nil];
+        MALEnv* replEnvironment = [[MALEnv alloc] init];
         
         // Add some functions to the repl environment:
         replEnvironment->data[[@"+" asSymbol]] = plus;

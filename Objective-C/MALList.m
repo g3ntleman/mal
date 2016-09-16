@@ -89,10 +89,37 @@
     return buffer;
 }
 
-- (id) EVAL: (NSDictionary*) env {
+- (id) EVAL: (MALEnv*) env {
     
     if (self.count) {
         @try {
+            if (self[0] == [@"def!" asSymbol]) {
+                if (self.count==3) {
+                    // Make new Binding:
+                    id value = [self[2] EVAL: env];
+                    env->data[self[1]] = value;
+                    return value;
+                }
+                return nil;
+            }
+            if (self[0] == [@"let*" asSymbol]) {
+                if (self.count==3) {
+                    NSArray* bindingsList = self[1];
+                    NSUInteger bindingListCount = bindingsList.count;
+                    // Make new Environment:
+                    MALEnv* letEnv = [[MALEnv alloc] initWithOuterEnvironment: env capacity:bindingListCount];
+                    for (NSUInteger i=0; i<bindingListCount; i+=2) {
+                        id key = bindingsList[i];
+                        id value = [bindingsList[i+1] EVAL: letEnv];
+                        letEnv->data[key] = value;
+                    }
+                    id result = [self[2] EVAL: letEnv];
+                    return result;
+
+                }
+                return nil;
+            }
+            
             MALList* evaluatedList = [self eval_ast: env];
             LispFunction f = evaluatedList[0];
             if (MALObjectIsBlock(f)) {
@@ -107,7 +134,7 @@
     return self;
 }
 
-- (id) eval_ast: (NSDictionary*) env {
+- (id) eval_ast: (MALEnv*) env {
     NSUInteger count = self.count;
     if (!count) return self;
     //LispFunction f = nil;

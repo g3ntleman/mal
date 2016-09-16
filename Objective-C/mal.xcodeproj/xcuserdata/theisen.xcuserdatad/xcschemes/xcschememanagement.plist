@@ -29,6 +29,11 @@
 			<key>orderHint</key>
 			<integer>4</integer>
 		</dict>
+		<key>step4_if_fn_do.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>5</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
@@ -53,6 +58,11 @@
 			<true/>
 		</dict>
 		<key>8D8CDD4C1D7F4F1700B28817</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8DB4C9521D8C6E26000743BA</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -9,21 +9,39 @@
 #import "MALEnv.h"
 #import "NSObject+Types.h"
 
-@implementation MALEnv
-
-- (id) init {
-    if (self = [super init]) {
-        data = [[NSMutableDictionary alloc] initWithCapacity: 4];
-    }
-    return self;
+@implementation MALEnv {
+    MALEnv* outer;
 }
 
-- (id) initWithOuterEnvironment: (MALEnv*) anOuter {
-    if (self = [self init]) {
+- (id) init {
+    return [self initWithOuterEnvironment: nil capacity: 4];
+}
+
+- (id) initWithOuterEnvironment: (MALEnv*) anOuter
+                       capacity: (NSUInteger) capacity {
+    if (self = [super init]) {
+        data = [[NSMutableDictionary alloc] initWithCapacity: capacity];
         outer = anOuter;
     }
     return self;
 }
+
+- (id) initWithOuterEnvironment: (MALEnv*) anOuter
+                       bindings: (NSArray*) keys
+                    expressions: (NSArray*) expressions {
+    
+    NSParameterAssert(keys.count == expressions.count);
+    NSUInteger count = keys.count;
+    if (self = [self initWithOuterEnvironment: anOuter
+                                     capacity: count]) {
+        for (NSUInteger i=0; i<count; i++) {
+            data[keys[i]] = expressions[i];
+        }
+    }
+    return self;
+}
+
+
 
 //void set: (id) obj symbol: (NSString*) symbol {
 //    data[[symbol asSymbol]] = obj;
@@ -45,7 +63,7 @@
     
     MALEnv* me = self;
     id obj;
-    while (! (obj = me->data[symbol])) {
+    while (me && ! (obj = me->data[symbol])) {
         me = me->outer;
     }
     if (! obj) {

@@ -22,7 +22,6 @@
 		8D8C74A31D88DDF3007AE095 /* MALEnv.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8C74A21D88DDF3007AE095 /* MALEnv.m */; };
 		8D8C74A41D88DDF3007AE095 /* MALEnv.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8C74A21D88DDF3007AE095 /* MALEnv.m */; };
 		8D8C74A61D88E24C007AE095 /* step3_env.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8C74A51D88E24C007AE095 /* step3_env.m */; };
-		8D8C74A71D88E24C007AE095 /* step3_env.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8C74A51D88E24C007AE095 /* step3_env.m */; };
 		8D8CDD491D7E941300B28817 /* MALList.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8CDD481D7E941300B28817 /* MALList.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8D8CDD4B1D7EB7E000B28817 /* MALList.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8CDD481D7E941300B28817 /* MALList.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8D8CDD4E1D7F4F1700B28817 /* SESyntaxParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8917CA1D74F8A700351894 /* SESyntaxParser.m */; };
@@ -31,6 +30,13 @@
 		8D8CDD531D7F4F1700B28817 /* libreadline.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D8917C61D70D78B00351894 /* libreadline.tbd */; };
 		8D8CDD5D1D7F4F9300B28817 /* step2_eval.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8CDD5A1D7F4F6300B28817 /* step2_eval.m */; };
 		8D8CDD5F1D7F504400B28817 /* step1_read_print.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8917D91D74FA2E00351894 /* step1_read_print.m */; };
+		8DB4C9541D8C6E26000743BA /* MALEnv.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8C74A21D88DDF3007AE095 /* MALEnv.m */; };
+		8DB4C9551D8C6E26000743BA /* SESyntaxParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8917CA1D74F8A700351894 /* SESyntaxParser.m */; };
+		8DB4C9561D8C6E26000743BA /* MALList.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8CDD481D7E941300B28817 /* MALList.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8DB4C9571D8C6E26000743BA /* NSObject+Types.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D511F4C1D779F43003ED9FC /* NSObject+Types.m */; };
+		8DB4C95A1D8C6E26000743BA /* libreadline.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D8917C61D70D78B00351894 /* libreadline.tbd */; };
+		8DB4C9641D8C6EAA000743BA /* step4_if_fn_do.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DB4C9611D8C6E93000743BA /* step4_if_fn_do.m */; };
+		8DB4C9651D8C6EAB000743BA /* step4_if_fn_do.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DB4C9611D8C6E93000743BA /* step4_if_fn_do.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -70,6 +76,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		8DB4C95B1D8C6E26000743BA /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -98,6 +113,9 @@
 		8D8CDD591D7F4F1700B28817 /* step2_eval */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = step2_eval; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D8CDD5A1D7F4F6300B28817 /* step2_eval.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = step2_eval.m; sourceTree = "<group>"; };
 		8D8CDD5C1D7F4F8500B28817 /* step2_eval.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = step2_eval.h; sourceTree = "<group>"; };
+		8DB4C9601D8C6E26000743BA /* step4_if_fn_do */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = step4_if_fn_do; sourceTree = BUILT_PRODUCTS_DIR; };
+		8DB4C9611D8C6E93000743BA /* step4_if_fn_do.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = step4_if_fn_do.m; sourceTree = "<group>"; };
+		8DB4C9621D8C6E93000743BA /* step4_if_fn_do.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = step4_if_fn_do.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +159,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8DB4C9591D8C6E26000743BA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8DB4C95A1D8C6E26000743BA /* libreadline.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -166,6 +192,8 @@
 				8D8CDD5A1D7F4F6300B28817 /* step2_eval.m */,
 				8D8C74A81D88E28C007AE095 /* step3_env.h */,
 				8D8C74A51D88E24C007AE095 /* step3_env.m */,
+				8DB4C9621D8C6E93000743BA /* step4_if_fn_do.h */,
+				8DB4C9611D8C6E93000743BA /* step4_if_fn_do.m */,
 				8D454BD61D6FD291007C7554 /* Products */,
 				8D8917C31D70D17400351894 /* tests */,
 			);
@@ -179,6 +207,7 @@
 				8D8917CF1D74F91900351894 /* step1_read_print */,
 				8D8CDD591D7F4F1700B28817 /* step2_eval */,
 				8D8C74A01D88DC95007AE095 /* step3_env */,
+				8DB4C9601D8C6E26000743BA /* step4_if_fn_do */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -274,6 +303,24 @@
 			productReference = 8D8CDD591D7F4F1700B28817 /* step2_eval */;
 			productType = "com.apple.product-type.tool";
 		};
+		8DB4C9521D8C6E26000743BA /* step4_if_fn_do */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8DB4C95D1D8C6E26000743BA /* Build configuration list for PBXNativeTarget "step4_if_fn_do" */;
+			buildPhases = (
+				8DB4C9531D8C6E26000743BA /* Sources */,
+				8DB4C9591D8C6E26000743BA /* Frameworks */,
+				8DB4C95B1D8C6E26000743BA /* CopyFiles */,
+				8DB4C95C1D8C6E26000743BA /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = step4_if_fn_do;
+			productName = step1_read_print;
+			productReference = 8DB4C9601D8C6E26000743BA /* step4_if_fn_do */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -307,6 +354,7 @@
 				8D8917CE1D74F91900351894 /* step1_read_print */,
 				8D8CDD4C1D7F4F1700B28817 /* step2_eval */,
 				8D8C74931D88DC95007AE095 /* step3_env */,
+				8DB4C9521D8C6E26000743BA /* step4_if_fn_do */,
 				8D454BD41D6FD291007C7554 /* mal */,
 			);
 		};
@@ -366,6 +414,19 @@
 			shellPath = /bin/sh;
 			shellScript = "export STEP=$TARGETNAME\nexport MAL_IMPL=Objective-C\n../runtest.py --deferrable --optional ../tests/$TARGETNAME.mal -- $CODESIGNING_FOLDER_PATH\n";
 		};
+		8DB4C95C1D8C6E26000743BA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export STEP=$TARGETNAME\nexport MAL_IMPL=Objective-C\n../runtest.py --deferrable --optional ../tests/$TARGETNAME.mal -- $CODESIGNING_FOLDER_PATH\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -373,11 +434,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8DB4C9651D8C6EAB000743BA /* step4_if_fn_do.m in Sources */,
 				8D8C74A41D88DDF3007AE095 /* MALEnv.m in Sources */,
 				8D511F4F1D77C8F6003ED9FC /* NSObject+Types.m in Sources */,
 				8D8CDD4B1D7EB7E000B28817 /* MALList.m in Sources */,
 				8D511F501D77C8F9003ED9FC /* SESyntaxParser.m in Sources */,
-				8D8C74A71D88E24C007AE095 /* step3_env.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -420,6 +481,18 @@
 				8D8CDD4E1D7F4F1700B28817 /* SESyntaxParser.m in Sources */,
 				8D8CDD501D7F4F1700B28817 /* MALList.m in Sources */,
 				8D8CDD511D7F4F1700B28817 /* NSObject+Types.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8DB4C9531D8C6E26000743BA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8DB4C9641D8C6EAA000743BA /* step4_if_fn_do.m in Sources */,
+				8DB4C9541D8C6E26000743BA /* MALEnv.m in Sources */,
+				8DB4C9551D8C6E26000743BA /* SESyntaxParser.m in Sources */,
+				8DB4C9561D8C6E26000743BA /* MALList.m in Sources */,
+				8DB4C9571D8C6E26000743BA /* NSObject+Types.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -577,6 +650,20 @@
 			};
 			name = Release;
 		};
+		8DB4C95E1D8C6E26000743BA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		8DB4C95F1D8C6E26000743BA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -630,6 +717,15 @@
 			buildConfigurations = (
 				8D8CDD571D7F4F1700B28817 /* Debug */,
 				8D8CDD581D7F4F1700B28817 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8DB4C95D1D8C6E26000743BA /* Build configuration list for PBXNativeTarget "step4_if_fn_do" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8DB4C95E1D8C6E26000743BA /* Debug */,
+				8DB4C95F1D8C6E26000743BA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
