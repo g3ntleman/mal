@@ -12,6 +12,7 @@
 
 + (id) listFromArray: (NSArray*) anArray;
 + (id) listFromFirstObject: (id) first rest: (NSArray*) anArray;
++ (id) listFromArray:(NSArray *)anArray subrange: (NSRange) range;
 
 // TODO: Implement +listWithObjects: ...
 

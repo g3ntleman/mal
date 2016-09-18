@@ -336,7 +336,7 @@
                 // NOP
                 break;
             case NIL:
-                return nil;
+                return [NSNull null];
             case LEFT_PAR:
                 position = nextToken.range.location; // push back the reader
                 if (nextToken.firstChar == '{') {
@@ -356,15 +356,12 @@
             case KEYWORD: {
                 NSString* keyword = [[NSString stringWithCharacters: &characters[nextToken.range.location] length:nextToken.range.length] asSymbol];
                 return keyword;
-                break;
             }
             case BOOL_TRUE: {
-                return @YES;
-                break;
+                return [MALBool yes];
             }
             case BOOL_FALSE: {
-                return @NO;
-                break;
+                return [MALBool no];
             }
             case QUOTE:
                 return [MALList listFromFirstObject: @"quote" rest: [self readForm]];

@@ -30,7 +30,9 @@
                        bindings: (NSArray*) keys
                     expressions: (NSArray*) expressions {
     
-    NSParameterAssert(keys.count == expressions.count);
+    if (keys.count != expressions.count) {
+        NSParameterAssert(keys.count == expressions.count);
+    }
     NSUInteger count = keys.count;
     if (self = [self initWithOuterEnvironment: anOuter
                                      capacity: count]) {
@@ -74,5 +76,8 @@
     return obj;
 }
 
+- (NSString*) description {
+    return [NSString stringWithFormat: @"%@ bindings: %@", [super description], data];
+}
 
 @end

@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NSObject+Types.m"
-            timestampString = "495291203.470752"
+            timestampString = "495923484.709928"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "96"
-            endingLineNumber = "96"
+            startingLineNumber = "153"
+            endingLineNumber = "153"
             landmarkName = "-lispDescription"
             landmarkType = "5">
             <Locations>
@@ -39,14 +39,14 @@
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "-[NSDictionary(LispTypes) lispDescription]"
-                  moduleName = "step3_env"
+                  moduleName = "mal"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/theisen/Projects/Work/mal/Objective-C/NSObject+Types.m"
-                  timestampString = "495732134.440621"
+                  timestampString = "495923486.034013"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "96"
-                  endingLineNumber = "96"
+                  startingLineNumber = "153"
+                  endingLineNumber = "153"
                   offsetFromSymbolStart = "220">
                </Location>
                <Location
@@ -54,33 +54,17 @@
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "__42-[NSDictionary(LispTypes) lispDescription]_block_invoke"
-                  moduleName = "step3_env"
+                  moduleName = "mal"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/theisen/Projects/Work/mal/Objective-C/NSObject+Types.m"
-                  timestampString = "495732134.440808"
+                  timestampString = "495923486.034171"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "96"
-                  endingLineNumber = "96"
+                  startingLineNumber = "153"
+                  endingLineNumber = "153"
                   offsetFromSymbolStart = "16">
                </Location>
             </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SESyntaxParser.m"
-            timestampString = "495333964.217875"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "204"
-            endingLineNumber = "204"
-            landmarkName = "-nextToken"
-            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -109,41 +93,89 @@
             timestampString = "495333964.217875"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "353"
-            endingLineNumber = "353"
-            landmarkName = "-readForm"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SESyntaxParser.m"
-            timestampString = "495333964.217875"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "196"
-            endingLineNumber = "196"
-            landmarkName = "-nextToken"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SESyntaxParser.m"
-            timestampString = "495333964.217875"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
             startingLineNumber = "172"
             endingLineNumber = "172"
             landmarkName = "-nextToken"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MALEnv.m"
+            timestampString = "495791363.559051"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "34"
+            endingLineNumber = "34"
+            landmarkName = "-initWithOuterEnvironment:bindings:expressions:"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[MALEnv initWithOuterEnvironment:bindings:expressions:]"
+                  moduleName = "mal"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/theisen/Projects/Work/mal/Objective-C/MALEnv.m"
+                  timestampString = "495923486.036263"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "34"
+                  endingLineNumber = "34"
+                  offsetFromSymbolStart = "162">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[MALEnv initWithOuterEnvironment:bindings:expressions:]"
+                  moduleName = "mal"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/theisen/Projects/Work/mal/Objective-C/MALEnv.m"
+                  timestampString = "495923486.03827"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "34"
+                  endingLineNumber = "34"
+                  offsetFromSymbolStart = "237">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MALList.m"
+            timestampString = "495920403.068422"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "155"
+            endingLineNumber = "155"
+            landmarkName = "-EVAL:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MALList.m"
+            timestampString = "495922839.672318"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "160"
+            endingLineNumber = "160"
+            landmarkName = "-EVAL:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

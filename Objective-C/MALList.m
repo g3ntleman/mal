@@ -51,6 +51,19 @@
     return instance;
 }
 
++ (id) listFromArray:(NSArray *)anArray subrange: (NSRange) range {
+    
+    MALList* instance = [self listWithCapacity: range.length];
+    NSObject** objects = object_getIndexedIvars(instance);
+    NSUInteger max = range.location+range.length;
+    for (NSUInteger i=range.location; i<max;i++) {
+        id obj = [anArray[i] retain];
+        *objects++ = obj;
+    }
+    instance->_count = range.length;
+    return instance;
+}
+
 - (void) addObject: (id) obj {
     NSObject** objects = object_getIndexedIvars(self);
     objects[_count++] = [obj retain];
@@ -94,7 +107,7 @@
     if (self.count) {
         @try {
             if (self[0] == [@"def!" asSymbol]) {
-                if (self.count==3) {
+                if (_count==3) {
                     // Make new Binding:
                     id value = [self[2] EVAL: env];
                     env->data[self[1]] = value;
@@ -103,7 +116,7 @@
                 return nil;
             }
             if (self[0] == [@"let*" asSymbol]) {
-                if (self.count==3) {
+                if (_count==3) {
                     NSArray* bindingsList = self[1];
                     NSUInteger bindingListCount = bindingsList.count;
                     // Make new Environment:
@@ -118,6 +131,58 @@
 
                 }
                 return nil;
+            }
+            if (self[0] == [@"do" asSymbol]) {
+                id result = nil;
+                for (NSUInteger i=1; i<_count; i++) {
+                    result = [self[i] EVAL: env];
+                }
+                return result; // return the result of the last expression evaluation
+            }
+            if (self[0] == [@"if" asSymbol]) {
+                id cond = [self[1] EVAL: env];
+                id result = nil;
+                if ([cond boolValue]) {
+                    result = [self[2] EVAL: env];
+                } else {
+                    if (_count>3) {
+                        result = [self[3] EVAL: env];
+                    }
+                }
+                return result;
+            }
+            if (self[0] == [@"count" asSymbol]) {
+                NSArray* list = [self[1] EVAL: env];
+                return @(list.count);
+            }
+            if (self[0] == [@"empty?" asSymbol]) {
+                NSArray* list = [self[1] EVAL: env];
+                return [MALBool numberWithBool: list.count == 0];
+            }
+            if (self[0] == [@"list" asSymbol]) {
+                return [MALList listFromArray: self subrange: NSMakeRange(1,_count-1)];
+            }
+
+//            if (self[0] == [@"=" asSymbol]) {
+//                id o1 = [self[1] EVAL: env];
+//                id o2 = [self[2] EVAL: env];
+//                return  (o1 == o2) || [o1 isEqual: o2] ? @(YES) : @(NO);
+//            }
+
+            if (self[0] == [@"fn*" asSymbol]) {
+                MALList* bindings = self[1];
+                id body = self[2];
+                LispFunction block = ^id(NSArray* args) {
+//                    MALEnv* innerEnv = [[MALEnv alloc] initWithOuterEnvironment: env
+//                                                                       bindings: bindings
+//                                                                    expressions: args];
+                    
+                    return [body EVAL: [[MALEnv alloc] initWithOuterEnvironment: env
+                                                                       bindings: bindings
+                                                                    expressions: args]];
+                };
+
+                return [block copy];
             }
             
             MALList* evaluatedList = [self eval_ast: env];

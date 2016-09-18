@@ -12,8 +12,8 @@
 #import "step4_if_fn_do.h"
 
 
-//#define EVAL(ast, env) [ast lispEvalWithEnvironment: env]
-//#define eval_ast(ast, env) [ast eval_ast: env]
+#define EVAL(ast, env) [ast EVAL: env]
+#define PRINT(exp) [exp lispDescription]
 
 
 id eval_ast(id ast, MALEnv* env) {
@@ -31,15 +31,15 @@ id READ(NSString* code) {
 }
 
 
-id EVAL(id ast, id env) {
-    ast = [ast EVAL: env];
-    return ast;
-}
+//id EVAL(id ast, id env) {
+//    ast = [ast EVAL: env];
+//    return ast;
+//}
 
 
-NSString* PRINT(id exp) {
-    return [exp lispDescription];
-}
+//NSString* PRINT(id exp) {
+//    return [exp lispDescription];
+//}
 
 
 NSString* REP(NSString* code, MALEnv* env) {

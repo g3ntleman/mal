@@ -20,13 +20,13 @@ BOOL MALObjectIsBlock(id _Nullable block) {
         }
     });
     
-    return [block isKindOfClass:blockClass];
+    return [block isKindOfClass: blockClass];
 }
 
 @implementation NSObject (LispTypes)
 
 - (NSString*) lispDescription {
-    return [self description];
+    return MALObjectIsBlock(self) ? @"#" : [self description];
 }
 
 - (BOOL) isSymbol {
@@ -41,7 +41,64 @@ BOOL MALObjectIsBlock(id _Nullable block) {
     return self;
 }
 
+- (BOOL) boolValue {
+    return YES;
+}
+
 @end
+
+@implementation NSNull (LispTypes)
+
+- (NSUInteger) count {
+    return 0;
+}
+
+- (NSString*) lispDescription {
+    return @"nil";
+}
+
+@end
+
+@implementation MALBool : NSNumber
+
+static MALBool* YESBOOL = nil;
+static MALBool* NOBOOL = nil;
+
++ (void) load {
+    YESBOOL = [[self alloc] init];
+    NOBOOL = [[self alloc] init];
+}
+
++ (id) yes {
+    return YESBOOL;
+}
+
++ (id) no {
+    return NOBOOL;
+}
+
++ (id) numberWithBool: (BOOL) yn {
+    return yn ? YESBOOL : NOBOOL;
+}
+
+- (BOOL) boolValue {
+    return self == YESBOOL ? YES : NO;
+}
+
+- (const char*) objCType {
+    return "B";
+}
+
+- (NSString*) description {
+    return self == YESBOOL ? @"YES" : @"NO";
+}
+
+- (NSString*) lispDescription {
+    return self == YESBOOL ? @"true" : @"false";
+}
+
+@end
+
 
 
 @implementation NSArray (LispTypes)

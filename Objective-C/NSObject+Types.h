@@ -28,3 +28,11 @@ extern BOOL MALObjectIsBlock(id _Nullable block);
 
 @end
 
+@interface MALBool : NSNumber
+
++ (id) numberWithBool: (BOOL) yn;
+
++ (id) yes;
++ (id) no;
+
+@end
