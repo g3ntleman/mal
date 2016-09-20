@@ -19,8 +19,14 @@
 
 - (id) initWithOuterEnvironment: (MALEnv*) anOuter
                        capacity: (NSUInteger) capacity {
+    return [self initWithOuterEnvironment: anOuter
+                                 bindings: [[NSMutableDictionary alloc] initWithCapacity: capacity]];
+}
+
+- (id) initWithOuterEnvironment: (MALEnv*) anOuter
+                       bindings: (NSMutableDictionary*) bindings {
     if (self = [super init]) {
-        data = [[NSMutableDictionary alloc] initWithCapacity: capacity];
+        data = bindings;
         outer = anOuter;
     }
     return self;
@@ -30,17 +36,9 @@
                        bindings: (NSArray*) keys
                     expressions: (NSArray*) expressions {
     
-    if (keys.count != expressions.count) {
-        NSParameterAssert(keys.count == expressions.count);
-    }
-    NSUInteger count = keys.count;
-    if (self = [self initWithOuterEnvironment: anOuter
-                                     capacity: count]) {
-        for (NSUInteger i=0; i<count; i++) {
-            data[keys[i]] = expressions[i];
-        }
-    }
-    return self;
+    NSParameterAssert(keys.count == expressions.count);
+    
+    return [self initWithOuterEnvironment: anOuter bindings: [NSMutableDictionary dictionaryWithObjects:expressions forKeys: keys]];
 }
 
 

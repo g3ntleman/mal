@@ -9,6 +9,7 @@
 #include <readline/readline.h>
 #import "SESyntaxParser.h"
 #import "NSObject+Types.h"
+#import "core.h"
 #import "step4_if_fn_do.h"
 
 
@@ -69,66 +70,9 @@ int main(int argc, const char * argv[]) {
     // Create an autorelease pool to manage the memory into the program
     @autoreleasepool {
         
-        // Ignore first argument!
-        LispFunction plus = ^id(NSArray* args) {
-            NSUInteger count = args.count;
-            NSInteger result = 0;
-            for (int i = 1; i<count; i++) {
-                result += [args[i] integerValue];
-            }
-            return @(result);
-        };
-        LispFunction minus = ^id(NSArray* args) {
-            NSUInteger count = args.count;
-            NSInteger result = 0;
-            
-            if (count>1) {
-                result = [args[1] integerValue];
-                if (count == 2) {
-                    result = -result;
-                } else {
-                    for (int i = 2; i<count; i++) {
-                        result -= [args[i] integerValue];
-                    }
-                }
-            }
-            return @(result);
-        };
-        LispFunction multiply = ^id(NSArray* args) {
-            NSCParameterAssert(args.count>1);
-            NSInteger result = 1;
-            NSUInteger count = args.count;
-            
-            for (int i = 1; i<count; i++) {
-                result *= [args[i] integerValue];
-            }
-            return @(result);
-        };
-        LispFunction divide = ^id(NSArray* args) {
-            NSUInteger count = args.count;
-            NSInteger result = 0;
-            
-            if (count>1) {
-                result = [args[1] integerValue];
-                if (count == 2) {
-                    result = 1.0/result;
-                } else {
-                    for (int i = 2; i<count; i++) {
-                        result /= [args[i] integerValue];
-                    }
-                }
-            }
-            return @(result);
-        };
         
-        MALEnv* replEnvironment = [[MALEnv alloc] init];
-        
-        // Add some functions to the repl environment:
-        replEnvironment->data[[@"+" asSymbol]] = plus;
-        replEnvironment->data[[@"-" asSymbol]] = minus;
-        replEnvironment->data[[@"*" asSymbol]] = multiply;
-        replEnvironment->data[[@"/" asSymbol]] = divide;
-        
+        MALEnv* replEnvironment = [[MALEnv alloc] initWithOuterEnvironment: nil bindings: [MALCoreNameSpace() mutableCopy]];
+                
         while (true) {
             char *rawline = readline("user> ");
             if (!rawline) { break; }

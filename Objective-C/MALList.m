@@ -151,17 +151,7 @@
                 }
                 return result;
             }
-            if (self[0] == [@"count" asSymbol]) {
-                NSArray* list = [self[1] EVAL: env];
-                return @(list.count);
-            }
-            if (self[0] == [@"empty?" asSymbol]) {
-                NSArray* list = [self[1] EVAL: env];
-                return [MALBool numberWithBool: list.count == 0];
-            }
-            if (self[0] == [@"list" asSymbol]) {
-                return [MALList listFromArray: self subrange: NSMakeRange(1,_count-1)];
-            }
+
 
 //            if (self[0] == [@"=" asSymbol]) {
 //                id o1 = [self[1] EVAL: env];
@@ -188,7 +178,8 @@
             MALList* evaluatedList = [self eval_ast: env];
             LispFunction f = evaluatedList[0];
             if (MALObjectIsBlock(f)) {
-                return f(evaluatedList);
+                id result = f(evaluatedList);
+                return result;
             }
             @throw [NSException exceptionWithName: @"MALUndefinedFunction" reason: [NSString stringWithFormat: @"A '%@' function is not defined.", self[0]] userInfo: nil];
         } @catch(NSException* e) {

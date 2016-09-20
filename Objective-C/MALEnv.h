@@ -17,6 +17,9 @@
                        capacity: (NSUInteger) capacity;
 
 - (id) initWithOuterEnvironment: (MALEnv*) anOuter
+                       bindings: (NSMutableDictionary*) bindings;
+
+- (id) initWithOuterEnvironment: (MALEnv*) anOuter
                        bindings: (NSArray*) keys
                     expressions: (NSArray*) expressions;
 

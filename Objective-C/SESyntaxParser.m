@@ -201,7 +201,7 @@
                 }
                 case 'f': {
                     unichar* token = characters+lastToken.range.location;
-                    if (lastToken.range.length==5 && token[1]=='a' && token[2]=='l' && token[3]=='s' && token[3]=='e') {
+                    if (lastToken.range.length==5 && token[1]=='a' && token[2]=='l' && token[3]=='s' && token[4]=='e') {
                         lastToken.type = BOOL_FALSE;
                         break;
                     }
