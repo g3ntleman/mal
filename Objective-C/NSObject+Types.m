@@ -215,6 +215,10 @@ static NSMutableSet* symbols = nil;
     return self; // simple string
 }
 
+- (NSString*) lispDescription {
+    return self;
+}
+
 @end
 
 

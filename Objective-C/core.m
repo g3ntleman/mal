@@ -16,12 +16,14 @@ NSDictionary* MALCoreNameSpace() {
     static Class listClass = nil;
     static MALBool* yes = nil;
     static MALBool* no  = nil;
+    static NSNull* nilObject = nil;
     
     if (! coreNS) {
         stringClass = [NSString class];
         listClass = [MALList class];
         yes = [MALBool yes];
         no  = [MALBool no];
+        nilObject = [NSNull null];
         
         // Ignore first argument!
         NSDictionary* protoNS = @{
@@ -116,6 +118,16 @@ NSDictionary* MALCoreNameSpace() {
                                   [@"not" asSymbol]: ^id(NSArray* args) {
                                       id obj = args[1];
                                       return ((! obj) || obj == no) ? yes : no;
+                                  },
+                                  [@"println" asSymbol]: ^id(NSArray* args) {
+                                      NSUInteger count = args.count;
+                                      
+                                      for (int i = 1; i<count; i++) {
+                                          NSString* argDesc = [args[i] lispDescription];
+                                          printf(i>1 ? " %s" : "%s", [argDesc UTF8String]);
+                                      }
+                                      printf("\n");
+                                      return nilObject;
                                   }
                                   
                                   };

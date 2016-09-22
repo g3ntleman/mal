@@ -351,7 +351,6 @@
                 NSString* string = [NSString stringWithCharacters: &characters[nextToken.range.location] length: nextToken.range.length];
                 NSNumber* number = [f numberFromString: string];
                 return number;
-                break;
             }
             case KEYWORD: {
                 NSString* keyword = [[NSString stringWithCharacters: &characters[nextToken.range.location] length:nextToken.range.length] asSymbol];
@@ -365,40 +364,33 @@
             }
             case QUOTE:
                 return [MALList listFromFirstObject: @"quote" rest: [self readForm]];
-                break;
                 
             case UNQUOTE:
                 return [MALList listFromFirstObject: @"unquote" rest: [self readForm]];
-                break;
                 
             case SPLICE_UNQUOTE:
                 return [MALList listFromFirstObject: @"splice-unquote" rest: [self readForm]];
-                break;
                 
             case DEREF:
                 return [MALList listFromFirstObject: @"deref" rest: [self readForm]];
-                break;
                 
             case QUASIQUOTE:
                 return [MALList listFromFirstObject: @"quasiquote" rest: [self readForm]];
-                break;
                
             case WITH_META: {
                 id form1 = [self readMap];
                 id form2 = [self readForm];
                 return [MALList listFromArray: @[@"with-meta", form2, form1]];
-                break;
             }
             case ATOM:
                 return [[NSString stringWithCharacters: &characters[nextToken.range.location] length:nextToken.range.length] asSymbol];
-                break;
-            case STRING:
+            case STRING: {
+                NSString* stringWithQuotes = [[NSString alloc] initWithCharactersNoCopy: &characters[nextToken.range.location] length: nextToken.range.length freeWhenDone: NO];
+                return [[NSString alloc] initWithFormat: stringWithQuotes, nil];
+            }
             default:
                 return [NSString stringWithCharacters: &characters[nextToken.range.location] length:nextToken.range.length];
                 break;
-                
-                //@throw @"Unexpected Token";
-                //break;
         }
     } while (YES);
     

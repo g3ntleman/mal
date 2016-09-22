@@ -22,8 +22,6 @@ id eval_ast(id ast, MALEnv* env) {
 }
 
 
-
-
 id READ(NSString* code) {
     SESyntaxParser* reader = [[SESyntaxParser alloc] initWithString: code range: NSMakeRange(0, code.length)];
     id result = [reader readForm];
@@ -78,7 +76,8 @@ int main(int argc, const char * argv[]) {
             if (!rawline) { break; }
             NSString *line = [NSString stringWithUTF8String:rawline];
             if ([line length] == 0) { continue; }
-            printf("%s\n", [[REP(line, replEnvironment) description] UTF8String]);
+            id result = REP(line, replEnvironment);
+            printf("%s\n", [[result lispDescription] UTF8String]);
         }
     }
     return 0;
