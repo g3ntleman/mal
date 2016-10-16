@@ -15,7 +15,7 @@ extern BOOL MALObjectIsBlock(id _Nullable block);
 
 @interface NSObject (LispTypes)
 
-- (NSString* _Nonnull) lispDescription;
+- (NSString* _Nonnull) lispDescriptionReadable: (BOOL) readable;
 - (id) EVAL: (MALEnv*) env;
 - (id) eval_ast: (MALEnv*) env;
 - (BOOL) isSymbol;

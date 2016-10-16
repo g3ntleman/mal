@@ -8,7 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MALList : NSArray
+@interface MALList : NSArray {
+    NSUInteger _count;
+}
 
 + (id) listFromArray: (NSArray*) anArray;
 + (id) listFromFirstObject: (id) first rest: (NSArray*) anArray;

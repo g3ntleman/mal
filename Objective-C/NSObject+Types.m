@@ -25,7 +25,7 @@ BOOL MALObjectIsBlock(id _Nullable block) {
 
 @implementation NSObject (LispTypes)
 
-- (NSString*) lispDescription {
+- (NSString*) lispDescriptionReadable: (BOOL) readable {
     return MALObjectIsBlock(self) ? @"#" : [self description];
 }
 
@@ -53,7 +53,7 @@ BOOL MALObjectIsBlock(id _Nullable block) {
     return 0;
 }
 
-- (NSString*) lispDescription {
+- (NSString*) lispDescriptionReadable: (BOOL) readable {
     return @"nil";
 }
 
@@ -93,7 +93,7 @@ static MALBool* NOBOOL = nil;
     return self == YESBOOL ? @"YES" : @"NO";
 }
 
-- (NSString*) lispDescription {
+- (NSString*) lispDescriptionReadable: (BOOL) readable {
     return self == YESBOOL ? @"true" : @"false";
 }
 
@@ -103,7 +103,7 @@ static MALBool* NOBOOL = nil;
 
 @implementation NSArray (LispTypes)
 
-- (NSString*) lispDescription {
+- (NSString*) lispDescriptionReadable: (BOOL) readable {
     
     BOOL first = YES;
     NSMutableString* buffer = [[NSMutableString alloc] initWithCapacity: self.count*4];
@@ -114,7 +114,7 @@ static MALBool* NOBOOL = nil;
         } else {
             [buffer appendString: @" "];
         }
-        [buffer appendString: [object lispDescription]];
+        [buffer appendString: object ? [object lispDescriptionReadable: readable] : @"nil"];
     }
     [buffer appendString: @"]"];
     
@@ -145,7 +145,7 @@ static MALBool* NOBOOL = nil;
 
 @implementation NSDictionary (LispTypes)
 
-- (NSString*) lispDescription {
+- (NSString*) lispDescriptionReadable: (BOOL) readable {
     
     __block BOOL first = YES;
     NSMutableString* buffer = [[NSMutableString alloc] initWithCapacity: self.count*12];
@@ -156,9 +156,9 @@ static MALBool* NOBOOL = nil;
         } else {
             [buffer appendString: @" "];
         }
-        [buffer appendString: [key lispDescription]];
+        [buffer appendString: [key lispDescriptionReadable: readable]];
         [buffer appendString: @" "];
-        [buffer appendString: [value lispDescription]];
+        [buffer appendString: value ? [value lispDescriptionReadable: readable] : @"nil"];
     }];
     [buffer appendString: @"}"];
     
@@ -190,8 +190,8 @@ static NSMutableSet* symbols = nil;
 - (NSString*) asSymbol {
     NSString* result = [symbols member: self];
     if (! result) {
-        [symbols addObject: self];
-        result = self;
+        result = [NSString stringWithString: self];
+        [symbols addObject: result];
     }
     return result;
 }
@@ -210,13 +210,16 @@ static NSMutableSet* symbols = nil;
                                          userInfo: nil]);
         }
         return result;
-        
     }
-    return self; // simple string
+    return self; // it's a simple string
 }
 
-- (NSString*) lispDescription {
-    return self;
+- (NSString*) lispDescriptionReadable: (BOOL) readable {
+    if (readable) {
+        return [NSString stringWithFormat: @"\"%@\"", self];
+    } else {
+        return self;
+    }
 }
 
 @end

@@ -13,33 +13,12 @@
 #import "step4_if_fn_do.h"
 
 
-#define EVAL(ast, env) [ast EVAL: env]
-#define PRINT(exp) [exp lispDescription]
-
-
-id eval_ast(id ast, MALEnv* env) {
-    return [ast eval_ast: env];
-}
-
-
 id READ(NSString* code) {
     SESyntaxParser* reader = [[SESyntaxParser alloc] initWithString: code range: NSMakeRange(0, code.length)];
     id result = [reader readForm];
     //NSLog(@"Read '%@' into '%@'", code, result);
     return result;
 }
-
-
-//id EVAL(id ast, id env) {
-//    ast = [ast EVAL: env];
-//    return ast;
-//}
-
-
-//NSString* PRINT(id exp) {
-//    return [exp lispDescription];
-//}
-
 
 NSString* REP(NSString* code, MALEnv* env) {
     
@@ -70,14 +49,18 @@ int main(int argc, const char * argv[]) {
         
         
         MALEnv* replEnvironment = [[MALEnv alloc] initWithOuterEnvironment: nil bindings: [MALCoreNameSpace() mutableCopy]];
-                
+        
+        REP(@"(def! not (fn* (a) (if a false true)))", replEnvironment);
+        
+//#Warning: a is defined as a symbol and this makes strings "a" appear as symbols. :-(
+        
         while (true) {
             char *rawline = readline("user> ");
             if (!rawline) { break; }
             NSString *line = [NSString stringWithUTF8String:rawline];
             if ([line length] == 0) { continue; }
             id result = REP(line, replEnvironment);
-            printf("%s\n", [[result lispDescription] UTF8String]);
+            printf("%s\n", [result UTF8String]);
         }
     }
     return 0;

@@ -9,12 +9,13 @@
 
 #import "MALEnv.h"
 
-id READ(NSString* code);
 
-id EVAL(id ast, id env);
-
-
-NSString* PRINT(id exp);
+//id READ(NSString* code);
+//
+//id EVAL(id ast, id env);
+//
+//
+//NSString* PRINT(id exp);
 
 
 NSString* REP(NSString* code, MALEnv* env);

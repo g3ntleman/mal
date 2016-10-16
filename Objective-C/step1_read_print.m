@@ -24,7 +24,7 @@ id EVAL(id ast, id env) {
 
 
 NSString* PRINT(id exp) {
-    return [exp lispDescription];
+    return [exp lispDescriptionReadable: (BOOL) readable];
 }
 
 

@@ -8,4 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+#define EVAL(ast, env) [ast EVAL: env]
+#define PRINT(exp) [exp lispDescriptionReadable: YES]
+#define pr_str(exp, readably) [exp lispDescriptionReadable: readably]
+#define eval_ast(ast, env) [ast eval_ast: env]
+
 NSDictionary* MALCoreNameSpace();

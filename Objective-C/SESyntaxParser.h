@@ -37,6 +37,7 @@ typedef struct  {
     SETokenType type;
     NSRange range;
     unichar firstChar;
+    BOOL needsUnquoting;
 } SETokenOccurrence;
 
 typedef struct  {

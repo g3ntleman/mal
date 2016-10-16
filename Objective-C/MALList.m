@@ -10,9 +10,7 @@
 #import "NSObject+Types.h"
 #import <objc/runtime.h>
 
-@implementation MALList {
-    NSUInteger _count;
-}
+@implementation MALList 
 
 + (id) listWithCapacity: (NSUInteger) capacity {
     MALList* instance = class_createInstance([MALList class], capacity*sizeof(id));
@@ -69,6 +67,10 @@
     objects[_count++] = [obj retain];
 }
 
+- (NSString*) description {
+    return [self lispDescriptionReadable: YES];
+}
+
 - (void) dealloc {
     id* objects = object_getIndexedIvars(self);
     for (NSUInteger i=0;i<_count;i++) {
@@ -86,7 +88,7 @@
     return ((const id*)object_getIndexedIvars(self))[index];
 }
 
-- (NSString*) lispDescription {
+- (NSString*) lispDescriptionReadable: (BOOL) readable {
     
     NSMutableString* buffer = [[NSMutableString alloc] initWithCapacity: self.count*4];
     [buffer appendString: @"("];
@@ -95,7 +97,8 @@
         if (i>0) {
             [buffer appendString: @" "];
         }
-        [buffer appendString: [objects[i] lispDescription]];
+        id object = objects[i];
+        [buffer appendString: object ? [object lispDescriptionReadable: readable] : @"nil"];
     }
     [buffer appendString: @")"];
     
@@ -152,24 +155,14 @@
                 return result;
             }
 
-
-//            if (self[0] == [@"=" asSymbol]) {
-//                id o1 = [self[1] EVAL: env];
-//                id o2 = [self[2] EVAL: env];
-//                return  (o1 == o2) || [o1 isEqual: o2] ? @(YES) : @(NO);
-//            }
-
             if (self[0] == [@"fn*" asSymbol]) {
                 MALList* bindings = self[1];
                 id body = self[2];
                 LispFunction block = ^id(NSArray* args) {
-//                    MALEnv* innerEnv = [[MALEnv alloc] initWithOuterEnvironment: env
-//                                                                       bindings: bindings
-//                                                                    expressions: args];
-                    
+                    NSArray* argsOnly = [args subarrayWithRange: NSMakeRange(1, args.count-1)]; // Inefficient
                     return [body EVAL: [[MALEnv alloc] initWithOuterEnvironment: env
                                                                        bindings: bindings
-                                                                    expressions: args]];
+                                                                    expressions: argsOnly]];
                 };
 
                 return [block copy];

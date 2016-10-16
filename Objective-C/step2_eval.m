@@ -38,11 +38,11 @@ id EVAL(id ast, id env) {
 
 
 NSString* PRINT(id exp) {
-    return [exp lispDescription];
+    return [exp lispDescriptionReadable: YES];
 }
 
 
-NSString* REP(NSString* code, NSDictionary* env) {
+NSString* REP(NSString* code, MALEnv* env) {
     
     id ast = nil;
     NSString* result = nil;
@@ -63,6 +63,8 @@ NSString* REP(NSString* code, NSDictionary* env) {
     }
     return result;
 }
+
+// "(def! not (fn* (a) (if a false true)))"
 
 
 int main(int argc, const char * argv[]) {
