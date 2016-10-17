@@ -143,7 +143,19 @@ NSDictionary* MALCoreNameSpace() {
               if (count<2) return @"";
               NSMutableString* result = [NSMutableString stringWithCapacity: count*6];
               for (int i = 1; i<count; i++) {
+                  [result appendString: [args[i] lispDescriptionReadable: NO]];
+              }
+              return result;
+          },
+          [@"pr-str" asSymbol]: ^id(NSArray* args) {
+              NSUInteger count = args.count;
+              if (count<=1) return @"";
+              NSMutableString* result = [NSMutableString stringWithCapacity: count*6];
+              for (int i = 1; i<count; i++) {
                   [result appendString: [args[i] lispDescriptionReadable: YES]];
+                  if (i<count-1) {
+                      [result appendString: @" "];
+                  }
               }
               return result;
           },
@@ -152,7 +164,7 @@ NSDictionary* MALCoreNameSpace() {
               NSUInteger count = args.count;
               
               for (int i = 1; i<count; i++) {
-                  NSString* argDesc = [args[i] lispDescriptionReadable: YES];
+                  NSString* argDesc = [args[i] lispDescriptionReadable: NO];
                   printf(i>1 ? " %s" : "%s", [argDesc UTF8String]);
               }
               printf("\n");

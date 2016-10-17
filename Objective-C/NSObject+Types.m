@@ -57,6 +57,10 @@ BOOL MALObjectIsBlock(id _Nullable block) {
     return @"nil";
 }
 
+- (BOOL) boolValue {
+    return NO;
+}
+
 @end
 
 @implementation MALBool : NSNumber

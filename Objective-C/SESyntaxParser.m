@@ -143,7 +143,7 @@
                 prev = c;
                 c = [self getc];
                 if (c=='\\') {
-                    c = [self getc];
+                    [self getc];
                     lastToken.needsUnquoting = YES;
                 }
             } while (c != 0 && (c != '"'));
