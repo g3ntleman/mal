@@ -235,10 +235,11 @@
 }
 
 
-static void unquote_characters(const unichar* source, NSRange range, unichar* dest) {
+static long unquote_characters(const unichar* source, const NSRange range, unichar* dest) {
     
     const unichar* src = source+range.location;
     const unichar* end = src+range.length;
+    unichar* buffer = dest;
     while (src<end) {
         if (*src == '\\') {
 //            &&
@@ -246,10 +247,11 @@ static void unquote_characters(const unichar* source, NSRange range, unichar* de
             src++; // Skip quote char
         }
         
-        *dest++ = *src++;
+        *buffer++ = *src++;
     }
     
-    *dest = '\0';
+    *buffer = '\0';
+    return buffer-dest;
 }
 
 - (void) tokenizeAllWithBlock: (SESyntaxParserBlock) delegateBlock {
@@ -408,12 +410,15 @@ static void unquote_characters(const unichar* source, NSRange range, unichar* de
             case ATOM:
                 return [[NSString stringWithCharacters: &characters[nextToken.range.location] length:nextToken.range.length] asSymbol];
             case STRING: {
+                if (length == NSNotFound) {
+                    return nil; // throw?
+                }
                 nextToken.range.location+=1;
                 nextToken.range.length-=2;
                 if (nextToken.needsUnquoting) {
                     unichar buffer[nextToken.range.length];
-                    unquote_characters(characters, nextToken.range, buffer);
-                    return [[NSString alloc] initWithCharacters: buffer length: nextToken.range.length];
+                    long len = unquote_characters(characters, nextToken.range, buffer);
+                    return [[NSString alloc] initWithCharacters: buffer length: len];
                 }
                 
                 NSString* stringWithoutQuotes = [[NSString alloc] initWithCharactersNoCopy: &characters[nextToken.range.location] length: nextToken.range.length freeWhenDone: NO];

@@ -7,6 +7,7 @@
 //
 
 #import "MALList.h"
+#import "core.h"
 #import "NSObject+Types.h"
 #import <objc/runtime.h>
 
@@ -152,7 +153,7 @@
                         result = [self[3] EVAL: env];
                     }
                 }
-                return result;
+                return result ? result : nilObject;
             }
 
             if (self[0] == [@"fn*" asSymbol]) {

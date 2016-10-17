@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+static NSNull* nilObject;
+
 #define EVAL(ast, env) [ast EVAL: env]
 #define PRINT(exp) [exp lispDescriptionReadable: YES]
 #define pr_str(exp, readably) [exp lispDescriptionReadable: readably]

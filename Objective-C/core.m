@@ -10,13 +10,14 @@
 #import "NSObject+Types.h"
 #import "MALList.h"
 
+static NSMutableDictionary* coreNS = nil;
+static Class stringClass = nil;
+static Class listClass = nil;
+static MALBool* yes = nil;
+static MALBool* no  = nil;
+static NSNull* nilObject = nil;
+
 NSDictionary* MALCoreNameSpace() {
-    static NSMutableDictionary* coreNS = nil;
-    static Class stringClass = nil;
-    static Class listClass = nil;
-    static MALBool* yes = nil;
-    static MALBool* no  = nil;
-    static NSNull* nilObject = nil;
     
     if (! coreNS) {
         stringClass = [NSString class];
@@ -131,8 +132,10 @@ NSDictionary* MALCoreNameSpace() {
 //              return ((! obj) || obj == no) ? yes : no;
 //          },
           [@"prn" asSymbol]: ^id(NSArray* args) {
-              const char* str = [pr_str(args[1], YES) UTF8String];
-              printf("%s", str);
+              if (args.count > 1) {
+                  const char* str = [pr_str(args[1], YES) UTF8String];
+                  printf("%s\n", str);
+              }
               return nilObject;
           },
           [@"str" asSymbol]: ^id(NSArray* args) {
