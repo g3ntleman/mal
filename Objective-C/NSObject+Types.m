@@ -41,7 +41,7 @@ BOOL MALObjectIsBlock(id _Nullable block) {
     return self;
 }
 
-- (BOOL) boolValue {
+- (BOOL) truthValue {
     return YES;
 }
 
@@ -57,7 +57,7 @@ BOOL MALObjectIsBlock(id _Nullable block) {
     return @"nil";
 }
 
-- (BOOL) boolValue {
+- (BOOL) truthValue {
     return NO;
 }
 
@@ -85,7 +85,7 @@ static MALBool* NOBOOL = nil;
     return yn ? YESBOOL : NOBOOL;
 }
 
-- (BOOL) boolValue {
+- (BOOL) truthValue {
     return self == YESBOOL ? YES : NO;
 }
 

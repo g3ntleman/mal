@@ -146,7 +146,7 @@
             if (self[0] == [@"if" asSymbol]) {
                 id cond = [self[1] EVAL: env];
                 id result = nil;
-                if ([cond boolValue]) {
+                if ([cond truthValue]) {
                     result = [self[2] EVAL: env];
                 } else {
                     if (_count>3) {
