@@ -126,11 +126,6 @@ NSString* VARARGMARKER = nil;
             lastToken.range.length = 1;
             return lastToken;
         }
-        case '&': {
-            lastToken.type = VARARG_MARKER;
-            lastToken.range.length = 1;
-            return lastToken;
-        }
             
         case '~': {
             if (position<length && characters[position] == '@') {
@@ -255,11 +250,13 @@ static long unquote_characters(const unichar* source, const NSRange range, unich
     unichar* buffer = dest;
     while (src<end) {
         if (*src == '\\') {
-//            &&
-//            (*(src + 1) == orig_char || *(src + 1) == '\\'))
             src++; // Skip quote char
+            if (*src == 'n') {
+                *buffer++ = '\n';
+                src+=1;
+                continue;
+            }
         }
-        
         *buffer++ = *src++;
     }
     
@@ -416,8 +413,6 @@ static long unquote_characters(const unichar* source, const NSRange range, unich
             case QUASIQUOTE:
                 return [MALList listFromFirstObject: @"quasiquote" rest: [self readForm]];
                
-            case VARARG_MARKER:
-                return VARARGMARKER;
             case WITH_META: {
                 id form1 = [self readMap];
                 id form2 = [self readForm];

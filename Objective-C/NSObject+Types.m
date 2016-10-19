@@ -94,9 +94,9 @@ MALBool* NOBOOL = nil;
     return self == YESBOOL ? YES : NO;
 }
 
-- (const char*) objCType {
-    return "B";
-}
+//- (const char*) objCType {
+//    return "B";
+//}
 
 - (NSString*) description {
     return self == YESBOOL ? @"YESBOOL" : @"NOBOOL";
@@ -223,9 +223,36 @@ static NSMutableSet* symbols = nil;
     return self; // it's a simple string
 }
 
+
+/**
+ * TODO: abbreviate long strings
+ */
 - (NSString*) lispDescriptionReadable: (BOOL) readable {
+
     if (readable) {
-        return [NSString stringWithFormat: @"\"%@\"", self];
+        NSUInteger count = self.length;
+        unichar source[count];
+        unichar* sourcep = source;
+        unichar dest[count*2+2]; // worst case
+        unichar* destp = dest;
+        unichar* endp = sourcep+count;
+        [self getCharacters: sourcep];
+        *destp++ = '\"';
+        while (sourcep < endp) {
+            unichar ch = *sourcep;
+            if (ch == '\"' || ch == '\\') {
+                *destp++ = (unichar)'\\';
+            }
+            if (ch == '\n') {
+                *destp++ = (unichar)'\\';
+                *destp++ = 'n';
+            } else {
+                *destp++ = ch;
+            }
+            sourcep+=1;
+        }
+        *destp++ = '\"';
+        return [NSString stringWithCharacters: dest length: destp-dest];
     } else {
         return self;
     }

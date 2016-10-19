@@ -10,6 +10,31 @@
 #import "NSObject+Types.h"
 #import "MALList.h"
 
+//typedef struct SEQ_t {
+//    id obj;
+//    unsigned index;
+//} SEQ;
+
+//id seq_first(SEQ* seq) {
+//    return [seq->obj valueAtIndex: seq->index];
+//}
+//
+//SEQ seq_rest(SEQ* seq) {
+//    SEQ next;
+//    next.obj = seq->obj;
+//    next.index = seq.index+1
+//    return [seq->obj valueAtIndex: seq->index];
+//}
+
+int f1_i(int i) {
+    return 1;
+}
+
+NSString* f1_io(int i, id o) {
+    return [o description];
+}
+
+
 static NSMutableDictionary* coreNS = nil;
 static Class stringClass = nil;
 static Class listClass = nil;

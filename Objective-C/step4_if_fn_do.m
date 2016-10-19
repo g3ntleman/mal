@@ -51,9 +51,7 @@ int main(int argc, const char * argv[]) {
         MALEnv* replEnvironment = [[MALEnv alloc] initWithOuterEnvironment: nil bindings: [MALCoreNameSpace() mutableCopy]];
         
         REP(@"(def! not (fn* (a) (if a false true)))", replEnvironment);
-        
-//#Warning: a is defined as a symbol and this makes strings "a" appear as symbols. :-(
-        
+                
         while (true) {
             char *rawline = readline("user> ");
             if (!rawline) { break; }
