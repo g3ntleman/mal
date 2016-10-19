@@ -255,6 +255,10 @@ static long unquote_characters(const unichar* source, const NSRange range, unich
                 *buffer++ = '\n';
                 src+=1;
                 continue;
+            } else if (*src == 'r') {
+                *buffer++ = '\r';
+                src+=1;
+                continue;
             }
         }
         *buffer++ = *src++;

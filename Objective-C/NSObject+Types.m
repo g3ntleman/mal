@@ -246,6 +246,9 @@ static NSMutableSet* symbols = nil;
             if (ch == '\n') {
                 *destp++ = (unichar)'\\';
                 *destp++ = 'n';
+            } else if (ch == '\r') {
+                *destp++ = (unichar)'\\';
+                *destp++ = 'r';
             } else {
                 *destp++ = ch;
             }

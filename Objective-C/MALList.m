@@ -184,7 +184,8 @@
                         NSParameterAssert(call.count == symbols.count+1);
                         id args[symbols->_count];
                         [call getObjects: args];
-                        bindings = [NSMutableDictionary dictionaryWithObjects: args+1 forKeys: symbols.objects count: symbols->_count];
+                        const id* symbolsArray = [symbols objects];
+                        bindings = [NSMutableDictionary dictionaryWithObjects: args+1 forKeys: symbolsArray count: symbols->_count];
                     }
                     MALEnv* functionEnv = [[MALEnv alloc] initWithOuterEnvironment: env
                                                                           bindings: bindings]; // I want to be on the stack
