@@ -19,9 +19,6 @@
 - (id) initWithOuterEnvironment: (MALEnv*) anOuter
                        bindings: (NSMutableDictionary*) bindings;
 
-- (id) initWithOuterEnvironment: (MALEnv*) anOuter
-                       bindings: (NSArray*) keys
-                    expressions: (NSArray*) expressions;
 
 - (MALEnv*) find: (NSString*) symbol;
 - (id) get: (NSString*) symbol;

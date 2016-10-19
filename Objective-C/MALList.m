@@ -26,11 +26,7 @@
     
     NSObject** objects = object_getIndexedIvars(instance);
     
-    for (NSObject* obj in anArray) {
-        *objects = [obj retain];
-        objects+=1;
-    }
-    
+    [anArray getObjects: objects];
     return instance;
 }
 
@@ -50,17 +46,28 @@
     return instance;
 }
 
++ (id) listFromObjects: (id*) objects count: (NSUInteger) count {
+    MALList* instance = [self listWithCapacity: count];
+    NSObject** ivars = object_getIndexedIvars(instance);
+    for (NSUInteger i=0; i<count;i++) {
+        ivars[i] = [objects[i] retain];
+    }
+    instance->_count = count;
+    return instance;
+}
+
 + (id) listFromArray:(NSArray *)anArray subrange: (NSRange) range {
     
     MALList* instance = [self listWithCapacity: range.length];
     NSObject** objects = object_getIndexedIvars(instance);
-    NSUInteger max = range.location+range.length;
-    for (NSUInteger i=range.location; i<max;i++) {
-        id obj = [anArray[i] retain];
-        *objects++ = obj;
-    }
+    [anArray getObjects: objects range: range];
     instance->_count = range.length;
     return instance;
+}
+
+- (const id*) objects {
+    NSObject** objects = object_getIndexedIvars(self);
+    return objects;
 }
 
 - (void) addObject: (id) obj {
@@ -157,13 +164,31 @@
             }
 
             if (self[0] == [@"fn*" asSymbol]) {
-                MALList* bindings = self[1];
+                MALList* symbols = self[1];
                 id body = self[2];
-                LispFunction block = ^id(NSArray* args) {
-                    NSArray* argsOnly = [args subarrayWithRange: NSMakeRange(1, args.count-1)]; // Inefficient
-                    return [body EVAL: [[MALEnv alloc] initWithOuterEnvironment: env
-                                                                       bindings: bindings
-                                                                    expressions: argsOnly]];
+                BOOL hasVarargs = symbols->_count >= 2 && [(symbols[symbols->_count-2]) isEqualToString: @"&"];
+//                if (hasVarargs) {
+//                    
+//                }
+//                
+                LispFunction block = ^id(NSArray* call) {
+                    NSMutableDictionary* bindings;
+                    if (hasVarargs) {
+                        NSUInteger regularArgsCount = symbols->_count-2;
+                        id args[call.count];
+                        [call getObjects: args];
+                        bindings = [NSMutableDictionary dictionaryWithObjects: args+1 forKeys: symbols.objects count: regularArgsCount]; // formal params
+                        MALList* varargList = [MALList listFromObjects: args+1+regularArgsCount count: call.count-regularArgsCount-1];
+                        bindings[symbols.lastObject] = varargList;
+                    } else {
+                        NSParameterAssert(call.count == symbols.count+1);
+                        id args[symbols->_count];
+                        [call getObjects: args];
+                        bindings = [NSMutableDictionary dictionaryWithObjects: args+1 forKeys: symbols.objects count: symbols->_count];
+                    }
+                    MALEnv* functionEnv = [[MALEnv alloc] initWithOuterEnvironment: env
+                                                                          bindings: bindings]; // I want to be on the stack
+                    return [body EVAL: functionEnv];
                 };
 
                 return [block copy];

@@ -20,6 +20,14 @@
     SETokenOccurrence lastToken;
 }
 
+NSString* VARARGMARKER = nil;
+
++ (void) load {
+    if (! VARARGMARKER) {
+        VARARGMARKER = [[NSMutableString alloc] initWithString: @"&"];
+    }
+}
+
 - (id) initWithString: (NSString*) sSource
                 range: (NSRange) range {
     
@@ -115,6 +123,11 @@
         }
         case '^': {
             lastToken.type = WITH_META;
+            lastToken.range.length = 1;
+            return lastToken;
+        }
+        case '&': {
+            lastToken.type = VARARG_MARKER;
             lastToken.range.length = 1;
             return lastToken;
         }
@@ -300,6 +313,7 @@ static long unquote_characters(const unichar* source, const NSRange range, unich
     
     NSMutableArray* array = [[NSMutableArray alloc] initWithCapacity: 4];
     id element;
+
     while ((element = [self readForm])) {
         [array addObject: element];
     }
@@ -402,6 +416,8 @@ static long unquote_characters(const unichar* source, const NSRange range, unich
             case QUASIQUOTE:
                 return [MALList listFromFirstObject: @"quasiquote" rest: [self readForm]];
                
+            case VARARG_MARKER:
+                return VARARGMARKER;
             case WITH_META: {
                 id form1 = [self readMap];
                 id form2 = [self readForm];
@@ -422,7 +438,7 @@ static long unquote_characters(const unichar* source, const NSRange range, unich
                 }
                 
                 NSString* stringWithoutQuotes = [[NSString alloc] initWithCharactersNoCopy: &characters[nextToken.range.location] length: nextToken.range.length freeWhenDone: NO];
-                return [[NSString alloc] initWithFormat: stringWithoutQuotes, nil]; // does unquoting
+                return [[NSString alloc] initWithFormat: stringWithoutQuotes, nil]; // does unquoting as neccessary
             }
             default:
                 return [NSString stringWithCharacters: &characters[nextToken.range.location] length:nextToken.range.length];

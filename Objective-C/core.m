@@ -93,7 +93,7 @@ NSDictionary* MALCoreNameSpace() {
               return @([args[1] count]);
           },
           [@"empty?" asSymbol]: ^id(NSArray* args) {
-              return [MALBool numberWithBool: [args[1] count]==0];
+              return [args[1] count]==0 ? YESBOOL : NOBOOL;
           },
           [@"first" asSymbol]: ^id(NSArray* args) {
               return [args[1] firstObject];

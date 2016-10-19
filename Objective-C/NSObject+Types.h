@@ -19,6 +19,7 @@ extern BOOL MALObjectIsBlock(id _Nullable block);
 - (id) EVAL: (MALEnv*) env;
 - (id) eval_ast: (MALEnv*) env;
 - (BOOL) isSymbol;
+- (BOOL) truthValue;
 
 @end
 
@@ -28,11 +29,13 @@ extern BOOL MALObjectIsBlock(id _Nullable block);
 
 @end
 
+
 @interface MALBool : NSNumber
 
-+ (id) numberWithBool: (BOOL) yn;
-
-+ (id) yes;
-+ (id) no;
++ (_Nonnull id) yes;
++ (_Nonnull id) no;
 
 @end
+
+extern MALBool* _Nonnull  YESBOOL;
+extern MALBool* _Nonnull  NOBOOL;

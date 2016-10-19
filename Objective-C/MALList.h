@@ -15,11 +15,20 @@
 + (id) listFromArray: (NSArray*) anArray;
 + (id) listFromFirstObject: (id) first rest: (NSArray*) anArray;
 + (id) listFromArray:(NSArray *)anArray subrange: (NSRange) range;
++ (id) listFromObjects: (id*) objects count: (NSUInteger) count;
 
 // TODO: Implement +listWithObjects: ...
 
-- (NSUInteger)count;
+- (NSUInteger) count;
 
-- (id)objectAtIndex:(NSUInteger)index;
+- (id)objectAtIndex: (NSUInteger) index;
+
+- (const id*) objects;
+
+@end
+
+@interface MALVARGList : MALList
+
+//- (BOOL)
 
 @end

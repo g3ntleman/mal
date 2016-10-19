@@ -32,17 +32,15 @@
     return self;
 }
 
-- (id) initWithOuterEnvironment: (MALEnv*) anOuter
-                       bindings: (NSArray*) keys
-                    expressions: (NSArray*) expressions {
-    if (keys.count != expressions.count) {
-        if (keys.count != expressions.count) {
-            NSParameterAssert(keys.count == expressions.count);
-        }
-    }
-    
-    return [self initWithOuterEnvironment: anOuter bindings: [NSMutableDictionary dictionaryWithObjects:expressions forKeys: keys]];
-}
+//- (id) initWithOuterEnvironment: (MALEnv*) anOuter
+//                       bindings: (NSArray*) keys
+//                    expressions: (NSArray*) expressions {
+//    if (keys.count != expressions.count) {
+//        NSParameterAssert(keys.count == expressions.count);
+//    }
+//    
+//    return [self initWithOuterEnvironment: anOuter bindings: [NSMutableDictionary dictionaryWithObjects:expressions forKeys: keys]];
+//}
 
 
 

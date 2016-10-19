@@ -11,8 +11,8 @@
 static NSNull* nilObject;
 
 #define EVAL(ast, env) [ast EVAL: env]
-#define PRINT(exp) [exp lispDescriptionReadable: YES]
-#define pr_str(exp, readably) [exp lispDescriptionReadable: readably]
+#define PRINT(exp) (exp ? [exp lispDescriptionReadable: YES]: @"nil")
+#define pr_str(exp, readably) (exp ? [exp lispDescriptionReadable: readably]: @"nil")
 #define eval_ast(ast, env) [ast eval_ast: env]
 
 NSDictionary* MALCoreNameSpace();

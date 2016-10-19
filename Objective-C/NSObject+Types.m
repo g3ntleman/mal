@@ -63,10 +63,10 @@ BOOL MALObjectIsBlock(id _Nullable block) {
 
 @end
 
-@implementation MALBool : NSNumber
+@implementation MALBool
 
-static MALBool* YESBOOL = nil;
-static MALBool* NOBOOL = nil;
+MALBool* YESBOOL = nil;
+MALBool* NOBOOL = nil;
 
 + (void) load {
     YESBOOL = [[self alloc] init];
@@ -81,9 +81,14 @@ static MALBool* NOBOOL = nil;
     return NOBOOL;
 }
 
-+ (id) numberWithBool: (BOOL) yn {
-    return yn ? YESBOOL : NOBOOL;
-}
+//- (BOOL) boolValue {
+//    return self == YESBOOL ? YES : NO;
+//}
+//
+//- (NSInteger) integerValue {
+//    return self == YESBOOL ? 1 : 0;
+//}
+
 
 - (BOOL) truthValue {
     return self == YESBOOL ? YES : NO;
@@ -94,7 +99,7 @@ static MALBool* NOBOOL = nil;
 }
 
 - (NSString*) description {
-    return self == YESBOOL ? @"YES" : @"NO";
+    return self == YESBOOL ? @"YESBOOL" : @"NOBOOL";
 }
 
 - (NSString*) lispDescriptionReadable: (BOOL) readable {
