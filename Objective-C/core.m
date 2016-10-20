@@ -157,10 +157,17 @@ NSDictionary* MALCoreNameSpace() {
 //              return ((! obj) || obj == no) ? yes : no;
 //          },
           [@"prn" asSymbol]: ^id(NSArray* args) {
-              if (args.count > 1) {
-                  const char* str = [pr_str(args[1], YES) UTF8String];
-                  printf("%s\n", str);
+              BOOL first = YES;
+              id last = args.lastObject;
+              for (id arg in args) {
+                  if (! first) {
+                      const char* str = [pr_str(arg, YES) UTF8String];
+                      printf(arg == last ? "%s" : "%s ", str);
+                  } else {
+                      first = NO;
+                  }
               }
+              printf("\n");
               return nilObject;
           },
           [@"str" asSymbol]: ^id(NSArray* args) {

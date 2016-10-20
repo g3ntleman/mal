@@ -10,6 +10,7 @@
 #import "NSObject+Types.h"
 #import <Foundation/NSNumberFormatter.h>
 #import "MALList.h"
+#import "MALKeyword.h"
 #include <ctype.h>
 
 @implementation SESyntaxParser {
@@ -393,7 +394,7 @@ static long unquote_characters(const unichar* source, const NSRange range, unich
                 return number;
             }
             case KEYWORD: {
-                NSString* keyword = [[NSString stringWithCharacters: &characters[nextToken.range.location] length:nextToken.range.length] asSymbol];
+                NSString* keyword = [[NSString stringWithCharacters: &characters[nextToken.range.location] length:nextToken.range.length] asKeyword];
                 return keyword;
             }
             case BOOL_TRUE: {

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8D470A721DB7FFB1005D4286 /* MALKeyword.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D470A711DB7FFB1005D4286 /* MALKeyword.m */; };
+		8D470A731DB7FFB1005D4286 /* MALKeyword.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D470A711DB7FFB1005D4286 /* MALKeyword.m */; };
 		8D511F4D1D779F43003ED9FC /* NSObject+Types.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D511F4C1D779F43003ED9FC /* NSObject+Types.m */; };
 		8D511F4F1D77C8F6003ED9FC /* NSObject+Types.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D511F4C1D779F43003ED9FC /* NSObject+Types.m */; };
 		8D511F501D77C8F9003ED9FC /* SESyntaxParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8917CA1D74F8A700351894 /* SESyntaxParser.m */; };
@@ -92,6 +94,8 @@
 /* Begin PBXFileReference section */
 		8D454BD51D6FD291007C7554 /* mal */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mal; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D454BE71D6FD3D4007C7554 /* step0_repl */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = step0_repl; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D470A701DB7FFB1005D4286 /* MALKeyword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MALKeyword.h; sourceTree = "<group>"; };
+		8D470A711DB7FFB1005D4286 /* MALKeyword.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MALKeyword.m; sourceTree = "<group>"; };
 		8D511F4B1D779F43003ED9FC /* NSObject+Types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Types.h"; sourceTree = "<group>"; };
 		8D511F4C1D779F43003ED9FC /* NSObject+Types.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Types.m"; sourceTree = "<group>"; };
 		8D8917BF1D6FD4F200351894 /* step0_repl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = step0_repl.m; sourceTree = "<group>"; };
@@ -178,6 +182,8 @@
 		8D454BCC1D6FD291007C7554 = {
 			isa = PBXGroup;
 			children = (
+				8D470A701DB7FFB1005D4286 /* MALKeyword.h */,
+				8D470A711DB7FFB1005D4286 /* MALKeyword.m */,
 				8DE93FD61DB00ABC0073462E /* TODO.txt */,
 				8D8C74A11D88DDF3007AE095 /* MALEnv.h */,
 				8D8C74A21D88DDF3007AE095 /* MALEnv.m */,
@@ -443,6 +449,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8DB4C9691D8FDCC1000743BA /* core.m in Sources */,
+				8D470A731DB7FFB1005D4286 /* MALKeyword.m in Sources */,
 				8DB4C9651D8C6EAB000743BA /* step4_if_fn_do.m in Sources */,
 				8D8C74A41D88DDF3007AE095 /* MALEnv.m in Sources */,
 				8D511F4F1D77C8F6003ED9FC /* NSObject+Types.m in Sources */,
@@ -498,6 +505,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8DB4C9681D8FDCC1000743BA /* core.m in Sources */,
+				8D470A721DB7FFB1005D4286 /* MALKeyword.m in Sources */,
 				8DB4C9641D8C6EAA000743BA /* step4_if_fn_do.m in Sources */,
 				8DB4C9541D8C6E26000743BA /* MALEnv.m in Sources */,
 				8DB4C9551D8C6E26000743BA /* SESyntaxParser.m in Sources */,

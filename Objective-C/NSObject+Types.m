@@ -7,6 +7,7 @@
 //
 
 #import "MALList.h"
+#import "MALKeyword.h"
 #import "NSObject+Types.h"
 
 
@@ -192,8 +193,10 @@ MALBool* NOBOOL = nil;
 
 static NSMutableSet* symbols = nil;
 
-+ (void)load {
-    symbols = [NSMutableSet setWithCapacity: 50];
++ (void) load {
+    if (! symbols) {
+        symbols = [NSMutableSet setWithCapacity: 50];
+    }
 }
 
 - (NSString*) asSymbol {

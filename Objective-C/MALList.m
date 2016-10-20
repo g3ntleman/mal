@@ -164,28 +164,34 @@
             }
 
             if (self[0] == [@"fn*" asSymbol]) {
-                MALList* symbols = self[1];
+                NSArray* symbols = self[1];
+                NSParameterAssert([symbols isKindOfClass: [NSArray class]]);
                 id body = self[2];
-                BOOL hasVarargs = symbols->_count >= 2 && [(symbols[symbols->_count-2]) isEqualToString: @"&"];
-//                if (hasVarargs) {
-//                    
-//                }
-//                
+                NSUInteger symbolsCount = symbols.count;
+                BOOL hasVarargs = symbolsCount >= 2 && [(symbols[symbolsCount-2]) isEqualToString: @"&"];
+
                 LispFunction block = ^id(NSArray* call) {
                     NSMutableDictionary* bindings;
                     if (hasVarargs) {
-                        NSUInteger regularArgsCount = symbols->_count-2;
+                        NSUInteger regularArgsCount = symbolsCount-2;
                         id args[call.count];
+                        id syms[symbolsCount];
                         [call getObjects: args];
-                        bindings = [NSMutableDictionary dictionaryWithObjects: args+1 forKeys: symbols.objects count: regularArgsCount]; // formal params
+                        [symbols getObjects: syms];
+                        bindings = [NSMutableDictionary dictionaryWithObjects: args+1 forKeys: syms count: regularArgsCount]; // formal params
                         MALList* varargList = [MALList listFromObjects: args+1+regularArgsCount count: call.count-regularArgsCount-1];
                         bindings[symbols.lastObject] = varargList;
                     } else {
-                        NSParameterAssert(call.count == symbols.count+1);
-                        id args[symbols->_count];
-                        [call getObjects: args];
-                        const id* symbolsArray = [symbols objects];
-                        bindings = [NSMutableDictionary dictionaryWithObjects: args+1 forKeys: symbolsArray count: symbols->_count];
+                        NSParameterAssert(call.count == symbolsCount+1);
+                        if (symbolsCount) {
+                            id args[symbolsCount];
+                            id syms[symbolsCount];
+                            [call getObjects: args];
+                            [symbols getObjects: syms];
+                            bindings = [NSMutableDictionary dictionaryWithObjects: args+1 forKeys: syms count: symbolsCount];
+                        } else {
+                            return [body EVAL: env];
+                        }
                     }
                     MALEnv* functionEnv = [[MALEnv alloc] initWithOuterEnvironment: env
                                                                           bindings: bindings]; // I want to be on the stack
