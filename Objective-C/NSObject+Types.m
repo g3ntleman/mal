@@ -34,9 +34,6 @@ BOOL MALObjectIsBlock(id _Nullable block) {
     return NO;
 }
 
-- (id) EVAL: (MALEnv*) env {
-    return [self eval_ast: env];
-}
 
 - (id) eval_ast: (MALEnv*) env {
     return self;
@@ -139,7 +136,7 @@ MALBool* NOBOOL = nil;
     
     NSMutableArray* args = [NSMutableArray arrayWithCapacity: count-1];
     for (id object in self) {
-        id eObject = [object EVAL: env];
+        id eObject = EVAL(object, env);
         //if (!f) {
         //    f = eObject;
         //} else {
@@ -175,13 +172,13 @@ MALBool* NOBOOL = nil;
     return buffer;
 }
 
-- (id) eval_ast: (MALEnv*) env {
+- (id) eval_ast: (MALEnv* _Nullable) env {
     NSUInteger count = self.count;
     if (!count) return self;
 
     NSMutableDictionary* tmp = [NSMutableDictionary dictionaryWithCapacity: count];
     for (id key in self) {
-        id eObject = [[self objectForKey: key] EVAL: env];
+        id eObject = EVAL([self objectForKey: key], env);
         [tmp setObject: eObject forKey: key];
     }
     return tmp;

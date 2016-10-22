@@ -394,7 +394,7 @@ static long unquote_characters(const unichar* source, const NSRange range, unich
                 return number;
             }
             case KEYWORD: {
-                NSString* keyword = [[NSString stringWithCharacters: &characters[nextToken.range.location] length:nextToken.range.length] asKeyword];
+                MALKeyword* keyword = [[NSString stringWithCharacters: &characters[nextToken.range.location] length:nextToken.range.length] asKeyword];
                 return keyword;
             }
             case BOOL_TRUE: {

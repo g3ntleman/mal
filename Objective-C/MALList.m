@@ -46,7 +46,7 @@
     return instance;
 }
 
-+ (id) listFromObjects: (id*) objects count: (NSUInteger) count {
++ (id) listFromObjects: (const id[]) objects count: (NSUInteger) count {
     MALList* instance = [self listWithCapacity: count];
     NSObject** ivars = object_getIndexedIvars(instance);
     for (NSUInteger i=0; i<count;i++) {
@@ -113,108 +113,6 @@
     return buffer;
 }
 
-- (id) EVAL: (MALEnv*) env {
-    
-    if (self.count) {
-        @try {
-            if (self[0] == [@"def!" asSymbol]) {
-                if (_count==3) {
-                    // Make new Binding:
-                    id value = [self[2] EVAL: env];
-                    env->data[self[1]] = value;
-                    return value;
-                }
-                return nil;
-            }
-            if (self[0] == [@"let*" asSymbol]) {
-                if (_count==3) {
-                    NSArray* bindingsList = self[1];
-                    NSUInteger bindingListCount = bindingsList.count;
-                    // Make new Environment:
-                    MALEnv* letEnv = [[MALEnv alloc] initWithOuterEnvironment: env capacity:bindingListCount];
-                    for (NSUInteger i=0; i<bindingListCount; i+=2) {
-                        id key = bindingsList[i];
-                        id value = [bindingsList[i+1] EVAL: letEnv];
-                        letEnv->data[key] = value;
-                    }
-                    id result = [self[2] EVAL: letEnv];
-                    return result;
-
-                }
-                return nil;
-            }
-            if (self[0] == [@"do" asSymbol]) {
-                id result = nil;
-                for (NSUInteger i=1; i<_count; i++) {
-                    result = [self[i] EVAL: env];
-                }
-                return result; // return the result of the last expression evaluation
-            }
-            if (self[0] == [@"if" asSymbol]) {
-                id cond = [self[1] EVAL: env];
-                id result = nil;
-                if ([cond truthValue]) {
-                    result = [self[2] EVAL: env];
-                } else {
-                    if (_count>3) {
-                        result = [self[3] EVAL: env];
-                    }
-                }
-                return result ? result : nilObject;
-            }
-
-            if (self[0] == [@"fn*" asSymbol]) {
-                NSArray* symbols = self[1];
-                NSParameterAssert([symbols isKindOfClass: [NSArray class]]);
-                id body = self[2];
-                NSUInteger symbolsCount = symbols.count;
-                BOOL hasVarargs = symbolsCount >= 2 && [(symbols[symbolsCount-2]) isEqualToString: @"&"];
-
-                LispFunction block = ^id(NSArray* call) {
-                    NSMutableDictionary* bindings;
-                    if (hasVarargs) {
-                        NSUInteger regularArgsCount = symbolsCount-2;
-                        id args[call.count];
-                        id syms[symbolsCount];
-                        [call getObjects: args];
-                        [symbols getObjects: syms];
-                        bindings = [NSMutableDictionary dictionaryWithObjects: args+1 forKeys: syms count: regularArgsCount]; // formal params
-                        MALList* varargList = [MALList listFromObjects: args+1+regularArgsCount count: call.count-regularArgsCount-1];
-                        bindings[symbols.lastObject] = varargList;
-                    } else {
-                        NSParameterAssert(call.count == symbolsCount+1);
-                        if (symbolsCount) {
-                            id args[symbolsCount];
-                            id syms[symbolsCount];
-                            [call getObjects: args];
-                            [symbols getObjects: syms];
-                            bindings = [NSMutableDictionary dictionaryWithObjects: args+1 forKeys: syms count: symbolsCount];
-                        } else {
-                            return [body EVAL: env];
-                        }
-                    }
-                    MALEnv* functionEnv = [[MALEnv alloc] initWithOuterEnvironment: env
-                                                                          bindings: bindings]; // I want to be on the stack
-                    return [body EVAL: functionEnv];
-                };
-
-                return [block copy];
-            }
-            
-            MALList* evaluatedList = [self eval_ast: env];
-            LispFunction f = evaluatedList[0];
-            if (MALObjectIsBlock(f)) {
-                id result = f(evaluatedList);
-                return result;
-            }
-            @throw [NSException exceptionWithName: @"MALUndefinedFunction" reason: [NSString stringWithFormat: @"A '%@' function is not defined.", self[0]] userInfo: nil];
-        } @catch(NSException* e) {
-            NSLog(@"Error evaluating function '%@': %@", self[0], e);
-            return nil;
-        }
-    }
-    return self;
-}
 
 - (id) eval_ast: (MALEnv*) env {
     NSUInteger count = self.count;
@@ -223,7 +121,7 @@
     
     NSMutableArray* args = [MALList listWithCapacity: count];
     for (id object in self) {
-        id eObject = [object EVAL: env];
+        id eObject = EVAL(object, env);
         [args addObject: eObject];
     }
     return args;

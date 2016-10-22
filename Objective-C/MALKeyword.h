@@ -10,7 +10,7 @@
 
 @interface MALKeyword : NSObject
 
-+ (instancetype) keywordForString: (NSString* _Nonnull) aString;
++ (instancetype _Nonnull) keywordForString: (NSString* _Nonnull) aString;
 
 @end
 
