@@ -29,10 +29,20 @@
 			<key>orderHint</key>
 			<integer>4</integer>
 		</dict>
+		<key>step4_if_fn_do copy.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>6</integer>
+		</dict>
 		<key>step4_if_fn_do.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>5</integer>
+		</dict>
+		<key>step5_tco.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>7</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
@@ -43,6 +53,11 @@
 			<true/>
 		</dict>
 		<key>8D454BDF1D6FD3D4007C7554</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8D5A49821DBD045A00D90D97</key>
 		<dict>
 			<key>primary</key>
 			<true/>

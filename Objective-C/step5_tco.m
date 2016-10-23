@@ -44,7 +44,6 @@ NSString* REP(NSString* code, MALEnv* env) {
 
 id EVAL(id ast, MALEnv* env) {
     while (YES) {
-        
         if ([ast isKindOfClass: [MALList class]]) /* TODO: make [MALList class] a static var */ {
             MALList* list = ast;
             NSUInteger listCount = list.count;
@@ -75,9 +74,9 @@ id EVAL(id ast, MALEnv* env) {
                             id value = EVAL(bindingsList[i+1], letEnv);
                             letEnv->data[key] = value;
                         }
-                        
-                        id result = EVAL(list[2], letEnv);
-                        return result;
+                        env = letEnv;
+                        ast = list[2];
+                        // loop...
                     }
                     if (list[0] == [@"do" asSymbol]) {
                         id result = nil;
