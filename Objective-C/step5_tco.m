@@ -79,11 +79,12 @@ id EVAL(id ast, MALEnv* env) {
                         // loop...
                     }
                     if (list[0] == [@"do" asSymbol]) {
+                        if (listCount==1) return nil;
                         id result = nil;
-                        for (NSUInteger i=1; i<listCount; i++) {
+                        for (NSUInteger i=1; i<listCount-1; i++) {
                             result = EVAL(list[i], env);
                         }
-                        return result; // return the result of the last expression evaluation
+                        ast = list[i];
                     }
                     if (list[0] == [@"if" asSymbol]) {
                         id cond = EVAL(list[1], env);
