@@ -44,9 +44,11 @@
 
 
 
-//void set: (id) obj symbol: (NSString*) symbol {
-//    data[[symbol asSymbol]] = obj;
-//}
+- (void) set: (id) obj symbol: (NSString*) symbol {
+    NSParameterAssert([symbol isSymbol]);
+    NSParameterAssert(obj != nil);
+    data[symbol] = obj;
+}
 
 - (MALEnv*) find: (NSString*) symbol {
     NSParameterAssert([symbol isSymbol]);

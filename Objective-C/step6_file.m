@@ -132,13 +132,7 @@ id EVAL(id ast, MALEnv* env) {
                         };
                         
                         return [block copy];
-                    } else if (list[0] == [@"eval" asSymbol]) {
-                        NSCParameterAssert(list.count == 2);
-                        id ast = list[1];
-                        id result = EVAL(ast, env);
-                        return result;
                     }
-                    
                     MALList* evaluatedList = [list eval_ast: env];
                     LispFunction f = evaluatedList[0];
                     if (MALObjectIsBlock(f)) {
@@ -166,8 +160,16 @@ int main(int argc, const char * argv[]) {
     @autoreleasepool {
         
         
-        MALEnv* replEnvironment = [[MALEnv alloc] initWithOuterEnvironment: nil bindings: [MALCoreNameSpace() mutableCopy]];
+        NSMutableDictionary* bindings = [MALCoreNameSpace() mutableCopy];
+        MALEnv* replEnvironment = [[MALEnv alloc] initWithOuterEnvironment: nil bindings: bindings];
         
+        // Add eval:
+        [replEnvironment set: ^id(NSArray* args) {
+            NSCParameterAssert(args.count == 2);
+            id ast = args[1];
+            return EVAL(ast, replEnvironment);
+        } symbol: [@"eval" asSymbol]];
+
         REP(@"(def! not (fn* (a) (if a false true)))", replEnvironment);
                 
         while (true) {

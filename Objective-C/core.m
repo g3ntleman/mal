@@ -218,7 +218,8 @@ NSDictionary* MALCoreNameSpace() {
           },
           [@"read-string" asSymbol]: ^id(NSArray* args) {
               NSCParameterAssert(args.count == 2);
-              return read_str(args[1]);
+              id ast = read_str(args[1]);
+              return ast;
           },
           [@"slurp" asSymbol]: ^id(NSArray* args) {
               NSCParameterAssert(args.count == 2);

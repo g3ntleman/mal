@@ -22,5 +22,6 @@
 
 - (MALEnv*) find: (NSString*) symbol;
 - (id) get: (NSString*) symbol;
+- (void) set: (id) obj symbol: (NSString*) symbol;
 
 @end
