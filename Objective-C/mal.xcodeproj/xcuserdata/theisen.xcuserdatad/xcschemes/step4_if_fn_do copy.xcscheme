@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8D5A49821DBD045A00D90D97"
-               BuildableName = "step5_tco"
-               BlueprintName = "step5_tco"
+               BlueprintIdentifier = "8D5A49981DC240A200D90D97"
+               BuildableName = "step6_file"
+               BlueprintName = "step6_file"
                ReferencedContainer = "container:mal.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,9 +32,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8D5A49821DBD045A00D90D97"
-            BuildableName = "step5_tco"
-            BlueprintName = "step5_tco"
+            BlueprintIdentifier = "8D5A49981DC240A200D90D97"
+            BuildableName = "step6_file"
+            BlueprintName = "step6_file"
             ReferencedContainer = "container:mal.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -55,9 +55,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8D5A49821DBD045A00D90D97"
-            BuildableName = "step5_tco"
-            BlueprintName = "step5_tco"
+            BlueprintIdentifier = "8D5A49981DC240A200D90D97"
+            BuildableName = "step6_file"
+            BlueprintName = "step6_file"
             ReferencedContainer = "container:mal.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -74,9 +74,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8D5A49821DBD045A00D90D97"
-            BuildableName = "step5_tco"
-            BlueprintName = "step5_tco"
+            BlueprintIdentifier = "8D5A49981DC240A200D90D97"
+            BuildableName = "step6_file"
+            BlueprintName = "step6_file"
             ReferencedContainer = "container:mal.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

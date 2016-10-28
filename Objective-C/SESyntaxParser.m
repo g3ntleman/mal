@@ -21,6 +21,14 @@
     SETokenOccurrence lastToken;
 }
 
+
+id read_str(NSString* code) {
+    SESyntaxParser* reader = [[SESyntaxParser alloc] initWithString: code range: NSMakeRange(0, code.length)];
+    id result = [reader readForm];
+    //NSLog(@"Read '%@' into '%@'", code, result);
+    return result;
+}
+
 NSString* VARARGMARKER = nil;
 
 + (void) load {

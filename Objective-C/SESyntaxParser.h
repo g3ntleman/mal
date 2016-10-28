@@ -85,3 +85,5 @@ extern BOOL isClosingPar(unichar aChar);
 extern unichar matchingPar(unichar aPar);
 extern BOOL isPar(unichar aChar);
 
+extern id read_str(NSString* code);
+

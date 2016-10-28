@@ -14,10 +14,7 @@
 
 
 id READ(NSString* code) {
-    SESyntaxParser* reader = [[SESyntaxParser alloc] initWithString: code range: NSMakeRange(0, code.length)];
-    id result = [reader readForm];
-    //NSLog(@"Read '%@' into '%@'", code, result);
-    return result;
+    return read_str(code);
 }
 
 NSString* REP(NSString* code, MALEnv* env) {
@@ -44,13 +41,13 @@ NSString* REP(NSString* code, MALEnv* env) {
 
 id EVAL(id ast, MALEnv* env) {
     while (YES) {
+        
         if ([ast isKindOfClass: [MALList class]]) /* TODO: make [MALList class] a static var */ {
             MALList* list = ast;
             NSUInteger listCount = list.count;
             if (listCount) {
                 @try {
-                    id firstElement = list[0];
-                    if (firstElement == [@"def!" asSymbol]) { // TODO: turn symbols into statics
+                    if (list[0] == [@"def!" asSymbol]) { // TODO: turn symbols into statics
                         if (listCount==3) {
                             // Make new Binding:
                             id value = EVAL(list[2], env);
@@ -58,12 +55,13 @@ id EVAL(id ast, MALEnv* env) {
                             return value;
                         }
                         NSLog(@"Warning: def! needs 2 parameters.");
-                        return nilObject;
-                    } else if (firstElement == [@"let*" asSymbol]) {
+                        return nil;
+                    }
+                    if (list[0] == [@"let*" asSymbol]) {
                         MALEnv* letEnv;
                         if (listCount!=3) {
                             NSLog(@"Warning: let* expects 2 parameters.");
-                            return nilObject;
+                            return nil;
                         }
                         NSArray* bindingsList = list[1];
                         NSUInteger bindingListCount = bindingsList.count;
@@ -74,38 +72,39 @@ id EVAL(id ast, MALEnv* env) {
                             id value = EVAL(bindingsList[i+1], letEnv);
                             letEnv->data[key] = value;
                         }
-                        env = letEnv;
-                        ast = list[2];
-                        // loop...
-                    } else if (firstElement == [@"do" asSymbol]) {
-                        if (listCount==1) return nilObject;
+                        
+                        id result = EVAL(list[2], letEnv);
+                        return result;
+                    }
+                    if (list[0] == [@"do" asSymbol]) {
                         id result = nil;
-                        for (NSUInteger i=1; i<listCount-1; i++) {
+                        for (NSUInteger i=1; i<listCount; i++) {
                             result = EVAL(list[i], env);
                         }
-                        ast = list[listCount-1];
-                    } else if (firstElement == [@"if" asSymbol]) {
-                        NSCParameterAssert(listCount>2);
-
+                        return result; // return the result of the last expression evaluation
+                    }
+                    if (list[0] == [@"if" asSymbol]) {
                         id cond = EVAL(list[1], env);
+                        id result = nil;
                         if ([cond truthValue]) {
-                            ast = list[2];
+                            result = EVAL(list[2], env);
                         } else {
-                            if (listCount<=3) {
-                                return nilObject;
+                            if (listCount>3) {
+                                result = EVAL(list[3], env);
                             }
-                            ast = list[3];
                         }
-                    } else if (firstElement == [@"fn*" asSymbol]) {
-                        __block NSArray* symbols = list[1];
+                        return result ? result : nilObject;
+                    }
+                    
+                    if (list[0] == [@"fn*" asSymbol]) {
+                        NSArray* symbols = list[1];
                         NSCParameterAssert([symbols isKindOfClass: [NSArray class]]);
                         id body = list[2];
                         NSUInteger symbolsCount = symbols.count;
-                        __block BOOL hasVarargs = symbolsCount >= 2 && [(symbols[symbolsCount-2]) isEqualToString: @"&"];
+                        BOOL hasVarargs = symbolsCount >= 2 && [(symbols[symbolsCount-2]) isEqualToString: @"&"];
                         
                         LispFunction block = ^id(NSArray* call) {
                             NSMutableDictionary* bindings;
-                            MALEnv* functionEnv = env;
                             if (hasVarargs) {
                                 NSUInteger regularArgsCount = symbolsCount-2;
                                 __unsafe_unretained id args[call.count];
@@ -123,38 +122,36 @@ id EVAL(id ast, MALEnv* env) {
                                     [call getObjects: args];
                                     [symbols getObjects: syms];
                                     bindings = [NSMutableDictionary dictionaryWithObjects: args+1 forKeys: syms count: symbolsCount];
-                                    functionEnv = [[MALEnv alloc] initWithOuterEnvironment: env
-                                                                                  bindings: bindings]; // I want to be on the stack
+                                } else {
+                                    return EVAL(body, env);
                                 }
                             }
+                            MALEnv* functionEnv = [[MALEnv alloc] initWithOuterEnvironment: env
+                                                                                  bindings: bindings]; // I want to be on the stack
                             return EVAL(body, functionEnv);
                         };
                         
                         return [block copy];
-                    } else {
-                        MALList* evaluatedList = [list eval_ast: env];
-                        LispFunction f = evaluatedList[0];
-                        if (firstElement == [@"sum2" asSymbol]) {
-                    xxx
-                        } else {
-                            if (MALObjectIsBlock(f)) {
-                                id result = f(evaluatedList);
-                                return result;
-                            } else {
-                                @throw [NSException exceptionWithName: @"MALUndefinedFunction" reason: [NSString stringWithFormat: @"A '%@' function is not defined.", list[0]] userInfo: nil];
-                            }
-                        }
                     }
+                    
+                    MALList* evaluatedList = [list eval_ast: env];
+                    LispFunction f = evaluatedList[0];
+                    if (MALObjectIsBlock(f)) {
+                        id result = f(evaluatedList);
+                        return result;
+                    }
+                    @throw [NSException exceptionWithName: @"MALUndefinedFunction" reason: [NSString stringWithFormat: @"A '%@' function is not defined.", list[0]] userInfo: nil];
                 } @catch(NSException* e) {
                     NSLog(@"Error evaluating function '%@': %@", list[0], e);
                     return nil;
                 }
             }
+            return ast;
+            
         } else {
             return [ast eval_ast: env];
         }
     }
-    return nil; // silence compiler
 }
 
 

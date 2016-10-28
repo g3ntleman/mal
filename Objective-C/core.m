@@ -8,6 +8,7 @@
 
 #import "core.h"
 #import "NSObject+Types.h"
+#import "SESyntaxParser.h"
 #import "MALList.h"
 
 //typedef struct SEQ_t {
@@ -41,6 +42,18 @@ static Class listClass = nil;
 static MALBool* yes = nil;
 static MALBool* no  = nil;
 static NSNull* nilObject = nil;
+
+
+typedef id (*MALFunction1)(id arg1);
+typedef id (*MALFunction2)(id arg1, id arg2);
+typedef id (*MALFunction3)(id arg1, id arg2, id arg3);
+
+
+id MALCoreF_first(NSArray* array) {
+    return [array firstObject];
+}
+
+MALFunction1 MALCore_first = &MALCoreF_first;
 
 NSDictionary* MALCoreNameSpace() {
     
@@ -120,9 +133,10 @@ NSDictionary* MALCoreNameSpace() {
           [@"empty?" asSymbol]: ^id(NSArray* args) {
               return [args[1] count]==0 ? YESBOOL : NOBOOL;
           },
-          [@"first" asSymbol]: ^id(NSArray* args) {
-              return [args[1] firstObject];
-          },
+//          [@"first" asSymbol]: ^id(NSArray* args) {
+//              return [args[1] firstObject];
+//          },
+          [@"first" asSymbol]: [NSValue valueWithPointer: &MALCore_first],
           [@"rest" asSymbol]: ^id(NSArray* args) {
               return [MALList listFromArray: args
                                    subrange: NSMakeRange(1, args.count-1)];
@@ -201,10 +215,25 @@ NSDictionary* MALCoreNameSpace() {
               }
               printf("\n");
               return nilObject;
+          },
+          [@"read-string" asSymbol]: ^id(NSArray* args) {
+              NSCParameterAssert(args.count == 2);
+              return read_str(args[1]);
+          },
+          [@"slurp" asSymbol]: ^id(NSArray* args) {
+              NSCParameterAssert(args.count == 2);
+              NSError* error = nil;
+              NSString* stringContents = [NSString stringWithContentsOfFile: args[1] encoding:NSUTF8StringEncoding error: &error];
+              if (error) {
+                  @throw error;
+              }
+              return stringContents;
           }
-          
-          };
+        };
         coreNS = [protoNS mutableCopy];
+        
+        coreNS[[@"first" asSymbol]] = [NSValue valueWithPointer: &MALCore_first];
+        
     }
     return coreNS;
 }

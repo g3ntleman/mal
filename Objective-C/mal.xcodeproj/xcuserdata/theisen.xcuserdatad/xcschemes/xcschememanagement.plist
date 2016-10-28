@@ -32,7 +32,7 @@
 		<key>step4_if_fn_do copy.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>6</integer>
+			<integer>8</integer>
 		</dict>
 		<key>step4_if_fn_do.xcscheme</key>
 		<dict>
@@ -40,6 +40,11 @@
 			<integer>5</integer>
 		</dict>
 		<key>step5_tco.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>6</integer>
+		</dict>
+		<key>step6_file.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>7</integer>
@@ -58,6 +63,11 @@
 			<true/>
 		</dict>
 		<key>8D5A49821DBD045A00D90D97</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8D5A49981DC240A200D90D97</key>
 		<dict>
 			<key>primary</key>
 			<true/>

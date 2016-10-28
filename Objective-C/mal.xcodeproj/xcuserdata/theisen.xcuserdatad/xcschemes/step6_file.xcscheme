@@ -5,22 +5,6 @@
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
-      <BuildActionEntries>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8DB4C9521D8C6E26000743BA"
-               BuildableName = "step4_if_fn_do"
-               BlueprintName = "step4_if_fn_do"
-               ReferencedContainer = "container:mal.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-      </BuildActionEntries>
    </BuildAction>
    <TestAction
       buildConfiguration = "Debug"
@@ -32,9 +16,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8D5A49821DBD045A00D90D97"
-            BuildableName = "step5_tco"
-            BlueprintName = "step5_tco"
+            BlueprintIdentifier = "8D5A49981DC240A200D90D97"
+            BuildableName = "step6_file"
+            BlueprintName = "step6_file"
             ReferencedContainer = "container:mal.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -55,9 +39,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8D5A49821DBD045A00D90D97"
-            BuildableName = "step5_tco"
-            BlueprintName = "step5_tco"
+            BlueprintIdentifier = "8D5A49981DC240A200D90D97"
+            BuildableName = "step6_file"
+            BlueprintName = "step6_file"
             ReferencedContainer = "container:mal.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -70,16 +54,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8DB4C9521D8C6E26000743BA"
-            BuildableName = "step4_if_fn_do"
-            BlueprintName = "step4_if_fn_do"
-            ReferencedContainer = "container:mal.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
