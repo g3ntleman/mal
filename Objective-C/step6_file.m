@@ -157,20 +157,21 @@ id EVAL(id ast, MALEnv* env) {
 
 int main(int argc, const char * argv[]) {
     // Create an autorelease pool to manage the memory into the program
+    
     @autoreleasepool {
-        
         
         NSMutableDictionary* bindings = [MALCoreNameSpace() mutableCopy];
         MALEnv* replEnvironment = [[MALEnv alloc] initWithOuterEnvironment: nil bindings: bindings];
+        __weak MALEnv* weakEnv = replEnvironment;
         
         // Add eval:
         [replEnvironment set: ^id(NSArray* args) {
             NSCParameterAssert(args.count == 2);
             id ast = args[1];
-            return EVAL(ast, replEnvironment);
+            return EVAL(ast, weakEnv);
         } symbol: [@"eval" asSymbol]];
 
-        REP(@"(def! not (fn* (a) (if a false true)))", replEnvironment);
+        REP(@"(def! not (fn* (a) (if a false true)))", replEnvironment); // Just as test. TODO: implement natively
                 
         while (true) {
             char *rawline = readline("user> ");
