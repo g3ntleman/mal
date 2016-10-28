@@ -229,6 +229,10 @@ static NSMutableSet* symbols = nil;
  */
 - (NSString*) lispDescriptionReadable: (BOOL) readable {
 
+    if ([self isSymbol]) {
+        return self;
+    }
+    
     if (readable) {
         NSUInteger count = self.length;
         unichar source[count];

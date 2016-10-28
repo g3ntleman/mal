@@ -437,6 +437,7 @@ static long unquote_characters(const unichar* source, const NSRange range, unich
                 if (length == NSNotFound) {
                     return nil; // throw?
                 }
+                // Skip quotes:
                 nextToken.range.location+=1;
                 nextToken.range.length-=2;
                 if (nextToken.needsUnquoting) {

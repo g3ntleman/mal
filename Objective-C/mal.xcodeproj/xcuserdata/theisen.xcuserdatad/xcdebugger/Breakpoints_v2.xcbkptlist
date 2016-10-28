@@ -42,7 +42,7 @@
                   moduleName = "mal"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/theisen/Projects/Work/mal/Objective-C/NSObject+Types.m"
-                  timestampString = "498933038.759884"
+                  timestampString = "499353460.487018"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "160"
@@ -57,7 +57,7 @@
                   moduleName = "mal"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/theisen/Projects/Work/mal/Objective-C/NSObject+Types.m"
-                  timestampString = "498933038.761776"
+                  timestampString = "499353460.494853"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "160"
@@ -185,22 +185,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SESyntaxParser.m"
-            timestampString = "498629617.104891"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "324"
-            endingLineNumber = "324"
-            landmarkName = "-readList"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "core.m"
             timestampString = "498637855.411535"
             startingColumnNumber = "9223372036854775807"
@@ -241,6 +225,22 @@
             endingLineNumber = "130"
             landmarkName = "EVAL()"
             landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "NSObject+Types.m"
+            timestampString = "499353460.174692"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "236"
+            endingLineNumber = "236"
+            landmarkName = "-lispDescriptionReadable:"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

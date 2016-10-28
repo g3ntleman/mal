@@ -132,6 +132,11 @@ id EVAL(id ast, MALEnv* env) {
                         };
                         
                         return [block copy];
+                    } else if (list[0] == [@"eval" asSymbol]) {
+                        NSCParameterAssert(list.count == 2);
+                        id ast = list[1];
+                        id result = EVAL(ast, env);
+                        return result;
                     }
                     
                     MALList* evaluatedList = [list eval_ast: env];
