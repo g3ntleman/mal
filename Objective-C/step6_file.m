@@ -170,8 +170,17 @@ int main(int argc, const char * argv[]) {
             id ast = args[1];
             return EVAL(ast, weakEnv);
         } symbol: [@"eval" asSymbol]];
+        
+        // Add *ARGV*:
+        NSMutableArray* mainArgs = [NSMutableArray arrayWithCapacity: argc];
+        for (int i=1; i<argc; i++) {
+            [mainArgs addObject: [NSString stringWithCString: argv[i] encoding: NSUTF8StringEncoding]];
+        }
+        [replEnvironment set: [MALList listFromArray: mainArgs]
+                      symbol: [@"*ARGV*" asSymbol]];
 
         REP(@"(def! not (fn* (a) (if a false true)))", replEnvironment); // Just as test. TODO: implement natively
+        REP(@"(def! load-file (fn* (f) (eval (read-string (str \"(do \" (slurp f) \")\")))))", replEnvironment);
                 
         while (true) {
             char *rawline = readline("user> ");

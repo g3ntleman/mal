@@ -140,9 +140,7 @@
 		8D5A49A81DC240A200D90D97 /* step6_file */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = step6_file; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D8917BF1D6FD4F200351894 /* step0_repl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = step0_repl.m; sourceTree = "<group>"; };
 		8D8917C11D6FD84100351894 /* step0_repl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = step0_repl.h; sourceTree = "<group>"; };
-		8D8917C31D70D17400351894 /* tests */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tests; sourceTree = "<group>"; };
 		8D8917C41D70D19F00351894 /* run_argv_test.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = run_argv_test.sh; sourceTree = "<group>"; };
-		8D8917C51D70D19F00351894 /* runtest.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = runtest.py; sourceTree = "<group>"; };
 		8D8917C61D70D78B00351894 /* libreadline.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libreadline.tbd; path = usr/lib/libreadline.tbd; sourceTree = SDKROOT; };
 		8D8917C91D74F8A700351894 /* SESyntaxParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SESyntaxParser.h; sourceTree = "<group>"; };
 		8D8917CA1D74F8A700351894 /* SESyntaxParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SESyntaxParser.m; sourceTree = "<group>"; };
@@ -252,7 +250,6 @@
 				8D511F4C1D779F43003ED9FC /* NSObject+Types.m */,
 				8D8917C61D70D78B00351894 /* libreadline.tbd */,
 				8D8917C41D70D19F00351894 /* run_argv_test.sh */,
-				8D8917C51D70D19F00351894 /* runtest.py */,
 				8D8917C91D74F8A700351894 /* SESyntaxParser.h */,
 				8D8917CA1D74F8A700351894 /* SESyntaxParser.m */,
 				8D8917C11D6FD84100351894 /* step0_repl.h */,
@@ -270,7 +267,6 @@
 				8D5A49941DC2401500D90D97 /* step6_file.h */,
 				8D5A49951DC2401500D90D97 /* step6_file.m */,
 				8D454BD61D6FD291007C7554 /* Products */,
-				8D8917C31D70D17400351894 /* tests */,
 			);
 			sourceTree = "<group>";
 		};
@@ -801,14 +797,18 @@
 		8D5A49A61DC240A200D90D97 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				OTHER_CFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				WARNING_CFLAGS = "-Wnullability-completeness";
 			};
 			name = Debug;
 		};
 		8D5A49A71DC240A200D90D97 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				OTHER_CFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				WARNING_CFLAGS = "-Wnullability-completeness";
 			};
 			name = Release;
 		};

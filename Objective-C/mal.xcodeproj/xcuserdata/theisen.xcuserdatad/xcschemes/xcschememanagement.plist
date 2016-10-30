@@ -11,36 +11,43 @@
 		</dict>
 		<key>step0_repl.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<false/>
 			<key>orderHint</key>
 			<integer>1</integer>
 		</dict>
 		<key>step1_read_print.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<false/>
 			<key>orderHint</key>
 			<integer>2</integer>
 		</dict>
 		<key>step2_eval.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<false/>
 			<key>orderHint</key>
 			<integer>3</integer>
 		</dict>
 		<key>step3_env.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<false/>
 			<key>orderHint</key>
 			<integer>4</integer>
 		</dict>
-		<key>step4_if_fn_do copy.xcscheme</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>8</integer>
-		</dict>
 		<key>step4_if_fn_do.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<true/>
 			<key>orderHint</key>
 			<integer>5</integer>
 		</dict>
 		<key>step5_tco.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<false/>
 			<key>orderHint</key>
 			<integer>6</integer>
 		</dict>

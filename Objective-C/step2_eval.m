@@ -16,13 +16,6 @@
 //#define eval_ast(ast, env) [ast eval_ast: env]
 
 
-id eval_ast(id ast, NSDictionary* env) {
-    return [ast eval_ast: env];
-}
-
-
-
-
 id READ(NSString* code) {
     SESyntaxParser* reader = [[SESyntaxParser alloc] initWithString: code range: NSMakeRange(0, code.length)];
     id result = [reader readForm];

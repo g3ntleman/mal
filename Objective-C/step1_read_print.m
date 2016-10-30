@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 #include <readline/readline.h>
 #import "SESyntaxParser.h"
+#import "NSObject+Types.h"
 #import "step0_repl.h"
 
 
@@ -24,7 +25,7 @@ id EVAL(id ast, id env) {
 
 
 NSString* PRINT(id exp) {
-    return [exp lispDescriptionReadable: (BOOL) readable];
+    return [exp lispDescriptionReadable: YES];
 }
 
 

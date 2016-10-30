@@ -267,4 +267,15 @@ static NSMutableSet* symbols = nil;
 
 @end
 
+@implementation MalAtom
+    
+- (id) initWithValue: (id) aValue {
+    if (self = [super init]) {
+        value = aValue;
+    }
+    return self;
+}
+
+    
+@end
 

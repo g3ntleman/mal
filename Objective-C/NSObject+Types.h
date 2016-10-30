@@ -10,6 +10,9 @@
 #import "MALList.h"
 #import "MALEnv.h"
 
+#pragma clang diagnostic ignored "-Wnullability-completeness"
+
+
 typedef id _Nullable (^LispFunction)(NSArray* _Nullable args );
 
 extern BOOL MALObjectIsBlock(id _Nullable block);
@@ -36,6 +39,17 @@ extern BOOL MALObjectIsBlock(id _Nullable block);
 + (_Nonnull id) no;
 
 @end
+
+// Atoms
+
+@interface MalAtom : NSObject {
+    @public id value;
+}
+    
+- (id) initWithValue: (id) value;
+    
+@end
+
 
 extern MALBool* _Nonnull  YESBOOL;
 extern MALBool* _Nonnull  NOBOOL;

@@ -229,6 +229,34 @@ NSDictionary* MALCoreNameSpace() {
                   @throw error;
               }
               return stringContents;
+          },
+          [@"atom" asSymbol]: ^id(NSArray* args) {
+              NSCParameterAssert(args.count == 2);
+              return [[MalAtom alloc] initWithValue: args[1]];
+          },
+          [@"atom?" asSymbol]: ^id(NSArray* args) {
+              NSCParameterAssert(args.count == 2);
+              return [args[1] isKindOfClass: [MalAtom class]] ? YESBOOL : NOBOOL; // TODO: Make static Class variabel for comparison
+          },
+          [@"deref" asSymbol]: ^id(NSArray* args) {
+              NSCParameterAssert(args.count == 2);
+              NSCParameterAssert([args[1] isKindOfClass: [MalAtom class]]);
+              return ((MalAtom*)args[1])->value;
+          },
+          [@"reset!" asSymbol]: ^id(NSArray* args) {
+              NSCParameterAssert(args.count == 3);
+              NSCParameterAssert([args[1] isKindOfClass: [MalAtom class]]);
+              return ((MalAtom*)args[1])->value = args[2];
+          },
+          [@"swap!" asSymbol]: ^id(NSArray* args) {
+              NSCParameterAssert(args.count >= 3);
+              NSCParameterAssert([args[1] isKindOfClass: [MalAtom class]]);
+              LispFunction f = args[2];
+              id atomValue = ((MalAtom*)args[1])->value;
+              NSMutableArray* fargs = [args mutableCopy];
+              [fargs removeObjectAtIndex: 0]; // function symbol
+              fargs[0] = atomValue;
+              return f(fargs);
           }
         };
         coreNS = [protoNS mutableCopy];
