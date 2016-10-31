@@ -39,6 +39,35 @@ NSString* REP(NSString* code, MALEnv* env) {
     return result;
 }
 
+//static BOOL is_pair(id ast) {
+//    return [ast isKindOfClass: [MALList class]] && [ast count]>=2;
+//}
+
+static id quasiquote(NSArray* ast) {
+    NSCParameterAssert([ast isKindOfClass: [NSArray class]]);
+    NSUInteger astCount = [ast isKindOfClass: [NSArray class]] ? [ast count] : 0;
+    if (astCount<2) {
+        return [MALList listFromFirstObject: [@"quote" asSymbol] rest: ast];
+    }
+    if (ast[0] == [@"unquote" asSymbol]) {
+        return ast[1];
+    }
+    if (ast[0][0] == [@"unquote" asSymbol]) {
+        return nil;
+    }
+    
+    
+    // otherwise: return a new list containing: a symbol named "cons", the result of calling
+    // quasiquote on first element of ast ( ast[0] ), and the result of calling quasiquote with
+    // the second through last element of ast.
+    __unsafe_unretained id listContent[3];
+    listContent[0] = [@"cons" asSymbol];
+    listContent[1] = quasiquote(ast[0]);
+    listContent[2] = quasiquote([ast subarrayWithRange: NSMakeRange(1, astCount-1)]);
+    
+    return [MALList listFromObjects: listContent count: 3];
+}
+
 id EVAL(id ast, MALEnv* env) {
     while (YES) {
         
@@ -47,7 +76,8 @@ id EVAL(id ast, MALEnv* env) {
             NSUInteger listCount = list.count;
             if (listCount) {
                 @try {
-                    if (list[0] == [@"def!" asSymbol]) { // TODO: turn symbols into statics
+                    NSString* firstSymbol = list[0];
+                    if (firstSymbol == [@"def!" asSymbol]) { // TODO: turn symbols into statics
                         if (listCount==3) {
                             // Make new Binding:
                             id value = EVAL(list[2], env);
@@ -57,7 +87,7 @@ id EVAL(id ast, MALEnv* env) {
                         NSLog(@"Warning: def! needs 2 parameters.");
                         return nil;
                     }
-                    if (list[0] == [@"let*" asSymbol]) {
+                    if (firstSymbol == [@"let*" asSymbol]) {
                         MALEnv* letEnv;
                         if (listCount!=3) {
                             NSLog(@"Warning: let* expects 2 parameters.");
@@ -76,14 +106,14 @@ id EVAL(id ast, MALEnv* env) {
                         id result = EVAL(list[2], letEnv);
                         return result;
                     }
-                    if (list[0] == [@"do" asSymbol]) {
+                    if (firstSymbol == [@"do" asSymbol]) {
                         id result = nil;
                         for (NSUInteger i=1; i<listCount; i++) {
                             result = EVAL(list[i], env);
                         }
                         return result; // return the result of the last expression evaluation
                     }
-                    if (list[0] == [@"if" asSymbol]) {
+                    if (firstSymbol == [@"if" asSymbol]) {
                         id cond = EVAL(list[1], env);
                         id result = nil;
                         if ([cond truthValue]) {
@@ -95,8 +125,7 @@ id EVAL(id ast, MALEnv* env) {
                         }
                         return result ? result : nilObject;
                     }
-                    
-                    if (list[0] == [@"fn*" asSymbol]) {
+                    if (firstSymbol == [@"fn*" asSymbol]) {
                         NSArray* symbols = list[1];
                         NSCParameterAssert([symbols isKindOfClass: [NSArray class]]);
                         id body = list[2];
@@ -132,6 +161,15 @@ id EVAL(id ast, MALEnv* env) {
                         
                         return [block copy];
                     }
+                    if (firstSymbol == [@"quote" asSymbol]) {
+                        return list[1];
+                    }
+                    if (firstSymbol == [@"quasiquote" asSymbol]) {
+                        ast = quasiquote(list[1]);
+                        break; // TCO
+                    }
+                    
+                    
                     MALList* evaluatedList = [list eval_ast: env];
                     LispFunction f = evaluatedList[0];
                     if (MALObjectIsBlock(f)) {
