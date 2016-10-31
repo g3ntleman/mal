@@ -172,22 +172,32 @@ int main(int argc, const char * argv[]) {
         
         // Add *ARGV*:
         NSMutableArray* mainArgs = [NSMutableArray arrayWithCapacity: argc];
-        for (int i=1; i<argc; i++) {
-            [mainArgs addObject: [NSString stringWithCString: argv[i] encoding: NSUTF8StringEncoding]];
+        NSString* startupFilename = nil;
+        
+        if (argc>1) {
+            startupFilename = [NSString stringWithCString: argv[1] encoding: NSUTF8StringEncoding];
+            for (int i=2; i<argc; i++) {
+                [mainArgs addObject: [NSString stringWithCString: argv[i] encoding: NSUTF8StringEncoding]];
+            }
         }
         [replEnvironment set: [MALList listFromArray: mainArgs]
                       symbol: [@"*ARGV*" asSymbol]];
 
         REP(@"(def! not (fn* (a) (if a false true)))", replEnvironment); // Just as test. TODO: implement natively
         REP(@"(def! load-file (fn* (f) (eval (read-string (str \"(do \" (slurp f) \")\")))))", replEnvironment);
-                
-        while (true) {
-            char *rawline = readline("user> ");
-            if (!rawline) { break; }
-            NSString *line = [NSString stringWithUTF8String:rawline];
-            if ([line length] == 0) { continue; }
-            id result = REP(line, replEnvironment);
-            printf("%s\n", [result UTF8String]);
+        
+        if (startupFilename.length) {
+            REP([NSString stringWithFormat: @"(load-file \"%@\")", startupFilename], replEnvironment);
+        } else {
+            // Interactive
+            while (true) {
+                char *rawline = readline("user> ");
+                if (!rawline) { break; }
+                NSString *line = [NSString stringWithUTF8String:rawline];
+                if ([line length] == 0) { continue; }
+                id result = REP(line, replEnvironment);
+                printf("%s\n", [result UTF8String]);
+            }
         }
     }
     return 0;
