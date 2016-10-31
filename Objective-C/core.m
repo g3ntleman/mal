@@ -257,6 +257,35 @@ NSDictionary* MALCoreNameSpace() {
               MALList* list = [MALList listFromArray: args subrange: NSMakeRange(1, args.count-1)];
               list[1] = atomValue;
               return atom->value = f(list);
+          },
+          [@"cons" asSymbol]: ^id(NSArray* args) {
+              NSCParameterAssert(args.count >= 3);
+              NSCParameterAssert([args[2] isKindOfClass: [MALList class]]);
+              id first = args[1];
+              MALList* rest = args[2];
+              MALList* list = [MALList listFromFirstObject: first rest: rest];
+              return list;
+          },
+          [@"concat" asSymbol]: ^id(NSArray* args) {
+              id e1 = args[0];
+              NSUInteger count = 0;
+              for (MALList* e in args) {
+                  if (e != e1) {
+                      count+=e.count;
+                  }
+              }
+              __unsafe_unretained id elements[count];
+              if (count) {
+                  NSUInteger offset = 0;
+                  for (MALList* e in args) {
+                      if (e != e1) {
+                          [e getObjects: elements+offset];
+                          offset += e.count;
+                      }
+                  }
+              }
+              MALList* list = [MALList listFromObjects: elements count: count];
+              return list;
           }
         };
         coreNS = [protoNS mutableCopy];
