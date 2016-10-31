@@ -421,7 +421,7 @@ static long unquote_characters(const unichar* source, const NSRange range, unich
                 return [MALList listFromFirstObject: @"splice-unquote" rest: [self readForm]];
                 
             case DEREF:
-                return [MALList listFromFirstObject: @"deref" rest: [self readForm]];
+                return [MALList listFromFirstObject: @"deref" rest: @[[self readForm]]];
                 
             case QUASIQUOTE:
                 return [MALList listFromFirstObject: @"quasiquote" rest: [self readForm]];

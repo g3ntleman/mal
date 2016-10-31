@@ -251,12 +251,12 @@ NSDictionary* MALCoreNameSpace() {
           [@"swap!" asSymbol]: ^id(NSArray* args) {
               NSCParameterAssert(args.count >= 3);
               NSCParameterAssert([args[1] isKindOfClass: [MalAtom class]]);
+              MalAtom* atom = args[1];
               LispFunction f = args[2];
-              id atomValue = ((MalAtom*)args[1])->value;
-              NSMutableArray* fargs = [args mutableCopy];
-              [fargs removeObjectAtIndex: 0]; // function symbol
-              fargs[0] = atomValue;
-              return f(fargs);
+              id atomValue = atom->value;
+              MALList* list = [MALList listFromArray: args subrange: NSMakeRange(1, args.count-1)];
+              list[1] = atomValue;
+              return atom->value = f(list);
           }
         };
         coreNS = [protoNS mutableCopy];

@@ -24,6 +24,8 @@
 - (id)objectAtIndex: (NSUInteger) index;
 
 - (const id*) objects;
+    
+- (void)setObject:(id)obj atIndexedSubscript:(NSUInteger)idx;
 
 @end
 

@@ -116,15 +116,14 @@ id EVAL(id ast, MALEnv* env) {
                                 bindings[symbols.lastObject] = varargList;
                             } else {
                                 NSCParameterAssert(call.count == symbolsCount+1);
-                                if (symbolsCount) {
-                                    __unsafe_unretained id args[symbolsCount];
-                                    __unsafe_unretained id syms[symbolsCount];
-                                    [call getObjects: args];
-                                    [symbols getObjects: syms];
-                                    bindings = [NSMutableDictionary dictionaryWithObjects: args+1 forKeys: syms count: symbolsCount];
-                                } else {
+                                if (! symbolsCount) {
                                     return EVAL(body, env);
                                 }
+                                __unsafe_unretained id args[symbolsCount];
+                                __unsafe_unretained id syms[symbolsCount];
+                                [call getObjects: args];
+                                [symbols getObjects: syms];
+                                bindings = [NSMutableDictionary dictionaryWithObjects: args+1 forKeys: syms count: symbolsCount];
                             }
                             MALEnv* functionEnv = [[MALEnv alloc] initWithOuterEnvironment: env
                                                                                   bindings: bindings]; // I want to be on the stack

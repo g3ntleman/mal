@@ -276,6 +276,10 @@ static NSMutableSet* symbols = nil;
     return self;
 }
 
+- (NSString*) lispDescriptionReadable: (BOOL) readable {
+    return [NSString stringWithFormat: @"(atom %@)", [value lispDescriptionReadable: readable]];
+}
+
     
 @end
 

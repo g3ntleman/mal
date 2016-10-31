@@ -69,6 +69,13 @@
     NSObject** objects = object_getIndexedIvars(self);
     return objects;
 }
+    
+- (void)setObject: (id) obj atIndexedSubscript: (NSUInteger) idx {
+    NSParameterAssert(idx<_count);
+    NSObject** objects = object_getIndexedIvars(self);
+    objects[idx] = obj;
+}
+
 
 - (void) addObject: (id) obj {
     NSObject** objects = object_getIndexedIvars(self);
