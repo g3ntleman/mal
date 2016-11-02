@@ -23,6 +23,7 @@ extern BOOL MALObjectIsBlock(id _Nullable block);
 - (id _Nullable) eval_ast: (MALEnv* _Nullable) env;
 - (BOOL) isSymbol;
 - (BOOL) truthValue;
+- (BOOL) lispEqual: (id) other;
 
 @end
 

@@ -34,6 +34,10 @@ BOOL MALObjectIsBlock(id _Nullable block) {
     return NO;
 }
 
+- (BOOL) lispEqual: (id) other {
+    return [self isEqual: other];
+}
+
 
 - (id) eval_ast: (MALEnv*) env {
     return self;
@@ -208,6 +212,11 @@ static NSMutableSet* symbols = nil;
 - (BOOL) isSymbol {
     return self == [symbols member: self];
 }
+
+- (BOOL) lispEqual: (id) other {
+    return  [self isEqual: other] && ((self == [symbols member: self]) == (other == [symbols member: other]));
+}
+
 
 - (id) eval_ast : (MALEnv*) env {
     if ([self isSymbol]) {

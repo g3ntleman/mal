@@ -411,21 +411,24 @@ static long unquote_characters(const unichar* source, const NSRange range, unich
             case BOOL_FALSE: {
                 return [MALBool no];
             }
-            case QUOTE:
-                return [MALList listFromFirstObject: @"quote" rest: [self readForm]];
-                
-            case UNQUOTE:
-                return [MALList listFromFirstObject: @"unquote" rest: [self readForm]];
-                
+            case QUOTE: {
+                __unsafe_unretained id params[2] = {@"quote", [self readForm]};
+                return [MALList listFromObjects: params count: 2];
+            }
+            case UNQUOTE: {
+                __unsafe_unretained id params[2] = {@"unquote", [self readForm]};
+                return [MALList listFromObjects: params count: 2];
+            }
             case SPLICE_UNQUOTE:
                 return [MALList listFromFirstObject: @"splice-unquote" rest: [self readForm]];
                 
             case DEREF:
                 return [MALList listFromFirstObject: @"deref" rest: @[[self readForm]]];
                 
-            case QUASIQUOTE:
-                return [MALList listFromFirstObject: @"quasiquote" rest: [self readForm]];
-               
+            case QUASIQUOTE: {
+                __unsafe_unretained id params[2] = {@"quasiquote", [self readForm]};
+                return [MALList listFromObjects: params count: 2];
+            }
             case WITH_META: {
                 id form1 = [self readMap];
                 id form2 = [self readForm];

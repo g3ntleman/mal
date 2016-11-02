@@ -1,1 +1,4 @@
-Implement TCO
+Make MALSymbol its own class, not inheriting from String
+
+Implement TCO (Skipped)
+

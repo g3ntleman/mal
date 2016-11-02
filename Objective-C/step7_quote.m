@@ -44,7 +44,7 @@ NSString* REP(NSString* code, MALEnv* env) {
 //}
 
 static id quasiquote(NSArray* ast) {
-    NSCParameterAssert([ast isKindOfClass: [NSArray class]]);
+    
     NSUInteger astCount = [ast isKindOfClass: [NSArray class]] ? [ast count] : 0;
     if (astCount<2) {
         return [MALList listFromFirstObject: [@"quote" asSymbol] rest: ast];
@@ -52,10 +52,18 @@ static id quasiquote(NSArray* ast) {
     if (ast[0] == [@"unquote" asSymbol]) {
         return ast[1];
     }
-    if (ast[0][0] == [@"unquote" asSymbol]) {
-        return nil;
+    // if is_pair of the first element of ast is true and the first element of
+    // first element of ast ( ast[0][0] ) is a symbol named "splice-unquote":
+    // return a new list containing: a symbol named "concat", the second element
+    // of first element of ast ( ast[0][1] ), and the result of calling quasiquote
+    // with the second through last element of ast .
+    if (ast[0][0] == [@"splice-unquote" asSymbol]) {
+        __unsafe_unretained id listContent[3];
+        listContent[0] = [@"concat" asSymbol];
+        listContent[1] = ast[0][1];
+        listContent[2] = quasiquote([ast subarrayWithRange: NSMakeRange(1, astCount-1)]);
+        return [MALList listFromObjects: listContent count: 3];
     }
-    
     
     // otherwise: return a new list containing: a symbol named "cons", the result of calling
     // quasiquote on first element of ast ( ast[0] ), and the result of calling quasiquote with
@@ -64,7 +72,6 @@ static id quasiquote(NSArray* ast) {
     listContent[0] = [@"cons" asSymbol];
     listContent[1] = quasiquote(ast[0]);
     listContent[2] = quasiquote([ast subarrayWithRange: NSMakeRange(1, astCount-1)]);
-    
     return [MALList listFromObjects: listContent count: 3];
 }
 

@@ -144,7 +144,7 @@ NSDictionary* MALCoreNameSpace() {
           [@"=" asSymbol]: ^id(NSArray* args) {
               id o1 = args[1];
               id o2 = args[2];
-              return o1==o2 || [o1 isEqual: o2] ? yes : no;
+              return o1==o2 || [o1 lispEqual: o2] ? yes : no;
           },
           [@">" asSymbol]: ^id(NSArray* args) {
               id o1 = args[1];
@@ -260,7 +260,7 @@ NSDictionary* MALCoreNameSpace() {
           },
           [@"cons" asSymbol]: ^id(NSArray* args) {
               NSCParameterAssert(args.count >= 3);
-              NSCParameterAssert([args[2] isKindOfClass: [MALList class]]);
+              NSCParameterAssert([args[2] isKindOfClass: [NSArray class]]);
               id first = args[1];
               MALList* rest = args[2];
               MALList* list = [MALList listFromFirstObject: first rest: rest];

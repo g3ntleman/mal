@@ -46,7 +46,7 @@
     return instance;
 }
 
-+ (id) listFromObjects: (const id[]) objects count: (NSUInteger) count {
++ (id) listFromObjects: (const __unsafe_unretained id[]) objects count: (NSUInteger) count {
     MALList* instance = [self listWithCapacity: count];
     NSObject** ivars = object_getIndexedIvars(instance);
     for (NSUInteger i=0; i<count;i++) {
