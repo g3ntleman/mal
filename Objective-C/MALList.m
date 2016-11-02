@@ -30,6 +30,16 @@
     return instance;
 }
 
++ (id) listFromFirstObject: (id) first secondObject: second {
+    MALList* instance = [self listWithCapacity: 2];
+    instance->_count = 2;
+    NSObject** objects = object_getIndexedIvars(instance);
+    objects[0] = first;
+    objects[1] = second;
+    return instance;
+}
+
+
 + (id) listFromFirstObject: (id) first rest: (NSArray*) anArray {
     
     NSUInteger count = anArray.count+1;
@@ -118,6 +128,13 @@
     [buffer appendString: @")"];
     
     return buffer;
+}
+
+- (BOOL) lispEqual: (id) other {
+    if ([other isKindOfClass: [MALList class]]) {
+        return [self isEqual: other];
+    }
+    return NO;
 }
 
 
