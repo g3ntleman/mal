@@ -10,7 +10,7 @@
 #import "SESyntaxParser.h"
 #import "NSObject+Types.h"
 #import "core.h"
-#import "step4_if_fn_do.h"
+#import "step6_file.h"
 
 
 id READ(NSString* code) {

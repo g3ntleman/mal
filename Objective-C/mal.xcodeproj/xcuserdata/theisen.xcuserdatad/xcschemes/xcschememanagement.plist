@@ -61,6 +61,11 @@
 			<key>orderHint</key>
 			<integer>8</integer>
 		</dict>
+		<key>step8_macros.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>9</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
@@ -85,6 +90,11 @@
 			<true/>
 		</dict>
 		<key>8D5CC13B1DC788B9008FA8E4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8D765D451DCB33A00004EA25</key>
 		<dict>
 			<key>primary</key>
 			<true/>
