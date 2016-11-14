@@ -141,7 +141,6 @@
 - (id) eval_ast: (MALEnv*) env {
     NSUInteger count = self.count;
     if (!count) return self;
-    //LispFunction f = nil;
     
     NSMutableArray* args = [MALList listWithCapacity: count];
     for (id object in self) {

@@ -34,6 +34,10 @@ BOOL MALObjectIsBlock(id _Nullable block) {
     return NO;
 }
 
+- (BOOL) isMacro {
+    return NO;
+}
+
 - (BOOL) lispEqual: (id) other {
     return [self isEqual: other];
 }

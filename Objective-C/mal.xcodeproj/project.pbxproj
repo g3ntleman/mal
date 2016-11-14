@@ -45,6 +45,8 @@
 		8D765D591DCB39190004EA25 /* step7_quote.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D5CC14D1DC78950008FA8E4 /* step7_quote.m */; };
 		8D765D5A1DCB39210004EA25 /* step8_macros.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D765D571DCB38D50004EA25 /* step8_macros.m */; };
 		8D765D5B1DCB39210004EA25 /* step8_macros.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D765D571DCB38D50004EA25 /* step8_macros.m */; };
+		8D765D5F1DCB3EF10004EA25 /* MALFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D765D5D1DCB3E3E0004EA25 /* MALFunction.m */; };
+		8D765D601DCB3EF10004EA25 /* MALFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D765D5D1DCB3E3E0004EA25 /* MALFunction.m */; };
 		8D8917C01D6FD4F200351894 /* step0_repl.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8917BF1D6FD4F200351894 /* step0_repl.m */; };
 		8D8917C71D70D78B00351894 /* libreadline.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D8917C61D70D78B00351894 /* libreadline.tbd */; };
 		8D8917D71D74F95C00351894 /* SESyntaxParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8917CA1D74F8A700351894 /* SESyntaxParser.m */; };
@@ -178,6 +180,8 @@
 		8D765D551DCB33A00004EA25 /* step8_macros */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = step8_macros; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D765D561DCB38D50004EA25 /* step8_macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = step8_macros.h; sourceTree = "<group>"; };
 		8D765D571DCB38D50004EA25 /* step8_macros.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = step8_macros.m; sourceTree = "<group>"; };
+		8D765D5C1DCB3E3E0004EA25 /* MALFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MALFunction.h; sourceTree = "<group>"; };
+		8D765D5D1DCB3E3E0004EA25 /* MALFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MALFunction.m; sourceTree = "<group>"; };
 		8D8917BF1D6FD4F200351894 /* step0_repl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = step0_repl.m; sourceTree = "<group>"; };
 		8D8917C11D6FD84100351894 /* step0_repl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = step0_repl.h; sourceTree = "<group>"; };
 		8D8917C41D70D19F00351894 /* run_argv_test.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = run_argv_test.sh; sourceTree = "<group>"; };
@@ -298,6 +302,8 @@
 				8DE93FD61DB00ABC0073462E /* TODO.txt */,
 				8D8C74A11D88DDF3007AE095 /* MALEnv.h */,
 				8D8C74A21D88DDF3007AE095 /* MALEnv.m */,
+				8D765D5C1DCB3E3E0004EA25 /* MALFunction.h */,
+				8D765D5D1DCB3E3E0004EA25 /* MALFunction.m */,
 				8D8CDD4A1D7E943700B28817 /* MALList.h */,
 				8D8CDD481D7E941300B28817 /* MALList.m */,
 				8DB4C9661D8FDCC1000743BA /* core.h */,
@@ -697,6 +703,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D765D5F1DCB3EF10004EA25 /* MALFunction.m in Sources */,
 				8D765D5A1DCB39210004EA25 /* step8_macros.m in Sources */,
 				8DB4C9691D8FDCC1000743BA /* core.m in Sources */,
 				8D470A731DB7FFB1005D4286 /* MALKeyword.m in Sources */,
@@ -760,6 +767,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D765D601DCB3EF10004EA25 /* MALFunction.m in Sources */,
 				8D765D481DCB33A00004EA25 /* core.m in Sources */,
 				8D765D491DCB33A00004EA25 /* MALKeyword.m in Sources */,
 				8D765D5B1DCB39210004EA25 /* step8_macros.m in Sources */,

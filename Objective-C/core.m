@@ -9,6 +9,7 @@
 #import "core.h"
 #import "NSObject+Types.h"
 #import "SESyntaxParser.h"
+#import "MALFunction.h"
 #import "MALList.h"
 
 //typedef struct SEQ_t {
@@ -48,7 +49,7 @@ typedef id (*MALFunction1)(id arg1);
 typedef id (*MALFunction2)(id arg1, id arg2);
 typedef id (*MALFunction3)(id arg1, id arg2, id arg3);
 
-
+// Test for wrapping functions
 id MALCoreF_first(NSArray* array) {
     return [array firstObject];
 }
@@ -67,21 +68,21 @@ NSDictionary* MALCoreNameSpace() {
         // Ignore first argument!
         NSDictionary* protoNS =
         @{
-          [@"string?" asSymbol]: ^(NSArray *args){
+          [@"string?" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               return [args[1] isKindOfClass: stringClass] ? yes: no;
-          },
-          [@"list?" asSymbol]: ^(NSArray *args){
+          }],
+          [@"list?" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               return [args[1] isKindOfClass: listClass] ? yes : no;
-          },
-          [@"+" asSymbol]: ^id(NSArray* args) {
+          }],
+          [@"+" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSUInteger count = args.count;
               NSInteger result = 0;
               for (int i = 1; i<count; i++) {
                   result += [args[i] integerValue];
               }
               return @(result);
-          },
-          [@"-" asSymbol]: ^id(NSArray* args) {
+          }],
+          [@"-" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSUInteger count = args.count;
               NSInteger result = 0;
               
@@ -96,8 +97,8 @@ NSDictionary* MALCoreNameSpace() {
                   }
               }
               return @(result);
-          },
-          [@"*" asSymbol]: ^id(NSArray* args) {
+          }],
+          [@"*" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSCParameterAssert(args.count>1);
               NSInteger result = 1;
               NSUInteger count = args.count;
@@ -106,8 +107,8 @@ NSDictionary* MALCoreNameSpace() {
                   result *= [args[i] integerValue];
               }
               return @(result);
-          },
-          [@"/" asSymbol]: ^id(NSArray* args) {
+          }],
+          [@"/" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSUInteger count = args.count;
               NSInteger result = 0;
               
@@ -122,17 +123,17 @@ NSDictionary* MALCoreNameSpace() {
                   }
               }
               return @(result);
-          },
-          [@"list" asSymbol]: ^id(NSArray* args) {
+          }],
+          [@"list" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               return [MALList listFromArray: args
                                    subrange: NSMakeRange(1, args.count-1)];
-          },
-          [@"count" asSymbol]: ^id(NSArray* args) {
+          }],
+          [@"count" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               return @([args[1] count]);
-          },
-          [@"empty?" asSymbol]: ^id(NSArray* args) {
+          }],
+          [@"empty?" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               return [args[1] count]==0 ? YESBOOL : NOBOOL;
-          },
+          }],
 //          [@"first" asSymbol]: ^id(NSArray* args) {
 //              return [args[1] firstObject];
 //          },
@@ -141,36 +142,36 @@ NSDictionary* MALCoreNameSpace() {
               return [MALList listFromArray: args
                                    subrange: NSMakeRange(1, args.count-1)];
           },
-          [@"=" asSymbol]: ^id(NSArray* args) {
+          [@"=" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               id o1 = args[1];
               id o2 = args[2];
               return o1==o2 || [o1 lispEqual: o2] ? yes : no;
-          },
-          [@">" asSymbol]: ^id(NSArray* args) {
+          }],
+          [@">" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               id o1 = args[1];
               id o2 = args[2];
               return [o1 integerValue] > [o2 integerValue] ? yes : no;
-          },
-          [@"<" asSymbol]: ^id(NSArray* args) {
+          }],
+          [@"<" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               id o1 = args[1];
               id o2 = args[2];
               return [o1 integerValue] < [o2 integerValue] ? yes : no;
-          },
-          [@"<=" asSymbol]: ^id(NSArray* args) {
+          }],
+          [@"<=" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               id o1 = args[1];
               id o2 = args[2];
               return [o1 integerValue] <= [o2 integerValue] ? yes : no;
-          },
-          [@">=" asSymbol]: ^id(NSArray* args) {
+          }],
+          [@">=" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               id o1 = args[1];
               id o2 = args[2];
               return [o1 integerValue] >= [o2 integerValue] ? yes : no;
-          },
+          }],
 //          [@"not" asSymbol]: ^id(NSArray* args) {
 //              id obj = args[1];
 //              return ((! obj) || obj == no) ? yes : no;
 //          },
-          [@"prn" asSymbol]: ^id(NSArray* args) {
+          [@"prn" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               BOOL first = YES;
               id last = args.lastObject;
               for (id arg in args) {
@@ -183,8 +184,8 @@ NSDictionary* MALCoreNameSpace() {
               }
               printf("\n");
               return nilObject;
-          },
-          [@"str" asSymbol]: ^id(NSArray* args) {
+          }],
+          [@"str" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSUInteger count = args.count;
               if (count<2) return @"";
               NSMutableString* result = [NSMutableString stringWithCapacity: count*6];
@@ -192,8 +193,8 @@ NSDictionary* MALCoreNameSpace() {
                   [result appendString: [args[i] lispDescriptionReadable: NO]];
               }
               return result;
-          },
-          [@"pr-str" asSymbol]: ^id(NSArray* args) {
+          }],
+          [@"pr-str" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSUInteger count = args.count;
               if (count<=1) return @"";
               NSMutableString* result = [NSMutableString stringWithCapacity: count*6];
@@ -204,9 +205,8 @@ NSDictionary* MALCoreNameSpace() {
                   }
               }
               return result;
-          },
-          
-          [@"println" asSymbol]: ^id(NSArray* args) {
+          }],
+          [@"println" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSUInteger count = args.count;
               
               for (int i = 1; i<count; i++) {
@@ -215,13 +215,13 @@ NSDictionary* MALCoreNameSpace() {
               }
               printf("\n");
               return nilObject;
-          },
-          [@"read-string" asSymbol]: ^id(NSArray* args) {
+          }],
+          [@"read-string" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSCParameterAssert(args.count == 2);
               id ast = read_str(args[1]);
               return ast;
-          },
-          [@"slurp" asSymbol]: ^id(NSArray* args) {
+          }],
+          [@"slurp" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSCParameterAssert(args.count == 2);
               NSError* error = nil;
               NSString* stringContents = [NSString stringWithContentsOfFile: args[1] encoding:NSUTF8StringEncoding error: &error];
@@ -229,26 +229,26 @@ NSDictionary* MALCoreNameSpace() {
                   @throw error;
               }
               return stringContents;
-          },
-          [@"atom" asSymbol]: ^id(NSArray* args) {
+          }],
+          [@"atom" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSCParameterAssert(args.count == 2);
               return [[MalAtom alloc] initWithValue: args[1]];
-          },
-          [@"atom?" asSymbol]: ^id(NSArray* args) {
+          }],
+          [@"atom?" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSCParameterAssert(args.count == 2);
               return [args[1] isKindOfClass: [MalAtom class]] ? YESBOOL : NOBOOL; // TODO: Make static Class variabel for comparison
-          },
-          [@"deref" asSymbol]: ^id(NSArray* args) {
+          }],
+          [@"deref" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSCParameterAssert(args.count == 2);
               NSCParameterAssert([args[1] isKindOfClass: [MalAtom class]]);
               return ((MalAtom*)args[1])->value;
-          },
-          [@"reset!" asSymbol]: ^id(NSArray* args) {
+          }],
+          [@"reset!" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSCParameterAssert(args.count == 3);
               NSCParameterAssert([args[1] isKindOfClass: [MalAtom class]]);
               return ((MalAtom*)args[1])->value = args[2];
-          },
-          [@"swap!" asSymbol]: ^id(NSArray* args) {
+          }],
+          [@"swap!" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSCParameterAssert(args.count >= 3);
               NSCParameterAssert([args[1] isKindOfClass: [MalAtom class]]);
               MalAtom* atom = args[1];
@@ -257,16 +257,16 @@ NSDictionary* MALCoreNameSpace() {
               MALList* list = [MALList listFromArray: args subrange: NSMakeRange(1, args.count-1)];
               list[1] = atomValue;
               return atom->value = f(list);
-          },
-          [@"cons" asSymbol]: ^id(NSArray* args) {
+          }],
+          [@"cons" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSCParameterAssert(args.count >= 3);
               NSCParameterAssert([args[2] isKindOfClass: [NSArray class]]);
               id first = args[1];
               MALList* rest = args[2];
               MALList* list = [MALList listFromFirstObject: first rest: rest];
               return list;
-          },
-          [@"concat" asSymbol]: ^id(NSArray* args) {
+          }],
+          [@"concat" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               id e1 = args[0];
               NSUInteger count = 0;
               for (MALList* e in args) {
@@ -286,11 +286,11 @@ NSDictionary* MALCoreNameSpace() {
               }
               MALList* list = [MALList listFromObjects: elements count: count];
               return list;
-          }
+          }]
         };
         coreNS = [protoNS mutableCopy];
-        
-        coreNS[[@"first" asSymbol]] = [NSValue valueWithPointer: &MALCore_first];
+//        
+//        coreNS[[@"first" asSymbol]] = [NSValue valueWithPointer: &MALCore_first];
         
     }
     return coreNS;

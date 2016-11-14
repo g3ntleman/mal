@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MALFunction.h"
 
 @interface MALEnv : NSObject {
     @public

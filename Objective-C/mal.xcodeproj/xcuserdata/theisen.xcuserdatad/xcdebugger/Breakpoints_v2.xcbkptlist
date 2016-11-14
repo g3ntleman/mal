@@ -16,39 +16,7 @@
             startingLineNumber = "164"
             endingLineNumber = "164"
             landmarkName = "-lispDescriptionReadable:"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[NSDictionary(LispTypes) lispDescriptionReadable:]"
-                  moduleName = "mal"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/theisen/Projects/Work/mal/Objective-C/NSObject+Types.m"
-                  timestampString = "499857765.331897"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "164"
-                  endingLineNumber = "164"
-                  offsetFromSymbolStart = "231">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__51-[NSDictionary(LispTypes) lispDescriptionReadable:]_block_invoke"
-                  moduleName = "mal"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/theisen/Projects/Work/mal/Objective-C/NSObject+Types.m"
-                  timestampString = "499857765.333873"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "164"
-                  endingLineNumber = "164"
-                  offsetFromSymbolStart = "19">
-               </Location>
-            </Locations>
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -73,22 +41,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "core.m"
-            timestampString = "498637855.411535"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "197"
-            endingLineNumber = "197"
-            landmarkName = "MALCoreNameSpace()"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "NSObject+Types.m"
             timestampString = "499765379.386666"
             startingColumnNumber = "9223372036854775807"
@@ -96,7 +48,7 @@
             startingLineNumber = "128"
             endingLineNumber = "128"
             landmarkName = "-lispDescriptionReadable:"
-            landmarkType = "7">
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -112,7 +64,7 @@
             startingLineNumber = "172"
             endingLineNumber = "172"
             landmarkName = "-lispDescriptionReadable:"
-            landmarkType = "7">
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -160,7 +112,7 @@
             startingLineNumber = "162"
             endingLineNumber = "162"
             landmarkName = "MALCoreNameSpace()"
-            landmarkType = "9">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -201,22 +153,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "NSObject+Types.m"
-            timestampString = "499765379.386666"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "245"
-            endingLineNumber = "245"
-            landmarkName = "-lispDescriptionReadable:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "step7_quote.m"
             timestampString = "499765248.840349"
             startingColumnNumber = "9223372036854775807"
@@ -224,7 +160,7 @@
             startingLineNumber = "49"
             endingLineNumber = "49"
             landmarkName = "quasiquote()"
-            landmarkType = "9">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -241,6 +177,22 @@
             endingLineNumber = "140"
             landmarkName = "-nextToken"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MALEnv.m"
+            timestampString = "500833851.715833"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "70"
+            endingLineNumber = "70"
+            landmarkName = "-get:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

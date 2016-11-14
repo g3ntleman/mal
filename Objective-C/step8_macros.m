@@ -179,9 +179,9 @@ id EVAL(id ast, MALEnv* env) {
                     
                     
                     MALList* evaluatedList = [list eval_ast: env];
-                    LispFunction f = evaluatedList[0];
-                    if (MALObjectIsBlock(f)) {
-                        id result = f(evaluatedList);
+                    MALFunction* f = evaluatedList[0];
+                    if ([f isKindOfClass: [MALFunction class]]) {
+                        id result = f->block(evaluatedList);
                         return result;
                     }
                     @throw [NSException exceptionWithName: @"MALUndefinedFunction" reason: [NSString stringWithFormat: @"A '%@' function is not defined.", list[0]] userInfo: nil];

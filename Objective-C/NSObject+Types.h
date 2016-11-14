@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MALList.h"
+#import "MALFunction.h"
 #import "MALEnv.h"
 
 #pragma clang diagnostic ignored "-Wnullability-completeness"
@@ -22,6 +23,7 @@ extern BOOL MALObjectIsBlock(id _Nullable block);
 - (NSString* _Nonnull) lispDescriptionReadable: (BOOL) readable;
 - (id _Nullable) eval_ast: (MALEnv* _Nullable) env;
 - (BOOL) isSymbol;
+- (BOOL) isMacro;
 - (BOOL) truthValue;
 - (BOOL) lispEqual: (id) other;
 
