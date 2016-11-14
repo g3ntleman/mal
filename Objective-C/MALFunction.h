@@ -18,7 +18,6 @@ id EVAL(id ast, id env);
     GenericFunction block ;
 }
 
-//@property (copy) NSArray* ast;
 @property (copy) MALEnv* env;
 //@property (copy) NSArray* params;
 @property BOOL isMacro;

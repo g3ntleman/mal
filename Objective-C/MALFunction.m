@@ -28,6 +28,13 @@
     return _meta;
 }
 
+/**
+ * returns a name or nil for anonymous functions.
+ */
+- (NSString*) name {
+    return _meta[@"name"];
+}
+
 //- (id)apply:(NSArray *)args {
 //    return EVAL(_ast, [[MALEnv alloc] initWithOuterEnvironment: _env bindings: binds:_params]);
 //}
@@ -41,7 +48,7 @@
 }
 
 - (NSString*) lispDescriptionReadable: (BOOL) readable {
-    return @"#";
+    return [NSString stringWithFormat: @"#%@", self.name];
 }
 
 - (BOOL) isEqual: (id) other {

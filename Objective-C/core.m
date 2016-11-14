@@ -134,14 +134,13 @@ NSDictionary* MALCoreNameSpace() {
           [@"empty?" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               return [args[1] count]==0 ? YESBOOL : NOBOOL;
           }],
-//          [@"first" asSymbol]: ^id(NSArray* args) {
-//              return [args[1] firstObject];
-//          },
-          [@"first" asSymbol]: [NSValue valueWithPointer: &MALCore_first],
-          [@"rest" asSymbol]: ^id(NSArray* args) {
+          [@"first" asSymbol]:  [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
+              return [args[1] firstObject];
+          }],
+          [@"rest" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               return [MALList listFromArray: args
                                    subrange: NSMakeRange(1, args.count-1)];
-          },
+          }],
           [@"=" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               id o1 = args[1];
               id o2 = args[2];
@@ -289,7 +288,12 @@ NSDictionary* MALCoreNameSpace() {
           }]
         };
         coreNS = [protoNS mutableCopy];
-//        
+        
+        // Add key as metadata name:
+        [coreNS enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, MALFunction*  _Nonnull function, BOOL * _Nonnull stop) {
+            function.meta[@"name"] = key;
+        }];
+        
 //        coreNS[[@"first" asSymbol]] = [NSValue valueWithPointer: &MALCore_first];
         
     }
