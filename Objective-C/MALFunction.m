@@ -48,7 +48,8 @@
 }
 
 - (NSString*) lispDescriptionReadable: (BOOL) readable {
-    return [NSString stringWithFormat: @"#%@", self.name];
+    NSString* name = self.name;
+    return name ? [NSString stringWithFormat: @"#%@", self.name] : @"#";
 }
 
 - (BOOL) isEqual: (id) other {
