@@ -62,18 +62,19 @@
 }
 
 - (id) get: (NSString*) symbol {
-    NSParameterAssert([symbol isSymbol]);
+    
+    if (! [symbol isSymbol]) return nil;
     
     MALEnv* me = self;
     id obj;
     while (me && ! (obj = me->data[symbol])) {
         me = me->outer;
     }
-    if (! obj) {
-        @throw [NSException exceptionWithName: @"MALSymbolNotFound"
-                                       reason: [NSString stringWithFormat: @"Symbol '%@' unavailable in all accessible Environments.", symbol]
-                                     userInfo: nil];
-    }
+//    if (! obj) {
+//        @throw [NSException exceptionWithName: @"MALSymbolNotFound"
+//                                       reason: [NSString stringWithFormat: @"Symbol '%@' unavailable in all accessible Environments.", symbol]
+//                                     userInfo: nil];
+//    }
     return obj;
 }
 
