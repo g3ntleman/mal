@@ -34,6 +34,10 @@ BOOL MALObjectIsBlock(id _Nullable block) {
     return NO;
 }
 
+- (NSDictionary*) meta {
+    return nil;
+}
+
 - (BOOL) isMacro {
     return NO;
 }
