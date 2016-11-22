@@ -59,17 +59,16 @@
     return block == ((MALFunction*)other)->block;
 }
 
-
-@end
-
-
-@implementation MALMacro
-
 - (BOOL) isMacro {
-    return YES;
+    return _meta[@"macro"] != nil;
+}
+
+- (void) setMacro: (BOOL) isMacro {
+    self.meta[@"macro"] = isMacro ? @YES : nil;
 }
 
 @end
+
 
 //NSObject * apply(id f, NSArray *args) {
 //    if ([f isKindOfClass:[MALFunction class]]) {

@@ -9,7 +9,7 @@
 
 typedef id (^GenericFunction)(NSArray* args);
 
-
+#define apply(function, args) ((function)->block(args))
 
 id EVAL(id ast, id env);
  
@@ -20,7 +20,7 @@ id EVAL(id ast, id env);
 
 @property (copy) MALEnv* env;
 //@property (copy) NSArray* params;
-@property BOOL isMacro;
+@property (getter=isMacro,setter=setMacro:) BOOL isMacro;
 @property (readonly) NSMutableDictionary* meta;
 
 - (id) initWithBlock: (GenericFunction) aBlock;
@@ -29,8 +29,3 @@ id EVAL(id ast, id env);
 
 @end
 
-@interface MALMacro : MALFunction
-
-id apply(id f, NSArray* args);
-
-@end
