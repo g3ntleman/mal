@@ -13,10 +13,27 @@
 
 @implementation MALList 
 
+static MALList* emptyList = nil;
+
++ (void) load {
+    if (! emptyList) {
+        emptyList = [self listWithCapacity: 0];
+    }
+}
+
 + (id) listWithCapacity: (NSUInteger) capacity {
     MALList* instance = class_createInstance([MALList class], capacity*sizeof(id));
+    instance->_count = 0;
     return instance;
 }
+
+/**
+ * Returns the empty list
+ */
++ (id) list {
+    return emptyList;
+}
+
 
 + (id) listFromArray: (NSArray*) anArray {
     
