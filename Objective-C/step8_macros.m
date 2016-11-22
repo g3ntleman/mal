@@ -43,21 +43,29 @@ NSString* REP(NSString* code, MALEnv* env) {
 //    return [ast isKindOfClass: [MALList class]] && [ast count]>=2;
 //}
 
-static id quasiquote(NSArray* ast) {
+static NSArray* quasiquote(NSArray* ast) {
     
-    NSUInteger astCount = [ast isKindOfClass: [NSArray class]] ? [ast count] : 0;
-    if (astCount<2) {
+    if (! [ast isKindOfClass: [NSArray class]]) {
         return [MALList listFromFirstObject: [@"quote" asSymbol] secondObject: ast];
     }
-    if (ast[0] == [@"unquote" asSymbol]) {
+    
+    NSUInteger astCount =  ast.count;
+    
+    if (! astCount) {
+        return ast;
+    }
+    
+    id firstElement = ast[0];
+
+    if (firstElement == [@"unquote" asSymbol]) {
         return ast[1];
     }
+
     // if is_pair of the first element of ast is true and the first element of
     // first element of ast ( ast[0][0] ) is a symbol named "splice-unquote":
     // return a new list containing: a symbol named "concat", the second element
     // of first element of ast ( ast[0][1] ), and the result of calling quasiquote
     // with the second through last element of ast .
-    id firstElement = ast[0];
     if ([firstElement isKindOfClass: [NSArray class]] && firstElement[0] == [@"splice-unquote" asSymbol]) {
         __unsafe_unretained id listContent[3];
         listContent[0] = [@"concat" asSymbol];
@@ -76,20 +84,91 @@ static id quasiquote(NSArray* ast) {
     return [MALList listFromObjects: listContent count: 3];
 }
 
+/**
+ * This function takes arguments ast and env.
+ * It returns true if ast is a list that contains a symbol as the first element
+ * and that symbol refers to a function in the env environment and that function
+ * has the is_macro attribute set to true. Otherwise, it returns false.
+ */
+//id as_macro_call(id ast, MALEnv* environment) {
+//    if ([ast isKindOfClass: [MALList class]]) /* TODO: make [MALList class] a static var */ {
+//        MALList* list = ast;
+//        NSUInteger listCount = list.count;
+//        if (listCount) {
+//            NSString* firstSymbol = list[0];
+//            MALFunction* function = [environment get: firstSymbol];
+//            if ([function isMacro]) {
+//                return function;
+//            }
+//        }
+//    }
+//    return ast;
+//}
+
+/**
+ * This function takes arguments ast and env. It calls is_macro_call with ast and env
+ * and loops while that condition is true. Inside the loop, the first element of
+ * the ast list (a symbol), is looked up in the environment to get the macro function.
+ * This macro function is then called/applied with the rest of the ast elements
+ * (2nd through the last) as arguments.
+ * The return value of the macro call becomes the new value of ast.
+ * When the loop completes because ast no longer represents a macro call,
+ * the current value of ast is returned.
+ **/
+id macroexpand(id ast, MALEnv* environment) {
+    id expansion = nil;
+
+    if ([ast isKindOfClass: [MALList class]]) { /* TODO: make [MALList class] a static var */
+        MALList* list = ast;
+        NSUInteger listCount = list.count;
+        if (listCount) {
+            NSString* firstSymbol = list[0];
+            MALFunction* function = [environment get: firstSymbol];
+            if ([function isMacro]) {
+                expansion = apply(function, list);
+                //NSLog(@"Expanded Macro %@ to %@", function, expansion);
+            }
+        }
+    }
+    if (! expansion) {
+        return ast;
+    }
+    return macroexpand(expansion, environment); // rely on compiler TCO
+}
+
 id EVAL(id ast, MALEnv* env) {
     while (YES) {
-        
-        if ([ast isKindOfClass: [MALList class]]) /* TODO: make [MALList class] a static var */ {
+        ast = macroexpand(ast, env);
+        if ([ast isKindOfClass: [MALList class]]) {/* TODO: make [MALList class] a static var */
             MALList* list = ast;
             NSUInteger listCount = list.count;
             if (listCount) {
                 @try {
                     NSString* firstSymbol = list[0];
+                    
+                    if (firstSymbol == [@"defmacro!" asSymbol]) { // TODO: turn symbols into statics
+                        if (listCount==3) {
+                            NSString* name = [list[1] asSymbol];
+                            // Make new Binding:
+                            MALFunction* macro = EVAL(list[2], env);
+                            NSCAssert([macro isKindOfClass: [MALFunction class]], @"defmacro! expects a function.");
+                            [macro setMacro: YES];
+                            //NSCAssert(macro.isMacro, @"setMacro failed.");
+                            macro.meta[@"name"] = name;
+                            env->data[name] = macro;
+                            return macro;
+                        }
+                        NSLog(@"Warning: defmacro! needs 2 parameters.");
+                        return nil;
+                    }
+                    
                     if (firstSymbol == [@"def!" asSymbol]) { // TODO: turn symbols into statics
                         if (listCount==3) {
                             // Make new Binding:
-                            id value = EVAL(list[2], env);
-                            env->data[list[1]] = value;
+                            NSString* name = [list[1] asSymbol];
+                            NSObject* value = EVAL(list[2], env);
+                            value.meta[@"name"] = name;
+                            env->data[name] = value;
                             return value;
                         }
                         NSLog(@"Warning: def! needs 2 parameters.");
@@ -140,7 +219,7 @@ id EVAL(id ast, MALEnv* env) {
                         NSUInteger symbolsCount = symbols.count;
                         BOOL hasVarargs = symbolsCount >= 2 && [(symbols[symbolsCount-2]) isEqualToString: @"&"];
                         
-                        LispFunction block = ^id(NSArray* call) {
+                        return [[MALFunction alloc] initWithBlock: ^id(NSArray* call) {
                             NSMutableDictionary* bindings;
                             if (hasVarargs) {
                                 NSUInteger regularArgsCount = symbolsCount-2;
@@ -165,9 +244,7 @@ id EVAL(id ast, MALEnv* env) {
                             MALEnv* functionEnv = [[MALEnv alloc] initWithOuterEnvironment: env
                                                                                   bindings: bindings]; // I want to be on the stack
                             return EVAL(body, functionEnv);
-                        };
-                        
-                        return [block copy];
+                        }];
                     }
                     if (firstSymbol == [@"quote" asSymbol]) {
                         return list[1];
@@ -175,6 +252,10 @@ id EVAL(id ast, MALEnv* env) {
                     if (firstSymbol == [@"quasiquote" asSymbol]) {
                         ast = quasiquote(list[1]);
                         continue; // "TCO"
+                    }
+                    // Expose the macroexpand function, mostly for debugging:
+                    if (firstSymbol == [@"macroexpand" asSymbol]) {
+                        return macroexpand(list[1], env);
                     }
                     
                     
@@ -191,7 +272,6 @@ id EVAL(id ast, MALEnv* env) {
                 }
             }
             return ast;
-            
         } else {
             return [ast eval_ast: env];
         }
@@ -228,7 +308,7 @@ int main(int argc, const char * argv[]) {
         }
         [replEnvironment set: [MALList listFromArray: mainArgs]
                       symbol: [@"*ARGV*" asSymbol]];
-
+        
         REP(@"(def! not (fn* (a) (if a false true)))", replEnvironment); // Just as test. TODO: implement natively
         REP(@"(def! load-file (fn* (f) (eval (read-string (str \"(do \" (slurp f) \")\")))))", replEnvironment);
         
@@ -248,3 +328,4 @@ int main(int argc, const char * argv[]) {
     }
     return 0;
 }
+
