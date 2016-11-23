@@ -127,7 +127,7 @@ id macroexpand(id ast, MALEnv* environment) {
             MALFunction* function = [environment get: firstSymbol];
             if ([function isMacro]) {
                 expansion = apply(function, list);
-                //NSLog(@"Expanded Macro %@ to %@", function, expansion);
+                //NSLog(@"Expanded Macro '%@' to %@.", firstSymbol, expansion);
             }
         }
     }
@@ -335,12 +335,12 @@ int main(int argc, const char * argv[]) {
             NSMutableString* line = [NSMutableString string];
             // Interactive
             while (true) {
-                char *rawline = readline("user> ");
+                char *rawline = readline(line.length ? "": "user> ");
                 if (!rawline) { continue; }
                 [line appendString: [NSString stringWithUTF8String: rawline]];
-                if ([line length] == 0) { continue; }
+                if ([line length] == 0) { break; }
                 @try {
-                    [line appendString: [NSString stringWithUTF8String: rawline]];
+                    //[line appendString: [NSString stringWithUTF8String: rawline]];
                     READ(line);
                 } @catch (NSException* exception) {
                     [line appendString: @"\n"];
