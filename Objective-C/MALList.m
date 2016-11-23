@@ -127,6 +127,7 @@ static MALList* emptyList = nil;
 }
 
 - (id) objectAtIndex: (NSUInteger) index {
+    NSParameterAssert(index<_count);
     return ((const id*)object_getIndexedIvars(self))[index];
 }
 

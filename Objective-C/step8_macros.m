@@ -5,6 +5,7 @@
 //  Copyright © 2016 Dirk Theisen. All rights reserved.
 //
 
+#import <Foundation/NSString.h>
 #import <Foundation/Foundation.h>
 #include <readline/readline.h>
 #import "SESyntaxParser.h"
@@ -137,139 +138,152 @@ id macroexpand(id ast, MALEnv* environment) {
 }
 
 id EVAL(id ast, MALEnv* env) {
+    NSCParameterAssert(env != nil);
     while (YES) {
         ast = macroexpand(ast, env);
         if ([ast isKindOfClass: [MALList class]]) {/* TODO: make [MALList class] a static var */
             MALList* list = ast;
             NSUInteger listCount = list.count;
             if (listCount) {
-                @try {
-                    NSString* firstSymbol = list[0];
-                    
-                    if (firstSymbol == [@"defmacro!" asSymbol]) { // TODO: turn symbols into statics
-                        if (listCount==3) {
-                            NSString* name = [list[1] asSymbol];
-                            // Make new Binding:
-                            MALFunction* macro = EVAL(list[2], env);
-                            NSCAssert([macro isKindOfClass: [MALFunction class]], @"defmacro! expects a function.");
-                            [macro setMacro: YES];
-                            //NSCAssert(macro.isMacro, @"setMacro failed.");
-                            macro.meta[@"name"] = name;
-                            env->data[name] = macro;
-                            return macro;
-                        }
-                        NSLog(@"Warning: defmacro! needs 2 parameters.");
-                        return nil;
+                NSString* firstSymbol = list[0];
+                
+                /*
+                 
+                 (defmacro! ->
+                 (fn* (x & xs)
+                 (if (empty? xs)
+                 x
+                 (let* (form (first xs)
+                 more (rest xs))
+                 (if (empty? more)
+                 (if (list? form)
+                 `(~(first form) ~x ~@(rest form))
+                 (list form x))
+                 `(-> (-> ~x ~form) ~@more))))))
+                 
+                 */
+                
+                
+                if (firstSymbol == [@"defmacro!" asSymbol]) { // TODO: turn symbols into statics
+                    if (listCount==3) {
+                        NSString* name = [list[1] asSymbol];
+                        // Make new Binding:
+                        MALFunction* macro = EVAL(list[2], env);
+                        NSCAssert([macro isKindOfClass: [MALFunction class]], @"defmacro! expects a function.");
+                        [macro setMacro: YES];
+                        //NSCAssert(macro.isMacro, @"setMacro failed.");
+                        macro.meta[@"name"] = name;
+                        env->data[name] = macro;
+                        return macro;
                     }
-                    
-                    if (firstSymbol == [@"def!" asSymbol]) { // TODO: turn symbols into statics
-                        if (listCount==3) {
-                            // Make new Binding:
-                            NSString* name = [list[1] asSymbol];
-                            NSObject* value = EVAL(list[2], env);
-                            value.meta[@"name"] = name;
-                            env->data[name] = value;
-                            return value;
-                        }
-                        NSLog(@"Warning: def! needs 2 parameters.");
-                        return nil;
-                    }
-                    if (firstSymbol == [@"let*" asSymbol]) {
-                        MALEnv* letEnv;
-                        if (listCount!=3) {
-                            NSLog(@"Warning: let* expects 2 parameters.");
-                            return nil;
-                        }
-                        NSArray* bindingsList = list[1];
-                        NSUInteger bindingListCount = bindingsList.count;
-                        // Make new Environment:
-                        letEnv = [[MALEnv alloc] initWithOuterEnvironment: env capacity:bindingListCount];
-                        for (NSUInteger i=0; i<bindingListCount; i+=2) {
-                            id key = bindingsList[i];
-                            id value = EVAL(bindingsList[i+1], letEnv);
-                            letEnv->data[key] = value;
-                        }
-                        
-                        id result = EVAL(list[2], letEnv);
-                        return result;
-                    }
-                    if (firstSymbol == [@"do" asSymbol]) {
-                        id result = nil;
-                        for (NSUInteger i=1; i<listCount; i++) {
-                            result = EVAL(list[i], env);
-                        }
-                        return result; // return the result of the last expression evaluation
-                    }
-                    if (firstSymbol == [@"if" asSymbol]) {
-                        id cond = EVAL(list[1], env);
-                        id result = nil;
-                        if ([cond truthValue]) {
-                            result = EVAL(list[2], env);
-                        } else {
-                            if (listCount>3) {
-                                result = EVAL(list[3], env);
-                            }
-                        }
-                        return result ? result : nilObject;
-                    }
-                    if (firstSymbol == [@"fn*" asSymbol]) {
-                        NSArray* symbols = list[1];
-                        NSCParameterAssert([symbols isKindOfClass: [NSArray class]]);
-                        id body = list[2];
-                        NSUInteger symbolsCount = symbols.count;
-                        BOOL hasVarargs = symbolsCount >= 2 && [(symbols[symbolsCount-2]) isEqualToString: @"&"];
-                        
-                        return [[MALFunction alloc] initWithBlock: ^id(NSArray* call) {
-                            NSMutableDictionary* bindings;
-                            if (hasVarargs) {
-                                NSUInteger regularArgsCount = symbolsCount-2;
-                                __unsafe_unretained id args[call.count];
-                                __unsafe_unretained id syms[symbolsCount];
-                                [call getObjects: args];
-                                [symbols getObjects: syms];
-                                bindings = [NSMutableDictionary dictionaryWithObjects: args+1 forKeys: syms count: regularArgsCount]; // formal params
-                                MALList* varargList = [MALList listFromObjects: args+1+regularArgsCount count: call.count-regularArgsCount-1];
-                                bindings[symbols.lastObject] = varargList;
-                            } else {
-                                NSCParameterAssert(call.count == symbolsCount+1);
-                                if (! symbolsCount) {
-                                    return EVAL(body, env);
-                                }
-                                __unsafe_unretained id args[symbolsCount];
-                                __unsafe_unretained id syms[symbolsCount];
-                                [call getObjects: args];
-                                [symbols getObjects: syms];
-                                bindings = [NSMutableDictionary dictionaryWithObjects: args+1 forKeys: syms count: symbolsCount];
-                            }
-                            MALEnv* functionEnv = [[MALEnv alloc] initWithOuterEnvironment: env
-                                                                                  bindings: bindings]; // I want to be on the stack
-                            return EVAL(body, functionEnv);
-                        }];
-                    }
-                    if (firstSymbol == [@"quote" asSymbol]) {
-                        return list[1];
-                    }
-                    if (firstSymbol == [@"quasiquote" asSymbol]) {
-                        ast = quasiquote(list[1]);
-                        continue; // "TCO"
-                    }
-                    // Expose the macroexpand function, mostly for debugging:
-                    if (firstSymbol == [@"macroexpand" asSymbol]) {
-                        return macroexpand(list[1], env);
-                    }
-                    
-                    
-                    MALList* evaluatedList = [list eval_ast: env];
-                    MALFunction* f = evaluatedList[0];
-                    if ([f isKindOfClass: [MALFunction class]]) {
-                        id result = f->block(evaluatedList);
-                        return result;
-                    }
-                    @throw [NSException exceptionWithName: @"MALUndefinedFunction" reason: [NSString stringWithFormat: @"A '%@' function is not defined.", list[0]] userInfo: nil];
-                } @catch(NSException* e) {
-                    NSLog(@"Error evaluating function '%@': %@", list[0], e);
+                    NSLog(@"Warning: defmacro! needs 2 parameters.");
                     return nil;
                 }
+                
+                if (firstSymbol == [@"def!" asSymbol]) { // TODO: turn symbols into statics
+                    if (listCount==3) {
+                        // Make new Binding:
+                        NSString* name = [list[1] asSymbol];
+                        NSObject* value = EVAL(list[2], env);
+                        value.meta[@"name"] = name;
+                        env->data[name] = value;
+                        return value;
+                    }
+                    NSLog(@"Warning: def! needs 2 parameters.");
+                    return nil;
+                }
+                if (firstSymbol == [@"let*" asSymbol]) {
+                    MALEnv* letEnv;
+                    if (listCount!=3) {
+                        NSLog(@"Warning: let* expects 2 parameters.");
+                        return nil;
+                    }
+                    NSArray* bindingsList = list[1];
+                    NSUInteger bindingListCount = bindingsList.count;
+                    // Make new Environment:
+                    letEnv = [[MALEnv alloc] initWithOuterEnvironment: env capacity:bindingListCount];
+                    for (NSUInteger i=0; i<bindingListCount; i+=2) {
+                        id key = bindingsList[i];
+                        id value = EVAL(bindingsList[i+1], letEnv);
+                        letEnv->data[key] = value;
+                    }
+                    
+                    id result = EVAL(list[2], letEnv);
+                    return result;
+                }
+                if (firstSymbol == [@"do" asSymbol]) {
+                    id result = nil;
+                    for (NSUInteger i=1; i<listCount; i++) {
+                        result = EVAL(list[i], env);
+                    }
+                    return result; // return the result of the last expression evaluation
+                }
+                if (firstSymbol == [@"if" asSymbol]) {
+                    id cond = EVAL(list[1], env);
+                    id result = nil;
+                    if ([cond truthValue]) {
+                        result = EVAL(list[2], env);
+                    } else {
+                        if (listCount>3) {
+                            result = EVAL(list[3], env);
+                        }
+                    }
+                    return result ? result : nilObject;
+                }
+                if (firstSymbol == [@"fn*" asSymbol]) {
+                    NSArray* symbols = list[1];
+                    NSCParameterAssert([symbols isKindOfClass: [NSArray class]]);
+                    id body = list[2];
+                    NSUInteger symbolsCount = symbols.count;
+                    BOOL hasVarargs = symbolsCount >= 2 && [(symbols[symbolsCount-2]) isEqualToString: @"&"];
+                    
+                    return [[MALFunction alloc] initWithBlock: ^id(NSArray* call) {
+                        NSMutableDictionary* bindings;
+                        if (hasVarargs) {
+                            NSUInteger regularArgsCount = symbolsCount-2;
+                            __unsafe_unretained id args[call.count];
+                            __unsafe_unretained id syms[symbolsCount];
+                            [call getObjects: args];
+                            [symbols getObjects: syms];
+                            bindings = [NSMutableDictionary dictionaryWithObjects: args+1 forKeys: syms count: regularArgsCount]; // formal params
+                            MALList* varargList = [MALList listFromObjects: args+1+regularArgsCount count: call.count-regularArgsCount-1];
+                            bindings[symbols.lastObject] = varargList;
+                        } else {
+                            NSCParameterAssert(call.count == symbolsCount+1);
+                            if (! symbolsCount) {
+                                return EVAL(body, env);
+                            }
+                            __unsafe_unretained id args[symbolsCount];
+                            __unsafe_unretained id syms[symbolsCount];
+                            [call getObjects: args];
+                            [symbols getObjects: syms];
+                            bindings = [NSMutableDictionary dictionaryWithObjects: args+1 forKeys: syms count: symbolsCount];
+                        }
+                        MALEnv* functionEnv = [[MALEnv alloc] initWithOuterEnvironment: env
+                                                                              bindings: bindings]; // I want to be on the stack
+                        return EVAL(body, functionEnv);
+                    }];
+                }
+                if (firstSymbol == [@"quote" asSymbol]) {
+                    return list[1];
+                }
+                if (firstSymbol == [@"quasiquote" asSymbol]) {
+                    ast = quasiquote(list[1]);
+                    continue; // "TCO"
+                }
+                // Expose the macroexpand function, mostly for debugging:
+                if (firstSymbol == [@"macroexpand" asSymbol]) {
+                    return macroexpand(list[1], env);
+                }
+                
+                
+                MALList* evaluatedList = [list eval_ast: env];
+                MALFunction* f = evaluatedList[0];
+                if ([f isKindOfClass: [MALFunction class]]) {
+                    id result = f->block(evaluatedList);
+                    return result;
+                }
+                @throw [NSException exceptionWithName: @"MALUndefinedFunction" reason: [NSString stringWithFormat: @"A '%@' function is not defined.", list[0]] userInfo: nil];
             }
             return ast;
         } else {
@@ -311,18 +325,31 @@ int main(int argc, const char * argv[]) {
         
         REP(@"(def! not (fn* (a) (if a false true)))", replEnvironment); // Just as test. TODO: implement natively
         REP(@"(def! load-file (fn* (f) (eval (read-string (str \"(do \" (slurp f) \")\")))))", replEnvironment);
+        REP(@"(defmacro! cond (fn* (& xs) (if (> (count xs) 0) (list 'if (first xs) (if (> (count xs) 1) (nth xs 1) (throw \"odd number of forms to cond\")) (cons 'cond (rest (rest xs)))))))", replEnvironment);
+        REP(@"(defmacro! or (fn* (& xs) (if (empty? xs) nil (if (= 1 (count xs)) (first xs) `(let* (or_FIXME ~(first xs)) (if or_FIXME or_FIXME (or ~@(rest xs))))))))", replEnvironment);
+        
         
         if (startupFilename.length) {
             REP([NSString stringWithFormat: @"(load-file \"%@\")", startupFilename], replEnvironment);
         } else {
+            NSMutableString* line = [NSMutableString string];
             // Interactive
             while (true) {
                 char *rawline = readline("user> ");
-                if (!rawline) { break; }
-                NSString *line = [NSString stringWithUTF8String:rawline];
+                if (!rawline) { continue; }
+                [line appendString: [NSString stringWithUTF8String: rawline]];
                 if ([line length] == 0) { continue; }
+                @try {
+                    [line appendString: [NSString stringWithUTF8String: rawline]];
+                    READ(line);
+                } @catch (NSException* exception) {
+                    [line appendString: @"\n"];
+                    continue;
+                }
+                
                 id result = REP(line, replEnvironment);
                 printf("%s\n", [result UTF8String]);
+                line = [NSMutableString string];
             }
         }
     }

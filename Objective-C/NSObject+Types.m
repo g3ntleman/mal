@@ -71,6 +71,10 @@ BOOL MALObjectIsBlock(id _Nullable block) {
     return NO;
 }
 
+- (id) firstObject {
+    return nil;
+}
+
 @end
 
 @implementation MALBool

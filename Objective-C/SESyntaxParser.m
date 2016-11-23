@@ -191,15 +191,17 @@ NSString* VARARGMARKER = nil;
                     
                 case '-':
                 case '+': {
-                    if (lastToken.range.length<=1) {
+                    if (lastToken.range.length<=1 || (! isdigit(characters[lastToken.range.location+1]))) {
                         lastToken.type = ATOM;
                         break;
-                    } // else fall through to number
+                    }
+                    
+                    // Skip leading '+' because the number scanner can't handle it:
                     if (firstChar=='+') {
-                        // Skip leading '+' because the scanner can't handle it.
                         lastToken.range.length -=1;
                         lastToken.range.location +=1;
                     }
+                    // fall through to number...
                 }
                 case '1':
                 case '2':
@@ -329,10 +331,11 @@ static long unquote_characters(const unichar* source, const NSRange range, unich
     }
     
     if (lastToken.type != RIGHT_PAR) {
-        NSLog(@"Unterminated List starting at %ld", leftPar.range.location);
+        @throw [NSException exceptionWithName: @"MALUnterminatedExpression" reason: [NSString stringWithFormat: @"Not terminated '%C':%ld and '%C':%ld.", leftPar.firstChar, leftPar.range.location, lastToken.firstChar, lastToken.range.location] userInfo: nil];
     } else {
         if (matchingPar(leftPar.firstChar) != lastToken.firstChar) {
-            NSLog(@"Unmatched Pars '%C':%ld and '%C':%ld.", leftPar.firstChar, leftPar.range.location, lastToken.firstChar, lastToken.range.location);
+            @throw [NSException exceptionWithName: @"MALUnbalancedPars" reason: [NSString stringWithFormat: @"Unmatched Pars '%C':%ld and '%C':%ld.", leftPar.firstChar, leftPar.range.location, lastToken.firstChar, lastToken.range.location] userInfo: nil];
+            //NSLog(@"Unmatched Pars '%C':%ld and '%C':%ld.", leftPar.firstChar, leftPar.range.location, lastToken.firstChar, lastToken.range.location);
         }
     }
     if (leftPar.firstChar == '(') {
@@ -346,9 +349,7 @@ static long unquote_characters(const unichar* source, const NSRange range, unich
 - (id) readMap {
     SETokenOccurrence leftPar = [self nextToken];
     
-    if (leftPar.type != LEFT_PAR) {
-        NSLog(@"Expected '{' but got '%@'", [NSString stringWithCharacters: &characters[leftPar.range.location] length: leftPar.range.length]);
-    }
+    NSAssert(leftPar.type != LEFT_PAR, @"Expected '{' but got '%@'", [NSString stringWithCharacters: &characters[leftPar.range.location] length: leftPar.range.length]);
     
     NSMutableDictionary* map = [[NSMutableDictionary alloc] initWithCapacity: 4];
     id key, value;
@@ -359,10 +360,11 @@ static long unquote_characters(const unichar* source, const NSRange range, unich
     }
     
     if (lastToken.type != RIGHT_PAR) {
-        NSLog(@"Unterminated List starting at %ld", leftPar.range.location);
+        @throw [NSException exceptionWithName: @"MALUnterminatedExpression" reason: [NSString stringWithFormat: @"Not terminated '%C':%ld and '%C':%ld.", leftPar.firstChar, leftPar.range.location, lastToken.firstChar, lastToken.range.location] userInfo: nil];
     } else {
         if (matchingPar(leftPar.firstChar) != lastToken.firstChar) {
-            NSLog(@"Unterminated List starting at %ld", leftPar.range.location);
+            @throw [NSException exceptionWithName: @"MALUnbalancedBraces" reason: [NSString stringWithFormat: @"Unmatched '%C':%ld and '%C':%ld.", leftPar.firstChar, leftPar.range.location, lastToken.firstChar, lastToken.range.location] userInfo: nil];
+            //NSLog(@"Unterminated List starting at %ld", leftPar.range.location);
         }
     }
     

@@ -138,8 +138,10 @@ NSDictionary* MALCoreNameSpace() {
               return [args[1] firstObject];
           }],
           [@"rest" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
-              return [MALList listFromArray: args
-                                   subrange: NSMakeRange(1, args.count-1)];
+              NSArray* arg = args[1];
+              NSInteger argCount = arg.count;
+              return argCount ? [MALList listFromArray: arg
+                                              subrange: NSMakeRange(1, argCount-1)] : [MALList list];
           }],
           [@"=" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               id o1 = args[1];
@@ -270,7 +272,8 @@ NSDictionary* MALCoreNameSpace() {
               NSCParameterAssert([args[1] isKindOfClass: [NSArray class]]);
               NSArray* list = args[1];
               NSInteger n = [args[2] integerValue];
-              return list[n];
+              id result = [list objectAtIndex: n];
+              return result;
           }],
           [@"concat" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               id e1 = args[0];
