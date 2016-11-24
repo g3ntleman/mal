@@ -45,7 +45,7 @@
 
 
 - (void) set: (id) obj symbol: (NSString*) symbol {
-    NSParameterAssert([symbol isSymbol]);
+    symbol = [symbol asSymbol];
     NSParameterAssert(obj != nil);
     data[symbol] = obj;
 }

@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-
+#import "MALFunction.h"
 /*
 // Forward declaration of Env (see env.h for full interface)
 @class Env;

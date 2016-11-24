@@ -227,7 +227,7 @@ NSDictionary* MALCoreNameSpace() {
               NSError* error = nil;
               NSString* stringContents = [NSString stringWithContentsOfFile: args[1] encoding:NSUTF8StringEncoding error: &error];
               if (error) {
-                  @throw error;
+                  @throw [NSException exceptionWithName: error.domain reason: error.localizedDescription userInfo: nil];
               }
               return stringContents;
           }],
