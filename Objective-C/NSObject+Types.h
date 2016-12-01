@@ -18,15 +18,24 @@ typedef id _Nullable (^LispFunction)(NSArray* _Nullable args );
 
 extern BOOL MALObjectIsBlock(id _Nullable block);
 
+@interface MALBool : NSNumber
+
+@end
+
 @interface NSObject (LispTypes)
 
 - (NSString* _Nonnull) lispDescriptionReadable: (BOOL) readable;
 - (id _Nullable) eval_ast: (MALEnv* _Nullable) env;
 - (BOOL) isSymbol;
+- (BOOL) isKeyword;
 - (BOOL) isMacro;
+- (BOOL) isSequential;
 - (NSMutableDictionary*) meta;
-- (BOOL) truthValue;
+- (MALBool*) truthValue;
 - (BOOL) lispEqual: (id) other;
+
+- (BOOL) isMap;
+- (BOOL) isVector;
 
 @end
 
@@ -36,23 +45,22 @@ extern BOOL MALObjectIsBlock(id _Nullable block);
 
 @end
 
-
-@interface MALBool : NSNumber
-
-+ (_Nonnull id) yes;
-+ (_Nonnull id) no;
-
+@interface NSDictionary (LispTypes)
+- (id) dictionaryBySettingObject: (id) value forKey: (id<NSCopying>) key;
+- (id) dictionaryByRemovingObjectForKey: (id<NSCopying>) key;
 @end
+
 
 // Atoms
 
-@interface MalAtom : NSObject {
+@interface MALAtom : NSObject {
     @public id value;
 }
     
 - (id) initWithValue: (id) value;
     
 @end
+
 
 
 extern MALBool* _Nonnull  YESBOOL;

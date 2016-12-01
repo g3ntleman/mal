@@ -35,6 +35,15 @@
 		8D5CC1421DC788B9008FA8E4 /* MALList.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8CDD481D7E941300B28817 /* MALList.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8D5CC1431DC788B9008FA8E4 /* NSObject+Types.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D511F4C1D779F43003ED9FC /* NSObject+Types.m */; };
 		8D5CC1451DC788B9008FA8E4 /* libreadline.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D8917C61D70D78B00351894 /* libreadline.tbd */; };
+		8D5F72AA1DE67C3100AA37E4 /* MALFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D765D5D1DCB3E3E0004EA25 /* MALFunction.m */; };
+		8D5F72AB1DE67C3100AA37E4 /* core.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DB4C9671D8FDCC1000743BA /* core.m */; };
+		8D5F72AC1DE67C3100AA37E4 /* MALKeyword.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D470A711DB7FFB1005D4286 /* MALKeyword.m */; };
+		8D5F72AE1DE67C3100AA37E4 /* MALEnv.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8C74A21D88DDF3007AE095 /* MALEnv.m */; };
+		8D5F72AF1DE67C3100AA37E4 /* SESyntaxParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8917CA1D74F8A700351894 /* SESyntaxParser.m */; };
+		8D5F72B01DE67C3100AA37E4 /* MALList.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8CDD481D7E941300B28817 /* MALList.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8D5F72B11DE67C3100AA37E4 /* NSObject+Types.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D511F4C1D779F43003ED9FC /* NSObject+Types.m */; };
+		8D5F72B31DE67C3100AA37E4 /* libreadline.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D8917C61D70D78B00351894 /* libreadline.tbd */; };
+		8D5F72BA1DE67C5800AA37E4 /* step9_try.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D5F72A61DE67AA600AA37E4 /* step9_try.m */; };
 		8D765D481DCB33A00004EA25 /* core.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DB4C9671D8FDCC1000743BA /* core.m */; };
 		8D765D491DCB33A00004EA25 /* MALKeyword.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D470A711DB7FFB1005D4286 /* MALKeyword.m */; };
 		8D765D4A1DCB33A00004EA25 /* MALEnv.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D8C74A21D88DDF3007AE095 /* MALEnv.m */; };
@@ -43,7 +52,6 @@
 		8D765D4D1DCB33A00004EA25 /* NSObject+Types.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D511F4C1D779F43003ED9FC /* NSObject+Types.m */; };
 		8D765D4F1DCB33A00004EA25 /* libreadline.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D8917C61D70D78B00351894 /* libreadline.tbd */; };
 		8D765D591DCB39190004EA25 /* step7_quote.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D5CC14D1DC78950008FA8E4 /* step7_quote.m */; };
-		8D765D5A1DCB39210004EA25 /* step8_macros.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D765D571DCB38D50004EA25 /* step8_macros.m */; };
 		8D765D5B1DCB39210004EA25 /* step8_macros.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D765D571DCB38D50004EA25 /* step8_macros.m */; };
 		8D765D5F1DCB3EF10004EA25 /* MALFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D765D5D1DCB3E3E0004EA25 /* MALFunction.m */; };
 		8D765D601DCB3EF10004EA25 /* MALFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D765D5D1DCB3E3E0004EA25 /* MALFunction.m */; };
@@ -74,6 +82,7 @@
 		8DB4C9641D8C6EAA000743BA /* step4_if_fn_do.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DB4C9611D8C6E93000743BA /* step4_if_fn_do.m */; };
 		8DB4C9681D8FDCC1000743BA /* core.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DB4C9671D8FDCC1000743BA /* core.m */; };
 		8DB4C9691D8FDCC1000743BA /* core.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DB4C9671D8FDCC1000743BA /* core.m */; };
+		8DDB9C6F1DE7E3F1006A938A /* step9_try.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D5F72A61DE67AA600AA37E4 /* step9_try.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -105,6 +114,15 @@
 			runOnlyForDeploymentPostprocessing = 1;
 		};
 		8D5CC1461DC788B9008FA8E4 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		8D5F72B41DE67C3100AA37E4 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -177,6 +195,9 @@
 		8D5CC14B1DC788B9008FA8E4 /* step7_quote */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = step7_quote; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D5CC14C1DC78950008FA8E4 /* step7_quote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = step7_quote.h; sourceTree = "<group>"; };
 		8D5CC14D1DC78950008FA8E4 /* step7_quote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = step7_quote.m; sourceTree = "<group>"; };
+		8D5F72A51DE67AA600AA37E4 /* step9_try.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = step9_try.h; sourceTree = "<group>"; };
+		8D5F72A61DE67AA600AA37E4 /* step9_try.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = step9_try.m; sourceTree = "<group>"; };
+		8D5F72B91DE67C3100AA37E4 /* step9_try */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = step9_try; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D765D551DCB33A00004EA25 /* step8_macros */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = step8_macros; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D765D561DCB38D50004EA25 /* step8_macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = step8_macros.h; sourceTree = "<group>"; };
 		8D765D571DCB38D50004EA25 /* step8_macros.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = step8_macros.m; sourceTree = "<group>"; };
@@ -247,6 +268,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D5CC1451DC788B9008FA8E4 /* libreadline.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8D5F72B21DE67C3100AA37E4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D5F72B31DE67C3100AA37E4 /* libreadline.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -332,6 +361,8 @@
 				8D5CC14D1DC78950008FA8E4 /* step7_quote.m */,
 				8D765D561DCB38D50004EA25 /* step8_macros.h */,
 				8D765D571DCB38D50004EA25 /* step8_macros.m */,
+				8D5F72A51DE67AA600AA37E4 /* step9_try.h */,
+				8D5F72A61DE67AA600AA37E4 /* step9_try.m */,
 				8D454BD61D6FD291007C7554 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -349,6 +380,7 @@
 				8D5A49A81DC240A200D90D97 /* step6_file */,
 				8D5CC14B1DC788B9008FA8E4 /* step7_quote */,
 				8D765D551DCB33A00004EA25 /* step8_macros */,
+				8D5F72B91DE67C3100AA37E4 /* step9_try */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -442,6 +474,24 @@
 			name = step7_quote;
 			productName = step1_read_print;
 			productReference = 8D5CC14B1DC788B9008FA8E4 /* step7_quote */;
+			productType = "com.apple.product-type.tool";
+		};
+		8D5F72A81DE67C3100AA37E4 /* step9_try */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8D5F72B61DE67C3100AA37E4 /* Build configuration list for PBXNativeTarget "step9_try" */;
+			buildPhases = (
+				8D5F72A91DE67C3100AA37E4 /* Sources */,
+				8D5F72B21DE67C3100AA37E4 /* Frameworks */,
+				8D5F72B41DE67C3100AA37E4 /* CopyFiles */,
+				8D5F72B51DE67C3100AA37E4 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = step9_try;
+			productName = step1_read_print;
+			productReference = 8D5F72B91DE67C3100AA37E4 /* step9_try */;
 			productType = "com.apple.product-type.tool";
 		};
 		8D765D451DCB33A00004EA25 /* step8_macros */ = {
@@ -573,6 +623,7 @@
 				8D5CC13B1DC788B9008FA8E4 /* step7_quote */,
 				8D765D451DCB33A00004EA25 /* step8_macros */,
 				8D454BD41D6FD291007C7554 /* mal */,
+				8D5F72A81DE67C3100AA37E4 /* step9_try */,
 			);
 		};
 /* End PBXProject section */
@@ -605,6 +656,19 @@
 			shellScript = "export STEP=$TARGETNAME\nexport MAL_IMPL=Objective-C\n../runtest.py --deferrable --optional ../tests/$TARGETNAME.mal -- $CODESIGNING_FOLDER_PATH\n";
 		};
 		8D5CC1471DC788B9008FA8E4 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export STEP=$TARGETNAME\nexport MAL_IMPL=Objective-C\n../runtest.py --deferrable --optional ../tests/$TARGETNAME.mal -- $CODESIGNING_FOLDER_PATH\n";
+		};
+		8D5F72B51DE67C3100AA37E4 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -704,10 +768,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D765D5F1DCB3EF10004EA25 /* MALFunction.m in Sources */,
-				8D765D5A1DCB39210004EA25 /* step8_macros.m in Sources */,
 				8DB4C9691D8FDCC1000743BA /* core.m in Sources */,
 				8D470A731DB7FFB1005D4286 /* MALKeyword.m in Sources */,
 				8D8C74A41D88DDF3007AE095 /* MALEnv.m in Sources */,
+				8DDB9C6F1DE7E3F1006A938A /* step9_try.m in Sources */,
 				8D511F4F1D77C8F6003ED9FC /* NSObject+Types.m in Sources */,
 				8D8CDD4B1D7EB7E000B28817 /* MALList.m in Sources */,
 				8D511F501D77C8F9003ED9FC /* SESyntaxParser.m in Sources */,
@@ -760,6 +824,21 @@
 				8D5CC1421DC788B9008FA8E4 /* MALList.m in Sources */,
 				8D5CC1431DC788B9008FA8E4 /* NSObject+Types.m in Sources */,
 				8D765D591DCB39190004EA25 /* step7_quote.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8D5F72A91DE67C3100AA37E4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D5F72AA1DE67C3100AA37E4 /* MALFunction.m in Sources */,
+				8D5F72BA1DE67C5800AA37E4 /* step9_try.m in Sources */,
+				8D5F72AB1DE67C3100AA37E4 /* core.m in Sources */,
+				8D5F72AC1DE67C3100AA37E4 /* MALKeyword.m in Sources */,
+				8D5F72AE1DE67C3100AA37E4 /* MALEnv.m in Sources */,
+				8D5F72AF1DE67C3100AA37E4 /* SESyntaxParser.m in Sources */,
+				8D5F72B01DE67C3100AA37E4 /* MALList.m in Sources */,
+				8D5F72B11DE67C3100AA37E4 /* NSObject+Types.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -992,6 +1071,24 @@
 			};
 			name = Release;
 		};
+		8D5F72B71DE67C3100AA37E4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_CFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WARNING_CFLAGS = "-Wnullability-completeness";
+			};
+			name = Debug;
+		};
+		8D5F72B81DE67C3100AA37E4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_CFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WARNING_CFLAGS = "-Wnullability-completeness";
+			};
+			name = Release;
+		};
 		8D765D531DCB33A00004EA25 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1119,6 +1216,15 @@
 			buildConfigurations = (
 				8D5CC1491DC788B9008FA8E4 /* Debug */,
 				8D5CC14A1DC788B9008FA8E4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8D5F72B61DE67C3100AA37E4 /* Build configuration list for PBXNativeTarget "step9_try" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8D5F72B71DE67C3100AA37E4 /* Debug */,
+				8D5F72B81DE67C3100AA37E4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

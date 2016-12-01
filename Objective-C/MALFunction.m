@@ -47,6 +47,10 @@
     return copy;
 }
 
+- (NSString*) description {
+    return [NSString stringWithFormat: @"%@ %@", [super description], self.name];
+}
+
 - (NSString*) lispDescriptionReadable: (BOOL) readable {
     NSString* name = self.name;
     return name ? [NSString stringWithFormat: @"#%@", self.name] : @"#";

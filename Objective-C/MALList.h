@@ -25,14 +25,12 @@
 
 - (id)objectAtIndex: (NSUInteger) index;
 
-- (const id*) objects;
+- (id*) objects;
     
-- (void)setObject:(id)obj atIndexedSubscript:(NSUInteger)idx;
+- (void) setObject: (id) obj atIndexedSubscript: (NSUInteger) idx;
 
-@end
-
-@interface MALVARGList : MALList
-
-//- (BOOL)
+// "private"
++ (id) listWithCapacity: (NSUInteger) capacity;
+- (void) addObject: (id) obj;
 
 @end

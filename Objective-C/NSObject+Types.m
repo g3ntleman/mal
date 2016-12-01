@@ -34,6 +34,25 @@ BOOL MALObjectIsBlock(id _Nullable block) {
     return NO;
 }
 
+- (BOOL) isSequential {
+    return NO;
+}
+
+
+- (BOOL) isMap {
+    return NO;
+}
+
+- (BOOL) isVector {
+    return NO;
+}
+
+
+- (BOOL) isKeyword {
+    return NO;
+}
+
+
 - (NSDictionary*) meta {
     return nil;
 }
@@ -51,8 +70,8 @@ BOOL MALObjectIsBlock(id _Nullable block) {
     return self;
 }
 
-- (BOOL) truthValue {
-    return YES;
+- (MALBool*) truthValue {
+    return NOBOOL;
 }
 
 @end
@@ -67,8 +86,8 @@ BOOL MALObjectIsBlock(id _Nullable block) {
     return @"nil";
 }
 
-- (BOOL) truthValue {
-    return NO;
+- (MALBool*) truthValue {
+    return NOBOOL;
 }
 
 - (id) firstObject {
@@ -87,30 +106,24 @@ MALBool* NOBOOL = nil;
     NOBOOL = [[self alloc] init];
 }
 
-+ (id) yes {
-    return YESBOOL;
+
+- (BOOL) boolValue {
+    return self == YESBOOL ? YES : NO;
 }
 
-+ (id) no {
-    return NOBOOL;
-}
-
-//- (BOOL) boolValue {
-//    return self == YESBOOL ? YES : NO;
-//}
 //
 //- (NSInteger) integerValue {
 //    return self == YESBOOL ? 1 : 0;
 //}
 
 
-- (BOOL) truthValue {
-    return self == YESBOOL ? YES : NO;
+- (MALBool*) truthValue {
+    return self == YESBOOL ? YESBOOL : NOBOOL;
 }
 
-//- (const char*) objCType {
-//    return "B";
-//}
+- (const char*) objCType {
+    return "B";
+}
 
 - (NSString*) description {
     return self == YESBOOL ? @"YESBOOL" : @"NOBOOL";
@@ -118,6 +131,10 @@ MALBool* NOBOOL = nil;
 
 - (NSString*) lispDescriptionReadable: (BOOL) readable {
     return self == YESBOOL ? @"true" : @"false";
+}
+
+- (BOOL) isEqual: (id) object {
+    return self == object;
 }
 
 @end
@@ -144,6 +161,9 @@ MALBool* NOBOOL = nil;
     return buffer;
 }
 
+- (BOOL) isVector {
+    return YES;
+}
 
 - (id) eval_ast: (MALEnv*) env {
     NSUInteger count = self.count;
@@ -162,6 +182,9 @@ MALBool* NOBOOL = nil;
     return args;// f(args);
 }
 
+- (BOOL) isSequential {
+    return YES;
+}
 
 
 @end
@@ -186,6 +209,29 @@ MALBool* NOBOOL = nil;
     [buffer appendString: @"}"];
     
     return buffer;
+}
+
+- (BOOL) isMap {
+    return YES;
+}
+
+- (id) dictionaryBySettingObject: (id) value forKey: (id<NSCopying>) key {
+    NSParameterAssert(key);
+    NSDictionary* result = self;
+    if (value) {
+        if (! [value isEqual: self[key]]) {
+            NSMutableDictionary* newdict = [self mutableCopy];
+            [newdict setObject: value forKey: key];
+            result = newdict;
+        }
+    }
+    return result;
+}
+
+- (id) dictionaryByRemovingObjectForKey: (id<NSCopying>) key {
+    NSMutableDictionary * dictionary = [self mutableCopy];
+    [dictionary removeObjectForKey: key];
+    return [dictionary copy];
 }
 
 - (id) eval_ast: (MALEnv* _Nullable) env {
@@ -225,6 +271,7 @@ static NSMutableSet* symbols = nil;
     return self == [symbols member: self];
 }
 
+
 - (BOOL) lispEqual: (id) other {
     return  [self isEqual: other] && ((self == [symbols member: self]) == (other == [symbols member: other]));
 }
@@ -234,7 +281,7 @@ static NSMutableSet* symbols = nil;
     if ([self isSymbol]) {
         id result = [env get: self];
         if (! result) {
-            NSString* msg = [NSString stringWithFormat: @"Symbol '%@' not defined.", self];
+            NSString* msg = [NSString stringWithFormat: @"'%@' not found", self];
             @throw([NSException exceptionWithName: @"MALUndefinedSymbolException"
                                            reason: msg
                                          userInfo: nil]);
@@ -288,7 +335,7 @@ static NSMutableSet* symbols = nil;
 
 @end
 
-@implementation MalAtom
+@implementation MALAtom
     
 - (id) initWithValue: (id) aValue {
     if (self = [super init]) {
@@ -302,5 +349,14 @@ static NSMutableSet* symbols = nil;
 }
 
     
+@end
+
+@implementation NSException (LispTypes)
+
+- (NSString*) lispDescriptionReadable: (BOOL) readable {
+    return [NSString stringWithFormat: @"Exception %@", [[self userInfo][@"MalObject"] lispDescriptionReadable: readable]];
+}
+
+
 @end
 

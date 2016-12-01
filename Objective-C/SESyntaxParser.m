@@ -349,22 +349,23 @@ static long unquote_characters(const unichar* source, const NSRange range, unich
 - (id) readMap {
     SETokenOccurrence leftPar = [self nextToken];
     
-    NSAssert(leftPar.type != LEFT_PAR, @"Expected '{' but got '%@'", [NSString stringWithCharacters: &characters[leftPar.range.location] length: leftPar.range.length]);
+    NSAssert(leftPar.firstChar == '{', @"Expected '{' but got '%@'", [NSString stringWithCharacters: &characters[leftPar.range.location] length: leftPar.range.length]);
     
     NSMutableDictionary* map = [[NSMutableDictionary alloc] initWithCapacity: 4];
     id key, value;
+    // TODO: Check for "}" to end this loop:
     while ((key = [self readForm])) {
         if ((value = [self readForm])) {
             [map setObject: value forKey: key];
         }
     }
     
-    if (lastToken.type != RIGHT_PAR) {
-        @throw [NSException exceptionWithName: @"MALUnterminatedExpression" reason: [NSString stringWithFormat: @"Not terminated '%C':%ld and '%C':%ld.", leftPar.firstChar, leftPar.range.location, lastToken.firstChar, lastToken.range.location] userInfo: nil];
-    } else {
+    if (lastToken.firstChar != '}') {
         if (matchingPar(leftPar.firstChar) != lastToken.firstChar) {
             @throw [NSException exceptionWithName: @"MALUnbalancedBraces" reason: [NSString stringWithFormat: @"Unmatched '%C':%ld and '%C':%ld.", leftPar.firstChar, leftPar.range.location, lastToken.firstChar, lastToken.range.location] userInfo: nil];
             //NSLog(@"Unterminated List starting at %ld", leftPar.range.location);
+        } else {
+            @throw [NSException exceptionWithName: @"MALUnterminatedExpression" reason: [NSString stringWithFormat: @"Not terminated '%C':%ld and '%C':%ld.", leftPar.firstChar, leftPar.range.location, lastToken.firstChar, lastToken.range.location] userInfo: nil];
         }
     }
     
@@ -404,14 +405,14 @@ static long unquote_characters(const unichar* source, const NSRange range, unich
                 return number;
             }
             case KEYWORD: {
-                MALKeyword* keyword = [[NSString stringWithCharacters: &characters[nextToken.range.location] length:nextToken.range.length] asKeyword];
+                MALKeyword* keyword = [[NSString stringWithCharacters: &characters[nextToken.range.location+1] length:nextToken.range.length-1] asKeyword];
                 return keyword;
             }
             case BOOL_TRUE: {
-                return [MALBool yes];
+                return YESBOOL;
             }
             case BOOL_FALSE: {
-                return [MALBool no];
+                return NOBOOL;
             }
             case QUOTE: {
                 return [MALList listFromFirstObject: [@"quote" asSymbol] secondObject: [self readForm]];

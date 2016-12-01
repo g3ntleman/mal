@@ -89,7 +89,7 @@ id EVAL(id ast, MALEnv* env) {
                     if (list[0] == [@"if" asSymbol]) {
                         id cond = EVAL(list[1], env);
                         id result = nil;
-                        if ([cond truthValue]) {
+                        if ([cond truthValue] == YESBOOL) {
                             result = EVAL(list[2], env);
                         } else {
                             if (listCount>3) {

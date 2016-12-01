@@ -41,12 +41,24 @@ static NSMutableDictionary* keywords = nil;
     return self;
 }
 
+- (BOOL) isKeyword {
+    return YES;
+}
+
 - (BOOL) isEqual: (id) object {
     return self == object; // uniqued
 }
 
+- (NSString*) lispDescriptionReadable: (BOOL) readable {
+    return [@":" stringByAppendingString: _string];
+}
+
+- (id) copyWithZone: (id) zone {
+    return self;
+}
+
 - (NSString*) description {
-    return _string;
+    return [NSString stringWithFormat: @"%@: '%@'", [super description], _string];
 }
 
 @end

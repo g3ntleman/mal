@@ -88,7 +88,7 @@ id EVAL(id ast, MALEnv* env) {
                         NSCParameterAssert(listCount>2);
 
                         id cond = EVAL(list[1], env);
-                        if ([cond truthValue]) {
+                        if ([cond truthValue] == YESBOOL) {
                             ast = list[2];
                         } else {
                             if (listCount<=3) {

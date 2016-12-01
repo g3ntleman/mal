@@ -92,7 +92,7 @@ static MALList* emptyList = nil;
     return instance;
 }
 
-- (const id*) objects {
+- (id*) objects {
     NSObject** objects = object_getIndexedIvars(self);
     return objects;
 }
@@ -125,6 +125,11 @@ static MALList* emptyList = nil;
 - (NSUInteger) count {
     return _count;
 }
+
+- (BOOL) isVector {
+    return NO;
+}
+
 
 - (id) objectAtIndex: (NSUInteger) index {
     NSParameterAssert(index<_count);

@@ -11,7 +11,7 @@
 #import "SESyntaxParser.h"
 #import "NSObject+Types.h"
 #import "core.h"
-#import "step8_macros.h"
+#import "step9_try.h"
 
 
 id READ(NSString* code) {
@@ -25,17 +25,17 @@ NSString* REP(NSString* code, MALEnv* env) {
     @try {
         ast = READ(code);
     } @catch (NSException* exception) {
-        NSLog(@"Error during parsing: %@", exception);
+        NSLog(@"Exception during parsing: %@", exception);
     }
     @try {
         ast = EVAL(ast, env);
     } @catch (NSException* exception) {
-        NSLog(@"Error during evaluation: %@", exception);
+        NSLog(@"Exception during evaluation: %@", exception);
     }
     @try {
         result = PRINT(ast);
     } @catch (NSException* exception) {
-        NSLog(@"Error during printing: %@", exception);
+        NSLog(@"Exception during printing: %@", exception);
     }
     return result;
 }
@@ -264,6 +264,36 @@ id EVAL(id ast, MALEnv* env) {
                         return EVAL(body, functionEnv);
                     }];
                 }
+                if (firstSymbol == [@"try*" asSymbol]) {
+                    @try {
+                        return EVAL(list[1], env);
+                    } @catch(NSObject* e) {
+                        if (listCount > 2 && [list[2] isKindOfClass: [MALList class]]) {
+                            MALList* a2lst = list[2];
+                            if (a2lst[0] == [@"catch*" asSymbol]) {
+                                id exc = e;
+                                if ([e isKindOfClass: [NSException class]]) {
+                                    NSDictionary* userInfo = [exc userInfo];
+                                    id object = userInfo[@"MalObject"];
+                                    if (object) {
+                                        exc = object;
+                                    } else {
+                                        exc = [exc reason];
+//                                        NSMutableDictionary* dict = [NSMutableDictionary dictionaryWithObject: [exc name] forKey: @"name"];
+//                                        if ([exc reason]) dict[@"reason"] = [exc reason];
+//                                        if ([exc userInfo]) dict[@"userInfo"] = [exc userInfo];
+//                                        exc = dict;
+                                    }
+                                }
+                                // Bind 2nd paramter symbol to expection dictionary:
+                                MALEnv* eEnv = [[MALEnv alloc] initWithOuterEnvironment: env bindings: [NSMutableDictionary dictionaryWithObject: exc forKey: [a2lst[1] asSymbol]]];
+                                return EVAL(a2lst[2], eEnv);
+                            }
+                        }
+                        @throw e; // not handeled
+                    }
+                }
+                
                 if (firstSymbol == [@"quote" asSymbol]) {
                     return list[1];
                 }
@@ -347,7 +377,7 @@ int main(int argc, const char * argv[]) {
             // Interactive
             while (true) {
                 char *rawline = readline(line.length ? "": "user> ");
-                if (!rawline) { continue; }
+                if (!strlen(rawline)) { continue; }
                 [line appendString: [NSString stringWithUTF8String: rawline]];
                 if ([line length] == 0) { break; }
                 @try {
