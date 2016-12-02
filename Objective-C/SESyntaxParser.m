@@ -432,7 +432,7 @@ static long unquote_characters(const unichar* source, const NSRange range, unich
             case WITH_META: {
                 id form1 = [self readMap];
                 id form2 = [self readForm];
-                return [MALList listFromArray: @[@"with-meta", form2, form1]];
+                return [MALList listFromArray: @[[@"with-meta" asSymbol], form2, form1]];
             }
             case ATOM:
                 return [[NSString stringWithCharacters: &characters[nextToken.range.location] length:nextToken.range.length] asSymbol];

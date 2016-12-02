@@ -18,7 +18,7 @@ typedef id _Nullable (^LispFunction)(NSArray* _Nullable args );
 
 extern BOOL MALObjectIsBlock(id _Nullable block);
 
-@interface MALBool : NSNumber
+@interface MALBool : NSValue
 
 @end
 
@@ -30,7 +30,8 @@ extern BOOL MALObjectIsBlock(id _Nullable block);
 - (BOOL) isKeyword;
 - (BOOL) isMacro;
 - (BOOL) isSequential;
-- (NSMutableDictionary*) meta;
+- (id) meta;
+- (void) setMeta: (id) newMeta;
 - (MALBool*) truthValue;
 - (BOOL) lispEqual: (id) other;
 

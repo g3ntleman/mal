@@ -57,6 +57,11 @@ BOOL MALObjectIsBlock(id _Nullable block) {
     return nil;
 }
 
+- (void) setMeta: (id) newMeta {
+    // stub
+}
+
+
 - (BOOL) isMacro {
     return NO;
 }

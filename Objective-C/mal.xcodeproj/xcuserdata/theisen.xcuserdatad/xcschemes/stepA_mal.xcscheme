@@ -32,9 +32,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8D5F72A81DE67C3100AA37E4"
-            BuildableName = "step9_try"
-            BlueprintName = "step9_try"
+            BlueprintIdentifier = "8D6E88861DF0E6370060CCBF"
+            BuildableName = "stepA_mal"
+            BlueprintName = "stepA_mal"
             ReferencedContainer = "container:mal.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -55,9 +55,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8D5F72A81DE67C3100AA37E4"
-            BuildableName = "step9_try"
-            BlueprintName = "step9_try"
+            BlueprintIdentifier = "8D6E88861DF0E6370060CCBF"
+            BuildableName = "stepA_mal"
+            BlueprintName = "stepA_mal"
             ReferencedContainer = "container:mal.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

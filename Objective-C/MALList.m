@@ -40,10 +40,14 @@ static MALList* emptyList = nil;
     NSUInteger count = anArray.count;
     MALList* instance = [self listWithCapacity: count];
     instance->_count = count;
-    
     NSObject** objects = object_getIndexedIvars(instance);
-    
     [anArray getObjects: objects];
+    for (NSInteger i = 0; i<count; i++) {
+        [objects[i] retain];
+    }
+//    for (id element in anArray) {
+//        [instance addObject: element];
+//    }
     return instance;
 }
 
@@ -84,11 +88,14 @@ static MALList* emptyList = nil;
 }
 
 + (id) listFromArray:(NSArray *)anArray subrange: (NSRange) range {
-    
-    MALList* instance = [self listWithCapacity: range.length];
+    NSInteger count = range.length;
+    MALList* instance = [self listWithCapacity: count];
     NSObject** objects = object_getIndexedIvars(instance);
+    instance->_count = count;
     [anArray getObjects: objects range: range];
-    instance->_count = range.length;
+    for (NSInteger i = 0; i<range.length; i++) {
+        [objects[i] retain];
+    }
     return instance;
 }
 
@@ -100,7 +107,11 @@ static MALList* emptyList = nil;
 - (void)setObject: (id) obj atIndexedSubscript: (NSUInteger) idx {
     NSParameterAssert(idx<_count);
     NSObject** objects = object_getIndexedIvars(self);
-    objects[idx] = obj;
+    id previousValue = objects[idx];
+    if (previousValue != obj) {
+        [previousValue release];
+        objects[idx] = [obj retain];
+    }
 }
 
 
@@ -110,7 +121,7 @@ static MALList* emptyList = nil;
 }
 
 - (NSString*) description {
-    return [self lispDescriptionReadable: YES];
+    return [super description];
 }
 
 - (void) dealloc {

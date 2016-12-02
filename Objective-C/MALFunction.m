@@ -2,47 +2,49 @@
 #import "MALFunction.h"
 #import "MALEnv.h"
 
+
 @implementation MALFunction {
     NSMutableDictionary* _meta;
+    BOOL _isMacro;
 }
 
 - (id) initWithBlock: (GenericFunction) aBlock {
     if (self = [super init]) {
         block = [aBlock copy];
-        _meta = nil;
     }
     return self;
 }
 
 //- (void) dealloc {
-//    if (_block) {
-//        [_block release];
+//    if (block) {
+//        [block release];
 //    }
 //}
 
 
-- (NSMutableDictionary*) meta {
-    if (!_meta) {
-        _meta = [[NSMutableDictionary alloc] init];
-    }
+- (id) meta {
+//    if (!_meta) {
+//        _meta = [[NSMutableDictionary alloc] init];
+//    }
     return _meta;
 }
 
+- (void) setMeta: (id) meta {
+    _meta = meta;
+}
+
 /**
- * returns a name or nil for anonymous functions.
+ * returns a name of the function or nil, if not set.
  */
 - (NSString*) name {
     return _meta[@"name"];
 }
 
-//- (id)apply:(NSArray *)args {
-//    return EVAL(_ast, [[MALEnv alloc] initWithOuterEnvironment: _env bindings: binds:_params]);
-//}
-
 - (id) copyWithZone: (NSZone*) zone {
     MALFunction* copy = [[[self class] alloc] initWithBlock: block];
     if (copy && _meta) {
         [copy.meta setValuesForKeysWithDictionary: _meta];
+        copy->_isMacro = _isMacro;
     }
     return copy;
 }
@@ -56,19 +58,23 @@
     return name ? [NSString stringWithFormat: @"#%@", self.name] : @"#";
 }
 
+- (NSUInteger) hash {
+    return [block hash];
+}
+
 - (BOOL) isEqual: (id) other {
     if (! [other isKindOfClass: [self class]]) {
         return NO;
     }
-    return block == ((MALFunction*)other)->block;
+    return block == ((MALFunction*)other)->block; // also check macro flag?
 }
 
 - (BOOL) isMacro {
-    return _meta[@"macro"] != nil;
+    return _isMacro;
 }
 
 - (void) setMacro: (BOOL) isMacro {
-    self.meta[@"macro"] = isMacro ? @YES : nil;
+    _isMacro = isMacro;
 }
 
 @end

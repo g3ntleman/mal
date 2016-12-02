@@ -75,14 +75,15 @@ NSDictionary* MALCoreNameSpace() {
               NSUInteger count = args.count;
               NSInteger result = 0;
               for (int i = 1; i<count; i++) {
-                  result += [args[i] integerValue];
+                  NSNumber* arg = args[i];
+                  NSCAssert([arg isKindOfClass: [NSNumber class]], @"'+': Argument #%d ('%@') is not a number.", i, [arg lispDescriptionReadable: YES]);
+                  result += [arg integerValue];
               }
               return @(result);
           }],
           [@"-" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSUInteger count = args.count;
               NSInteger result = 0;
-              
               if (count>1) {
                   result = [args[1] integerValue];
                   if (count == 2) {
@@ -228,6 +229,13 @@ NSDictionary* MALCoreNameSpace() {
               }
               return stringContents;
           }],
+          [@"time-ms" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
+              NSCParameterAssert(args.count == 1);
+              struct timespec spec;
+              clock_gettime(CLOCK_REALTIME, &spec);
+              long ms = round(spec.tv_nsec / 1.0e6); // Convert nanoseconds to milliseconds
+              return @(spec.tv_sec*1000+ms);
+          }],
           [@"atom" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSCParameterAssert(args.count == 2);
               return [[MALAtom alloc] initWithValue: args[1]];
@@ -238,7 +246,7 @@ NSDictionary* MALCoreNameSpace() {
           }],
           [@"deref" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSCParameterAssert(args.count == 2);
-              NSCParameterAssert([args[1] isKindOfClass: [MALAtom class]]);
+              NSCAssert([args[1] isKindOfClass: [MALAtom class]], @"'deref' expects an atom, got '%@'.", [args[1] lispDescription]);
               return ((MALAtom*)args[1])->value;
           }],
           [@"reset!" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
@@ -250,11 +258,11 @@ NSDictionary* MALCoreNameSpace() {
               NSCParameterAssert(args.count >= 3);
               NSCParameterAssert([args[1] isKindOfClass: [MALAtom class]]);
               MALAtom* atom = args[1];
-              LispFunction f = args[2];
+              MALFunction* f = args[2];
               id atomValue = atom->value;
               MALList* list = [MALList listFromArray: args subrange: NSMakeRange(1, args.count-1)];
               list[1] = atomValue;
-              return atom->value = f(list);
+              return (atom->value = apply(f, list));
           }],
           [@"cons" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSCParameterAssert(args.count >= 3);
@@ -402,10 +410,21 @@ NSDictionary* MALCoreNameSpace() {
               }
               return result;
           }],
-          
+          [@"meta" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
+              return [args[1] meta];
+          }],
+          [@"with-meta" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
+              NSCAssert(args.count==3, @"'with-meta' expects two parameters.");
+              NSObject* object = args[1];
+              id newMeta = args[2];
+              NSObject* copy = [object copy];
+              [copy setMeta: newMeta];
+              return copy;
+          }],
           [@"vector" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               return [args subarrayWithRange: NSMakeRange(1, args.count-1)];
           }],
+          [@"*host-language*" asSymbol]: @"Objective-C",
           [@"hash-map" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSInteger argsCount = args.count;
               NSCAssert(args.count%2==1, @"hash-map expects an even number of arguments.");
