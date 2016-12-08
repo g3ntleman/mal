@@ -127,7 +127,7 @@ id macroexpand(id ast, MALEnv* environment) {
             MALFunction* function = [environment get: firstSymbol];
             if ([function isMacro]) {
                 expansion = apply(function, list);
-                //NSLog(@"Expanded Macro '%@' to %@.", firstSymbol, expansion);
+                //NSLog(@"Expanded Macro '%@' to '%@'.", firstSymbol, [expansion lispDescriptionReadable: YES]);
             }
         }
     }
@@ -409,7 +409,8 @@ int main(int argc, const char * argv[]) {
         //REP(@"(defmacro! or (fn* (& xs) (if (empty? xs) nil (if (= 1 (count xs)) (first xs) `(let* (or_FIXME ~(first xs)) (if or_FIXME or_FIXME (or ~@(rest xs))))))))", replEnvironment);
         REP(@"(def! *gensym-counter* (atom 0))", replEnvironment);
         REP(@"(def! gensym (fn* [] (symbol (str \"G__\" (swap! *gensym-counter* (fn* [x] (+ 1 x)))))))", replEnvironment);
-        REP(@"(defmacro! or (fn* (& xs) (if (empty? xs) nil (if (= 1 (count xs)) (first xs) (let* (condvar (gensym)))))))", replEnvironment);
+        REP(@"(defmacro! or (fn* (& xs) (if (empty? xs) nil (if (= 1 (count xs)) (first xs) (let* (condvar (gensym)) `(let* (~condvar ~(first xs)) (if ~condvar ~condvar (or ~@(rest xs)))))))))", replEnvironment);
+
         
         if (startupFilename.length) {
             REP([NSString stringWithFormat: @"(load-file \"%@\")", startupFilename], replEnvironment);
@@ -422,7 +423,7 @@ int main(int argc, const char * argv[]) {
             // Interactive
             while (true) {
                 char *rawline = readline(line.length ? "": "user> ");
-                if (!strlen(rawline)) { continue; }
+                if (!rawline || !strlen(rawline)) { continue; }
                 [line appendString: [NSString stringWithUTF8String: rawline]];
                 if ([line length] == 0) { break; }
                 @try {
