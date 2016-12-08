@@ -304,6 +304,22 @@ NSDictionary* MALCoreNameSpace() {
               MALList* list = [MALList listFromFirstObject: first rest: rest];
               return list;
           }],
+          [@"conj" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
+              NSUInteger argsCount = args.count;
+              NSCParameterAssert(args.count >= 2);
+              NSCParameterAssert([args[1] isKindOfClass: [NSArray class]]);
+              NSArray* orig = args[1];
+              if (argsCount==2) return orig; // reuse immutable data
+
+              MALList* list = [MALList listWithCapacity: orig.count+argsCount-2];
+              for (id element in orig) {
+                  [list addObject: element];
+              }
+              for (int i=2; i<argsCount;i++) {
+                  [list addObject: args[i]];
+              }
+              return list;
+          }],
           [@"nth" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSCParameterAssert(args.count >= 3);
               NSCParameterAssert([args[1] isKindOfClass: [NSArray class]]);
