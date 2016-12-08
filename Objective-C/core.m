@@ -265,7 +265,7 @@ NSDictionary* MALCoreNameSpace() {
               NSCParameterAssert(args.count == 1);
               struct timespec spec;
               clock_gettime(CLOCK_REALTIME, &spec);
-              long ms = round(spec.tv_nsec / 1.0e6); // Convert nanoseconds to milliseconds
+              long ms = ((spec.tv_nsec + 500000) / 1000000); // Round nanoseconds to milliseconds
               return @(spec.tv_sec*1000+ms);
           }],
           [@"atom" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
