@@ -13,6 +13,10 @@
 #import "MALKeyword.h"
 #import "MALList.h"
 
+static inline id TruthValue(id object) {
+    return object == YESBOOL ? YESBOOL : NOBOOL;
+}
+
 //typedef struct SEQ_t {
 //    id obj;
 //    unsigned index;
@@ -39,9 +43,7 @@ NSString* f1_io(int i, id o) {
 
 
 static NSMutableDictionary* coreNS = nil;
-static Class stringClass = nil;
-static Class listClass = nil;
-static id nilObject = nil;
+
 
 
 typedef id (*MALFunction1)(id arg1);
@@ -53,23 +55,53 @@ id MALCoreF_first(NSArray* array) {
     return [array firstObject];
 }
 
+#define isObject(generic) (YES)
+
 MALFunction1 MALCore_first = &MALCoreF_first;
+
+id string$_gg(void* object) {
+    if (!isObject(object)) {
+        return NOBOOL;
+    }
+    return ([((__bridge id)object) isKindOfClass: MALStringClass] ? YESBOOL: NOBOOL);
+}
+
+id plus_ggx(id ptr, ...) {
+    
+//    va_list va;
+//    id p;
+//    
+//    va_start(va, ptr);
+//    for (p = ptr; p != NULL; p = va_arg(va, id)) {
+//        printf("%p\n", p);
+//    }
+//    va_end(va);
+    
+    
+    va_list argp;
+    va_start(argp, ptr);
+    NSInteger result = [ptr integerValue];
+    while ((ptr = va_arg(argp, id)) != nil) {
+        NSCAssert([ptr isKindOfClass: [NSNumber class]], @"'+': Argument '%@' is not a number.", [ptr lispDescriptionReadable: YES]);
+        result += [ptr integerValue];
+    }
+    va_end(argp);
+    return @(result);
+}
+
 
 NSDictionary* MALCoreNameSpace() {
     
     if (! coreNS) {
-        stringClass = [NSString class];
-        listClass = [MALList class];
-        nilObject = [NSNull null];
         
         // Ignore first argument!
         NSDictionary* protoNS =
         @{
           [@"string?" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
-              return [args[1] isKindOfClass: stringClass] ? YESBOOL: NOBOOL;
+              return [args[1] isKindOfClass: MALStringClass] ? YESBOOL: NOBOOL;
           }],
           [@"list?" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
-              return [args[1] isKindOfClass: listClass] ? YESBOOL : NOBOOL;
+              return [args[1] isKindOfClass: MALListClass] ? YESBOOL : NOBOOL;
           }],
           [@"+" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSUInteger count = args.count;
@@ -182,7 +214,7 @@ NSDictionary* MALCoreNameSpace() {
                   }
               }
               printf("\n");
-              return nilObject;
+              return MALNilObject;
           }],
           [@"str" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSUInteger count = args.count;
@@ -213,7 +245,7 @@ NSDictionary* MALCoreNameSpace() {
                   printf(i>1 ? " %s" : "%s", [argDesc UTF8String]);
               }
               printf("\n");
-              return nilObject;
+              return MALNilObject;
           }],
           [@"read-string" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSCParameterAssert(args.count == 2);
@@ -246,7 +278,7 @@ NSDictionary* MALCoreNameSpace() {
           }],
           [@"deref" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSCParameterAssert(args.count == 2);
-              NSCAssert([args[1] isKindOfClass: [MALAtom class]], @"'deref' expects an atom, got '%@'.", [args[1] lispDescription]);
+              NSCAssert([args[1] isKindOfClass: [MALAtom class]], @"'deref' expects an atom, got '%@'.", [args[1] lispDescriptionReadable: YES]);
               return ((MALAtom*)args[1])->value;
           }],
           [@"reset!" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
@@ -321,7 +353,7 @@ NSDictionary* MALCoreNameSpace() {
           }],
           [@"get" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSDictionary* dict = args[1];
-              if (! dict || dict == nilObject) return nilObject;
+              if (! dict || dict == MALNilObject) return MALNilObject;
               id key = args[2];
               return dict[key];
           }],
@@ -373,14 +405,14 @@ NSDictionary* MALCoreNameSpace() {
               return vals;
           }],
           [@"true?" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
-              return [args[1] truthValue];
+              return TruthValue(args[1]);
           }],
           [@"false?" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
-              return [args[1] boolValue] ? NOBOOL : YESBOOL;
+              return args[1] == YESBOOL ? NOBOOL : YESBOOL;
           }],
           [@"nil?" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               id arg = args[1];
-              return (arg == nil || arg == nilObject) ? YESBOOL : NOBOOL;
+              return (arg == nil || arg == MALNilObject) ? YESBOOL : NOBOOL;
           }],
           [@"sequential?" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               id arg = args[1];
@@ -406,7 +438,7 @@ NSDictionary* MALCoreNameSpace() {
               MALList* result = [MALList listWithCapacity: objects.count];
               for (NSObject* o in objects) {
                   id oo = block(@[function, o]);
-                  [result addObject: oo ? oo : nilObject];
+                  [result addObject: oo ? oo : MALNilObject];
               }
               return result;
           }],

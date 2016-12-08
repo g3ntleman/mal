@@ -10,6 +10,27 @@
 #import "MALKeyword.h"
 #import "NSObject+Types.h"
 
+@interface MALBool : NSValue
+@end
+@interface MALNil : NSValue
+@end
+
+@implementation MALNil
+
+- (const char*) objCType {
+    return @encode(id);
+}
+
+- (void) getValue: (void*) value {
+    void** oPtr = value;
+    *oPtr = nil;
+}
+
+- (NSString*) lispDescriptionReadable: (BOOL) readable {
+    return @"nil";
+}
+
+@end
 
 BOOL MALObjectIsBlock(id _Nullable block) {
     static Class blockClass;
@@ -75,40 +96,45 @@ BOOL MALObjectIsBlock(id _Nullable block) {
     return self;
 }
 
-- (MALBool*) truthValue {
-    return NOBOOL;
-}
+//- (id) truthValue {
+//    return NOBOOL;
+//}
 
 @end
 
-@implementation NSNull (LispTypes)
+//@implementation NSNull (LispTypes)
+//
+//- (NSUInteger) count {
+//    return 0;
+//}
+//
+//- (NSString*) lispDescriptionReadable: (BOOL) readable {
+//    return @"nil";
+//}
+//
+//
+//- (id) firstObject {
+//    return nil;
+//}
+//
+//@end
 
-- (NSUInteger) count {
-    return 0;
-}
+Class MALStringClass;
+Class MALListClass;
+id MALNilObject;
+id YESBOOL = nil;
+id NOBOOL = nil;
 
-- (NSString*) lispDescriptionReadable: (BOOL) readable {
-    return @"nil";
-}
-
-- (MALBool*) truthValue {
-    return NOBOOL;
-}
-
-- (id) firstObject {
-    return nil;
-}
-
-@end
 
 @implementation MALBool
 
-MALBool* YESBOOL = nil;
-MALBool* NOBOOL = nil;
 
 + (void) load {
     YESBOOL = [[self alloc] init];
     NOBOOL = [[self alloc] init];
+    MALStringClass = [NSString class];
+    MALListClass = [MALList class];
+    MALNilObject = [[MALNil alloc] init];
 }
 
 
@@ -122,9 +148,9 @@ MALBool* NOBOOL = nil;
 //}
 
 
-- (MALBool*) truthValue {
-    return self == YESBOOL ? YESBOOL : NOBOOL;
-}
+//- (id) truthValue {
+//    return self == YESBOOL ? YESBOOL : NOBOOL;
+//}
 
 - (const char*) objCType {
     return "B";

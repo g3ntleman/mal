@@ -8,11 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-static NSNull* nilObject;
-
 #define PRINT(exp) (exp ? [exp lispDescriptionReadable: YES]: @"nil")
 #define pr_str(exp, readably) (exp ? [exp lispDescriptionReadable: readably]: @"nil")
 #define eval_ast(ast, env) [ast eval_ast: env]
 
 NSDictionary* MALCoreNameSpace();
 
+id plus_ggx(id a1, ...);

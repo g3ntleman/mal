@@ -13,14 +13,15 @@
 
 #pragma clang diagnostic ignored "-Wnullability-completeness"
 
+extern Class MALStringClass;
+extern Class MALListClass;
+extern id MALNilObject;
+
 
 typedef id _Nullable (^LispFunction)(NSArray* _Nullable args );
 
 extern BOOL MALObjectIsBlock(id _Nullable block);
 
-@interface MALBool : NSValue
-
-@end
 
 @interface NSObject (LispTypes)
 
@@ -32,7 +33,7 @@ extern BOOL MALObjectIsBlock(id _Nullable block);
 - (BOOL) isSequential;
 - (id) meta;
 - (void) setMeta: (id) newMeta;
-- (MALBool*) truthValue;
+//- (id) truthValue;
 - (BOOL) lispEqual: (id) other;
 
 - (BOOL) isMap;
@@ -64,8 +65,8 @@ extern BOOL MALObjectIsBlock(id _Nullable block);
 
 
 
-extern MALBool* _Nonnull  YESBOOL;
-extern MALBool* _Nonnull  NOBOOL;
+extern id _Nonnull  YESBOOL;
+extern id _Nonnull  NOBOOL;
 
 id _Nullable EVAL(id _Nullable ast, MALEnv* _Nullable env);
 

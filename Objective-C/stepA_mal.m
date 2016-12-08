@@ -12,7 +12,7 @@
 #import "NSObject+Types.h"
 #import "core.h"
 #import "stepA_mal.h"
-
+#include <dlfcn.h>
 
 id READ(NSString* code) {
     return read_str(code);
@@ -25,7 +25,7 @@ NSString* REP(NSString* code, MALEnv* env) {
     @try {
         ast = READ(code);
     } @catch (NSException* exception) {
-        NSLog(@"Exception during parsing: %@", exception);
+        NSLog(@"Exception during parsing '%@': %@", code, exception);
     }
     @try {
         ast = EVAL(ast, env);
@@ -221,14 +221,14 @@ id EVAL(id ast, MALEnv* env) {
                 if (firstSymbol == [@"if" asSymbol]) {
                     id cond = EVAL(list[1], env);
                     id result = nil;
-                    if ([cond truthValue] == YESBOOL) {
+                    if (cond == YESBOOL) {
                         result = EVAL(list[2], env);
                     } else {
                         if (listCount>3) {
                             result = EVAL(list[3], env);
                         }
                     }
-                    return result ? result : nilObject;
+                    return result ? result : MALNilObject;
                 }
                 if (firstSymbol == [@"fn*" asSymbol]) {
                     NSArray* symbols = list[1];
@@ -331,12 +331,54 @@ NSString* getCurrentWorkingDirectory() {
     return currentDir;
 }
 
+typedef id (LispFunction_gg)(id p1);
+typedef id (LispFunction_ggx)(id p1, ...);
+typedef id (LispFunction_ggg)(id p1, id p2);
+typedef id (LispFunction_gggg)(id p1, id p2, id p3);
+typedef id (LispFunction_ggggg)(id p1, id p2, id p3, id p4);
+typedef id (LispFunction_gggggg)(id p1, id p2, id p3, id p4, id p5);
+
+
+void* FunctionForSpec(const char* name, const char* parSpec) {
+    char symName[100];
+    sprintf(symName, "%s_%s", name, parSpec);
+    dlerror();
+    void* dlhandle = dlopen(NULL, RTLD_NOW);
+    void* function = dlsym(dlhandle, symName);
+    char* error = dlerror();
+    dlclose(dlhandle);
+    if (error) {
+        return NULL;
+    }
+    return function;
+}
+
+id call1(const char* name, id p1) {
+    LispFunction_gg* function = FunctionForSpec(name, "gg");
+    NSCAssert(function != NULL, @"Error calling function: No function named '%s' found.", name);
+    return function(p1);
+}
+
+id call3(const char* name, id p1, id p2, id p3) {
+    LispFunction_ggx* function = FunctionForSpec(name, "ggx");
+    NSCAssert(function != NULL, @"Error calling function: No function named '%s' found.", name);
+    return function(p1, p2, p3);
+}
+
+
+
 int main(int argc, const char * argv[]) {
     // Create an autorelease pool to manage the memory into the program
     
     @autoreleasepool {
         
         
+        NSNumber* sum0 = plus_ggx(@(2), @(3), nil); // call vararg function directly
+        NSNumber* sum1 = call3("plus", @(2), @(3), nil); // call vararg function by name
+        
+        BOOL isString = [call1("string$", @"TestString") boolValue];
+        
+        //((LispFunction2*)addr)(argc, argv);
         NSMutableDictionary* bindings = [MALCoreNameSpace() mutableCopy];
         MALEnv* replEnvironment = [[MALEnv alloc] initWithOuterEnvironment: nil bindings: bindings];
         __weak MALEnv* weakEnv = replEnvironment;
@@ -364,8 +406,10 @@ int main(int argc, const char * argv[]) {
         REP(@"(def! not (fn* (a) (if a false true)))", replEnvironment); // Just as test. TODO: implement natively
         REP(@"(def! load-file (fn* (f) (eval (read-string (str \"(do \" (slurp f) \")\")))))", replEnvironment);
         REP(@"(defmacro! cond (fn* (& xs) (if (> (count xs) 0) (list 'if (first xs) (if (> (count xs) 1) (nth xs 1) (throw \"odd number of forms to cond\")) (cons 'cond (rest (rest xs)))))))", replEnvironment);
-        REP(@"(defmacro! or (fn* (& xs) (if (empty? xs) nil (if (= 1 (count xs)) (first xs) `(let* (or_FIXME ~(first xs)) (if or_FIXME or_FIXME (or ~@(rest xs))))))))", replEnvironment);
-        
+        //REP(@"(defmacro! or (fn* (& xs) (if (empty? xs) nil (if (= 1 (count xs)) (first xs) `(let* (or_FIXME ~(first xs)) (if or_FIXME or_FIXME (or ~@(rest xs))))))))", replEnvironment);
+        REP(@"(def! *gensym-counter* (atom 0))", replEnvironment);
+        REP(@"(def! gensym (fn* [] (symbol (str \"G__\" (swap! *gensym-counter* (fn* [x] (+ 1 x)))))))", replEnvironment);
+        REP(@"(defmacro! or (fn* (& xs) (if (empty? xs) nil (if (= 1 (count xs)) (first xs) (let* (condvar (gensym)))))))", replEnvironment);
         
         if (startupFilename.length) {
             REP([NSString stringWithFormat: @"(load-file \"%@\")", startupFilename], replEnvironment);

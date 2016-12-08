@@ -339,7 +339,7 @@ static long unquote_characters(const unichar* source, const NSRange range, unich
         }
     }
     if (leftPar.firstChar == '(') {
-        return [MALList listFromArray: array]; // Turn it into a List
+        return [MALList listFromArray: array]; // Turn parsed Array into a List
 
     }
     return array;
@@ -388,7 +388,7 @@ static long unquote_characters(const unichar* source, const NSRange range, unich
                 // NOP
                 break;
             case NIL:
-                return [NSNull null];
+                return MALNilObject;
             case LEFT_PAR:
                 position = nextToken.range.location; // push back the reader
                 if (nextToken.firstChar == '{') {

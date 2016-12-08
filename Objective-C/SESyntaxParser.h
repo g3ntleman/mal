@@ -52,17 +52,17 @@ typedef struct  {
 
 typedef void (^SESyntaxParserBlock)(SESyntaxParser *parser, SEParserResult result, BOOL* stopRef);
 
-@interface SEExpression : NSObject {
-    SETokenOccurrence occurrence;
-}
-
-@property (readonly) id value; // can be constants, strings, lists, etc.
-
-- (id) initWithValue: (id) value occurrence: (SETokenOccurrence) occurrence;
-
-- (NSString*) lispDescription;
-
-@end
+//@interface SEExpression : NSObject {
+//    SETokenOccurrence occurrence;
+//}
+//
+//@property (readonly) id value; // can be constants, strings, lists, etc.
+//
+//- (id) initWithValue: (id) value occurrence: (SETokenOccurrence) occurrence;
+//
+//- (NSString*) lispDescriptionReadable: (BOOL) yn;
+//
+//@end
 
 
 @interface SESyntaxParser : NSObject

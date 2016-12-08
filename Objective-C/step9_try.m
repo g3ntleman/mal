@@ -221,14 +221,14 @@ id EVAL(id ast, MALEnv* env) {
                 if (firstSymbol == [@"if" asSymbol]) {
                     id cond = EVAL(list[1], env);
                     id result = nil;
-                    if ([cond truthValue] == YESBOOL) {
+                    if (cond == YESBOOL) {
                         result = EVAL(list[2], env);
                     } else {
                         if (listCount>3) {
                             result = EVAL(list[3], env);
                         }
                     }
-                    return result ? result : nilObject;
+                    return result ? result : MALNilObject;
                 }
                 if (firstSymbol == [@"fn*" asSymbol]) {
                     NSArray* symbols = list[1];
