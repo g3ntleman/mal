@@ -98,7 +98,8 @@ NSDictionary* MALCoreNameSpace() {
         NSDictionary* protoNS =
         @{
           [@"string?" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
-              return [args[1] isKindOfClass: MALStringClass] ? YESBOOL: NOBOOL;
+              id arg1 = args[1];
+              return [arg1 isKindOfClass: MALStringClass] && ![arg1 isSymbol] ? YESBOOL: NOBOOL;
           }],
           [@"list?" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               return [args[1] isKindOfClass: MALListClass] ? YESBOOL : NOBOOL;
@@ -157,6 +158,10 @@ NSDictionary* MALCoreNameSpace() {
           [@"list" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               return [MALList listFromArray: args
                                    subrange: NSMakeRange(1, args.count-1)];
+          }],
+          [@"seq" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
+              id arg = args[1];
+              return [arg asSequence];
           }],
           [@"count" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               return @([args[1] count]);
@@ -307,18 +312,27 @@ NSDictionary* MALCoreNameSpace() {
           [@"conj" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSUInteger argsCount = args.count;
               NSCParameterAssert(args.count >= 2);
-              NSCParameterAssert([args[1] isKindOfClass: [NSArray class]]);
+              NSCParameterAssert([args[1] isKindOfClass: MALArrayClass]);
               NSArray* orig = args[1];
               if (argsCount==2) return orig; // reuse immutable data
 
-              MALList* list = [MALList listWithCapacity: orig.count+argsCount-2];
-              for (id element in orig) {
-                  [list addObject: element];
+              if ([args[1] isKindOfClass: MALListClass]) {
+                  MALList* list = [MALList listWithCapacity: orig.count+argsCount-2];
+                  for (NSInteger i=argsCount-1; i>=2; i--) {
+                      [list addObject: args[i]];
+                  }
+                  for (id element in orig) {
+                      [list addObject: element];
+                  }
+                  return list;
               }
+
+              NSMutableArray* array = [[NSMutableArray alloc] initWithCapacity: orig.count+argsCount-2];
+              [array addObjectsFromArray: orig];
               for (int i=2; i<argsCount;i++) {
-                  [list addObject: args[i]];
+                  [array addObject: args[i]];
               }
-              return list;
+              return array;
           }],
           [@"nth" asSymbol]: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
               NSCParameterAssert(args.count >= 3);

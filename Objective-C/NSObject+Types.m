@@ -59,6 +59,10 @@ BOOL MALObjectIsBlock(id _Nullable block) {
     return NO;
 }
 
+- (MALList*) asSequence {
+    return MALNilObject;
+}
+
 
 - (BOOL) isMap {
     return NO;
@@ -120,6 +124,7 @@ BOOL MALObjectIsBlock(id _Nullable block) {
 //@end
 
 Class MALStringClass;
+Class MALArrayClass;
 Class MALListClass;
 id MALNilObject;
 id YESBOOL = nil;
@@ -133,6 +138,7 @@ id NOBOOL = nil;
     YESBOOL = [[self alloc] init];
     NOBOOL = [[self alloc] init];
     MALStringClass = [NSString class];
+    MALArrayClass = [NSArray class];
     MALListClass = [MALList class];
     MALNilObject = [[MALNil alloc] init];
 }
@@ -217,6 +223,10 @@ id NOBOOL = nil;
     return YES;
 }
 
+- (MALList*) asSequence {
+    if (! self.count) return MALNilObject;
+    return [MALList listFromArray: self];
+}
 
 @end
 
@@ -320,6 +330,19 @@ static NSMutableSet* symbols = nil;
         return result;
     }
     return self; // it's a simple string
+}
+
+- (MALList*) asSequence {
+    NSUInteger len = self.length;
+    if (! len) return MALNilObject;
+    MALList* result = [MALList listWithCapacity: len];
+    unichar string[len];
+    [self getCharacters: string];
+    for (NSUInteger i=0; i<len; i++) {
+        [result addObject: [NSString stringWithCharacters: &(string[i]) length: 1]];
+    }
+    
+    return result;
 }
 
 

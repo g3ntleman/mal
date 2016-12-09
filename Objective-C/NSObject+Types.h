@@ -15,6 +15,7 @@
 
 extern Class MALStringClass;
 extern Class MALListClass;
+extern Class MALArrayClass;
 extern id MALNilObject;
 
 
@@ -38,6 +39,7 @@ extern BOOL MALObjectIsBlock(id _Nullable block);
 
 - (BOOL) isMap;
 - (BOOL) isVector;
+- (MALList*) asSequence;
 
 @end
 

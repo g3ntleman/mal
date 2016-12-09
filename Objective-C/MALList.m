@@ -99,6 +99,12 @@ static MALList* emptyList = nil;
     return instance;
 }
 
+- (MALList*) asSequence {
+    if (!_count) return MALNilObject;
+    return self;
+}
+
+
 - (id*) objects {
     NSObject** objects = object_getIndexedIvars(self);
     return objects;
