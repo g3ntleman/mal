@@ -8,11 +8,19 @@
     BOOL _isMacro;
 }
 
-- (id) initWithBlock: (GenericFunction) aBlock {
+
+- (id) initWithMetaInfo: (NSDictionary*) meta
+                  block: (GenericFunction) aBlock {
     if (self = [super init]) {
         block = [aBlock copy];
+        _meta = [meta copy];
     }
     return self;
+}
+
+- (id) initWithName: (NSString*) functionName
+              block: (GenericFunction) aBlock {
+    return [self initWithMetaInfo: @{@"name": functionName} block: aBlock];
 }
 
 //- (void) dealloc {
@@ -40,12 +48,13 @@
     return _meta[@"name"];
 }
 
-- (id) copyWithZone: (NSZone*) zone {
-    MALFunction* copy = [[[self class] alloc] initWithBlock: block];
-    if (copy && _meta) {
-        [copy.meta setValuesForKeysWithDictionary: _meta];
-        copy->_isMacro = _isMacro;
-    }
+- (id) copyWithZone:(NSZone *)zone {
+    return self;
+}
+
+- (id) lispObjectBySettingMeta: (id) newMeta {
+    MALFunction* copy = [[[self class] alloc] initWithMetaInfo: newMeta block: block];
+    copy->_isMacro = _isMacro;
     return copy;
 }
 

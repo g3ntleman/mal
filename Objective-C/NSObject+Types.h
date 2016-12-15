@@ -33,8 +33,7 @@ extern BOOL MALObjectIsBlock(id _Nullable block);
 - (BOOL) isMacro;
 - (BOOL) isSequential;
 - (id) meta;
-- (void) setMeta: (id) newMeta;
-//- (id) truthValue;
+- (id) lispObjectBySettingMeta: (id) newMeta;
 - (BOOL) lispEqual: (id) other;
 
 - (BOOL) isMap;

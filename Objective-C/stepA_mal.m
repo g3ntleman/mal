@@ -146,24 +146,7 @@ id EVAL(id ast, MALEnv* env) {
             NSUInteger listCount = list.count;
             if (listCount) {
                 NSString* firstSymbol = list[0];
-                
-                /*
-                 
-                 (defmacro! ->
-                 (fn* (x & xs)
-                 (if (empty? xs)
-                 x
-                 (let* (form (first xs)
-                 more (rest xs))
-                 (if (empty? more)
-                 (if (list? form)
-                 `(~(first form) ~x ~@(rest form))
-                 (list form x))
-                 `(-> (-> ~x ~form) ~@more))))))
-                 
-                 */
-                
-                
+
                 if (firstSymbol == [@"defmacro!" asSymbol]) { // TODO: turn symbols into statics
                     if (listCount==3) {
                         NSString* name = [list[1] asSymbol];
@@ -183,10 +166,10 @@ id EVAL(id ast, MALEnv* env) {
                 if (firstSymbol == [@"def!" asSymbol]) { // TODO: turn symbols into statics
                     if (listCount==3) {
                         // Make new Binding:
-                        NSString* name = [list[1] asSymbol];
+                        NSString* symbol = [list[1] asSymbol];
                         NSObject* value = EVAL(list[2], env);
-                        value.meta  = @{@"name": name};
-                        env->data[name] = value;
+                        value = [value lispObjectBySettingMeta: @{@"name": symbol}];
+                        env->data[symbol] = value;
                         return value;
                     }
                     NSLog(@"Warning: def! needs 2 parameters.");
@@ -203,7 +186,7 @@ id EVAL(id ast, MALEnv* env) {
                     // Make new Environment:
                     letEnv = [[MALEnv alloc] initWithOuterEnvironment: env capacity:bindingListCount];
                     for (NSUInteger i=0; i<bindingListCount; i+=2) {
-                        id key = bindingsList[i];
+                        id key = [bindingsList[i] asSymbol];
                         id value = EVAL(bindingsList[i+1], letEnv);
                         letEnv->data[key] = value;
                     }
@@ -237,7 +220,7 @@ id EVAL(id ast, MALEnv* env) {
                     NSUInteger symbolsCount = symbols.count;
                     BOOL hasVarargs = symbolsCount >= 2 && [(symbols[symbolsCount-2]) isEqualToString: @"&"];
                     
-                    return [[MALFunction alloc] initWithBlock: ^id(NSArray* call) {
+                    return [[MALFunction alloc] initWithMetaInfo: nil block: ^id(NSArray* call) {
                         NSMutableDictionary* bindings;
                         if (hasVarargs) {
                             NSUInteger regularArgsCount = symbolsCount-2;
@@ -384,7 +367,7 @@ int main(int argc, const char * argv[]) {
         __weak MALEnv* weakEnv = replEnvironment;
         
         // Add eval:
-        [weakEnv set: [[MALFunction alloc] initWithBlock: ^id(NSArray* args) {
+        [weakEnv set: [[MALFunction alloc] initWithName: @"eval" block: ^id(NSArray* args) {
             NSCParameterAssert(args.count == 2);
             id ast = args[1];
             return EVAL(ast, replEnvironment);
@@ -424,12 +407,18 @@ int main(int argc, const char * argv[]) {
             while (true) {
                 char *rawline = readline(line.length ? "": "user> ");
                 if (!rawline || !strlen(rawline)) { continue; }
-                [line appendString: [NSString stringWithUTF8String: rawline]];
+                if (rawline[0] == '\4') {
+                    break; // quit
+                }
+                
+                NSString* fragment = [NSString stringWithUTF8String: rawline];
+                [line appendString: fragment];
                 if ([line length] == 0) { break; }
                 @try {
-                    //[line appendString: [NSString stringWithUTF8String: rawline]];
+                    // Try to read a form:
                     READ(line);
                 } @catch (NSException* exception) {
+                    // If that fails, wait for more input:
                     [line appendString: @"\n"];
                     continue;
                 }

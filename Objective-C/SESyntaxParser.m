@@ -318,7 +318,7 @@ static long unquote_characters(const unichar* source, const NSRange range, unich
 }
 
 /**
- * Also Reads Vectors / Arrays.
+ * Read a list. Also reads vectors aka arrays.
  **/
 - (id) readList {
     SETokenOccurrence leftPar = [self nextToken];
@@ -450,7 +450,7 @@ static long unquote_characters(const unichar* source, const NSRange range, unich
                 }
                 
                 NSString* stringWithoutQuotes = [[NSString alloc] initWithCharactersNoCopy: &characters[nextToken.range.location] length: nextToken.range.length freeWhenDone: NO];
-                return [[NSString alloc] initWithFormat: stringWithoutQuotes, nil]; // does unquoting as neccessary
+                return [[NSString alloc] initWithFormat: stringWithoutQuotes, nil]; // does unquoting as neccessary, TODO
             }
             default:
                 return [NSString stringWithCharacters: &characters[nextToken.range.location] length:nextToken.range.length];

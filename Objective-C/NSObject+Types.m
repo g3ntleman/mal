@@ -79,11 +79,11 @@ BOOL MALObjectIsBlock(id _Nullable block) {
 
 
 - (NSDictionary*) meta {
-    return nil;
+    return MALNilObject;
 }
 
-- (void) setMeta: (id) newMeta {
-    // stub
+- (id) lispObjectBySettingMeta: (id) newMeta {
+    return self;
 }
 
 

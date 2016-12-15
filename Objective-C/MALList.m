@@ -190,4 +190,11 @@ static MALList* emptyList = nil;
     return args;
 }
 
+//- (id) mutableCopyWithZone:(NSZone *)zone {
+//    MALList* copy = [MALList listFromArray: self];
+//    return copy;
+//}
+//
+//- (id) copy
+
 @end
